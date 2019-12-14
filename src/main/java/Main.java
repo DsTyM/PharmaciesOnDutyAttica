@@ -12,10 +12,7 @@ public class Main {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 
-
-//        var url = "https://www.foititikanea.gr/";
         var url = "http://www.fsa.gr/duties.asp";
-//        var url = "http://www.fsa.gr/%CE%95%CF%86%CE%B7%CE%BC%CE%B5%CF%81%CE%AF%CE%B5%CF%82%CE%A6%CE%B1%CF%81%CE%BC%CE%B1%CE%BA%CE%B5%CE%AF%CF%89%CE%BD/tabid/95/Default.aspx";
 
         WebClient webClient;
         HtmlPage page;
@@ -72,7 +69,7 @@ public class Main {
             // Click next until the last page.
 
             anchors = page.getAnchors();
-//            System.out.println(anchors.toArray()[10]);
+
             for (var i = 0; i < numOfPages - 1; i++) {
                 page = anchors.get(10).click();
                 pages.add(page);
