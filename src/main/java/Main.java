@@ -59,13 +59,11 @@ public class Main {
             // this equals this XPath: /html/body/table/tbody/tr/td[2]/table/tbody/tr[5]/td/table/tbody/tr[1]/td/nobr
 
             // If there are more than one pages.
-            if(!numOfPagesAsText.equals("")) {
+            if (!numOfPagesAsText.equals("")) {
                 numOfPages = Integer.parseInt(numOfPagesAsText.substring(numOfPagesAsText.lastIndexOf(" ") + 1));
             } else {
                 numOfPages = 1;
             }
-//            System.out.println(numOfPages);
-
 
             pages.add(page);
 //            System.out.println(page.asXml());
