@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 /*
     This is a simple script to get info from all pharmacyIds.
-*/
+ */
 
 public class GetPharmaciesInfo {
     public static void main(String[] args) throws IOException {

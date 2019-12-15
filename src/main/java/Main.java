@@ -12,7 +12,7 @@ import java.util.List;
 /*
     This code is just for playing with HtmlUnit and Jsoup.
     Later it will be refactored into Classes, Methods, Best Practices, etc.
-*/
+ */
 
 public class Main {
     public static void main(String[] args) {

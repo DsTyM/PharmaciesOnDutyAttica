@@ -18,7 +18,7 @@ import java.util.List;
 /*
     Script to get a set of all the available Pharmacy Ids.
     And save them to file: pharmacyIds.txt .
-*/
+ */
 
 public class GetAllAvailablePharmacyIds {
     public static void main(String[] args) throws IOException {
