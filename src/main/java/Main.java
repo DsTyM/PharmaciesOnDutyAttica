@@ -12,7 +12,7 @@ import java.util.List;
 /*
     This code is just for playing with HtmlUnit and Jsoup.
     Later it will be refactored into Classes, Methods, Best Practices, etc.
- */
+*/
 
 public class Main {
     public static void main(String[] args) {
@@ -48,8 +48,8 @@ public class Main {
 //            HtmlOption option = select.getOptionByValue("16/12/2019");
 //            select.setSelectedAttribute(option, true);
 
-            // if date is today, get(2)
-            // else get(1)
+            // if we won't select a date, get(2)
+            // else if we select a date (even today), get(1)
             input = page.getForms().get(0).getInputsByValue("").get(2);
 
             // Click Search
