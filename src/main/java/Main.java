@@ -1,11 +1,18 @@
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.*;
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlInput;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.util.ArrayList;
 import java.util.List;
+
+/*
+    This code is just for playing with HtmlUnit and Jsoup.
+    Later it will be refactored into Classes, Methods, Best Practices, etc.
+ */
 
 public class Main {
     public static void main(String[] args) {
@@ -58,12 +65,32 @@ public class Main {
             var numOfPagesAsText = jsoupdoc.select("html body table tbody tr td:eq(1) table tbody tr:eq(4) td table tbody tr td nobr").text().trim();
             // this equals this XPath: /html/body/table/tbody/tr/td[2]/table/tbody/tr[5]/td/table/tbody/tr[1]/td/nobr
 
+
             // If there are more than one pages.
             if (!numOfPagesAsText.equals("")) {
                 numOfPages = Integer.parseInt(numOfPagesAsText.substring(numOfPagesAsText.lastIndexOf(" ") + 1));
             } else {
                 numOfPages = 1;
             }
+
+            // Getting pharmacyId and workingHoursId from DOM.
+
+            var pharmacyLinksJs = jsoupdoc.select("html body table tbody tr td:eq(1) table tbody tr:eq(3) td table tbody tr a").eachAttr("onclick");
+            var tempLinkJs = pharmacyLinksJs.toArray()[0].toString().trim();
+
+            var getPositionOfSecondEqualsChar = tempLinkJs.indexOf("=", tempLinkJs.indexOf("=") + 1);
+            var getPositionOfAndSymbolChar = tempLinkJs.indexOf("&", getPositionOfSecondEqualsChar);
+            var pharmacyId = tempLinkJs.substring(getPositionOfSecondEqualsChar + 1, getPositionOfAndSymbolChar);
+            System.out.println(pharmacyId);
+
+            var getPositionOfLastEqualsChar = tempLinkJs.lastIndexOf("=");
+            var getPositionOfLastApostropheChar = tempLinkJs.lastIndexOf("'");
+            var workingHoursId = tempLinkJs.substring(getPositionOfLastEqualsChar + 1, getPositionOfLastApostropheChar);
+            System.out.println(workingHoursId);
+
+//            for (var link : pharmacyLinksJs) {
+//                System.out.println(link);
+//            }
 
             pages.add(page);
 //            System.out.println(page.asXml());
