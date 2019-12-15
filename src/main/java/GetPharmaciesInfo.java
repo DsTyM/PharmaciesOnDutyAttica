@@ -36,9 +36,9 @@ public class GetPharmaciesInfo {
             url = tempUrl + pId + "&programmeid=1";
             jsoupdoc = Jsoup.connect(url).get();
 
-            var infos = new ArrayList<String[]>();
+            var listOfPharmacyInfo = new ArrayList<String[]>();
 
-            String data;
+            String pageInfo;
             var tempXPath = "html body center table tbody tr:eq(1) td table tbody tr";
 
             var tempArr = new String[4];
@@ -51,14 +51,14 @@ public class GetPharmaciesInfo {
 
             for (var i = 2; i <= 5; i++) {
                 var xPath = tempXPath + ":eq(" + i + ")";
-                data = jsoupdoc.select(xPath).text();
-                data = data.substring(data.indexOf(":") + 1).trim();
-                tempArr[i - 2] = data;
+                pageInfo = jsoupdoc.select(xPath).text();
+                pageInfo = pageInfo.substring(pageInfo.indexOf(":") + 1).trim();
+                tempArr[i - 2] = pageInfo;
             }
-            infos.add(tempArr);
+            listOfPharmacyInfo.add(tempArr);
 
-            for (var a : infos) {
-                System.out.println(a[0] + ", " + a[1] + ", " + a[2] + ", " + a[3]);
+            for (var info : listOfPharmacyInfo) {
+                System.out.println(info[0] + ", " + info[1] + ", " + info[2] + ", " + info[3]);
             }
         }
     }
