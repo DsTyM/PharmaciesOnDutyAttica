@@ -37,14 +37,13 @@ public class Main {
             page = webClient.getPage(url);
 
             // Select Date
-
-            HtmlSelect select = page.getForms().get(0).getSelectByName("dateduty");
-            HtmlOption option = select.getOptionByValue("15/12/2019");
-            select.setSelectedAttribute(option, true);
+//            HtmlSelect select = page.getForms().get(0).getSelectByName("dateduty");
+//            HtmlOption option = select.getOptionByValue("16/12/2019");
+//            select.setSelectedAttribute(option, true);
 
             // if date is today, get(2)
             // else get(1)
-            input = page.getForms().get(0).getInputsByValue("").get(1);
+            input = page.getForms().get(0).getInputsByValue("").get(2);
 
             // Click Search
 
