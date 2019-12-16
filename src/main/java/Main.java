@@ -1,12 +1,13 @@
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.gargoylesoftware.htmlunit.html.HtmlInput;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /*
@@ -44,13 +45,14 @@ public class Main {
             page = webClient.getPage(url);
 
             // Select Date
-//            HtmlSelect select = page.getForms().get(0).getSelectByName("dateduty");
-//            HtmlOption option = select.getOptionByValue("16/12/2019");
-//            select.setSelectedAttribute(option, true);
+            HtmlSelect select = page.getForms().get(0).getSelectByName("dateduty");
+            HtmlOption option = select.getOptionByValue(Helper.dateToString(Helper.getDateFromTodayPlusDays(1)));
+            select.setSelectedAttribute(option, true);
 
             // if we won't select a date, get(2)
-            // else if we select a date (even today), get(1)
-            input = page.getForms().get(0).getInputsByValue("").get(2);
+            // if we select a date except from today, get(1)
+            // if we select a specifically today, it is not sure if we should get(1) or get(2) yet
+            input = page.getForms().get(0).getInputsByValue("").get(1);
 
             // Click Search
 
