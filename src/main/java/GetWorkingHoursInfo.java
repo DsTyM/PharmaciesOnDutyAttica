@@ -38,7 +38,7 @@ public class GetWorkingHoursInfo {
             pageInfo = jsoupdoc.select(xPath).text();
             pageInfo = pageInfo.substring(pageInfo.indexOf(":") + 1).trim();
 
-            var tempArr = new String[4];
+            var tempArr = new String[2];
         /*
             1) Working Hours Id
             2) Working Hours
