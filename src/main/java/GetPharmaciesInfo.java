@@ -27,7 +27,7 @@ public class GetPharmaciesInfo {
             pharmacyIds.add(pharmacyId);
         }
 
-        String tempUrl = "http://www.fsa.gr/pharmacyshow.asp?pharmacyid=";
+        final var tempUrl = "http://www.fsa.gr/pharmacyshow.asp?pharmacyid=";
         String url;
 
         Document jsoupdoc;

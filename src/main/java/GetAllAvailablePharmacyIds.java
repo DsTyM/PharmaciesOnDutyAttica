@@ -27,7 +27,7 @@ public class GetAllAvailablePharmacyIds {
 
         var setOfIds = new HashSet<String>();
 
-        var url = "http://www.fsa.gr/duties.asp";
+        final var url = "http://www.fsa.gr/duties.asp";
 
         WebClient webClient;
         HtmlPage page;

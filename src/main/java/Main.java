@@ -4,10 +4,7 @@ import com.gargoylesoftware.htmlunit.html.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /*
@@ -20,7 +17,7 @@ public class Main {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 
-        var url = "http://www.fsa.gr/duties.asp";
+        final var url = "http://www.fsa.gr/duties.asp";
 
         WebClient webClient;
         HtmlPage page;
