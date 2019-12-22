@@ -5,6 +5,18 @@ public class Pharmacy {
     private String region;
     private String phoneNumber;
 
+    public Pharmacy() {
+
+    }
+
+    public Pharmacy(int id, String name, String address, String region, String phoneNumber) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.region = region;
+        this.phoneNumber = phoneNumber;
+    }
+
     public int getId() {
         return id;
     }
@@ -43,5 +55,16 @@ public class Pharmacy {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "Pharmacy{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", region='" + region + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
     }
 }
