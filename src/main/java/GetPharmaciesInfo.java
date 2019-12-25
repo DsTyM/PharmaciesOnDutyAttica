@@ -32,15 +32,17 @@ public class GetPharmaciesInfo {
 
         Document jsoupdoc;
 
+        var listOfPharmacies = new ArrayList<Pharmacy>();
+
         for (var pId : pharmacyIds) {
             url = tempUrl + pId + "&programmeid=1";
             jsoupdoc = Jsoup.connect(url).get();
 
-            var listOfPharmacyInfo = new ArrayList<String[]>();
 
             String pageInfo;
             var tempXPath = "html body center table tbody tr:eq(1) td table tbody tr";
 
+            // temp String Array to temporarily save the pharmacy info taken from the web
             var tempArr = new String[4];
             /*
                 1) Pharmacy Name
@@ -55,11 +57,15 @@ public class GetPharmaciesInfo {
                 pageInfo = pageInfo.substring(pageInfo.indexOf(":") + 1).trim();
                 tempArr[i - 2] = pageInfo;
             }
-            listOfPharmacyInfo.add(tempArr);
 
-            for (var info : listOfPharmacyInfo) {
-                System.out.println(info[0] + ", " + info[1] + ", " + info[2] + ", " + info[3]);
-            }
+            // transfer pharmacy info from tempArr to Pharmacy class
+            var pharmacy = new Pharmacy(Integer.parseInt(pId), tempArr[0], tempArr[1], tempArr[2], tempArr[3]);
+
+            listOfPharmacies.add(pharmacy);
+        }
+
+        for(var pharmacy : listOfPharmacies) {
+            System.out.println(pharmacy);
         }
     }
 }
