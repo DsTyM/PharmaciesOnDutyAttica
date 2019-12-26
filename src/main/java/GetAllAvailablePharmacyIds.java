@@ -61,7 +61,7 @@ public class GetAllAvailablePharmacyIds {
 
             // It should start from yesterday to the end of the next month.
             var stringDates = new ArrayList<String>();
-            for (var i = 14; i <= 31; i++) {
+            for (var i = 26; i <= 31; i++) {
                 stringDates.add(i + "/12/2019");
             }
             for (var i = 1; i <= 31; i++) {

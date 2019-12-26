@@ -3,8 +3,11 @@ import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.stream.IntStream;
+
+/*
+    This is a simple script to get all Working Hours given the workingHoursId.
+ */
 
 public class GetWorkingHoursInfo {
     public static void main(String[] args) throws IOException {
@@ -27,7 +30,7 @@ public class GetWorkingHoursInfo {
             }
         }
 
-        var pageInfoById = new HashMap<Integer, String>();
+        var listOfWorkingHours = new ArrayList<WorkingHour>();
 
         for (var id : workingHoursIds) {
             url = tempUrl + id;
@@ -38,9 +41,12 @@ public class GetWorkingHoursInfo {
             pageInfo = jsoupdoc.select(xPath).text();
             pageInfo = pageInfo.substring(pageInfo.indexOf(":") + 1).trim();
 
-            pageInfoById.put(id, pageInfo);
+            var workingHour = new WorkingHour(id, pageInfo);
+            listOfWorkingHours.add(workingHour);
         }
 
-        pageInfoById.forEach((id, pageInfo) -> System.out.println(id + ", " + pageInfo));
+        for (var workingHour : listOfWorkingHours) {
+            System.out.println(workingHour);
+        }
     }
 }
