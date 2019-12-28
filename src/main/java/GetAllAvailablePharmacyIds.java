@@ -59,7 +59,8 @@ public class GetAllAvailablePharmacyIds {
 
             // Get ids from all dates
 
-            // It should get about last ten days.
+            // It should get from yesterday, until 5/1/2020.
+            // If we won't include yesterday, we should also not include today.
             var stringDates = new ArrayList<String>();
             for (var i = 28; i <= 31; i++) {
                 stringDates.add(i + "/12/2019");
@@ -111,8 +112,6 @@ public class GetAllAvailablePharmacyIds {
             for (var singlePage : pages) {
                 jsoupdoc = Jsoup.parse(singlePage.asXml());
                 pharmacyLinksJs = jsoupdoc.select("html body table tbody tr td:eq(1) table tbody tr:eq(3) td table tbody tr a").eachAttr("onclick");
-
-                // an error seems to occur at next or previous line
                 tempLinkJs = pharmacyLinksJs.toArray()[0].toString().trim();
 
                 getPositionOfSecondEqualsChar = tempLinkJs.indexOf("=", tempLinkJs.indexOf("=") + 1);
