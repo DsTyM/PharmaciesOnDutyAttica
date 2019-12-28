@@ -21,7 +21,7 @@ import java.util.List;
  */
 
 public class GetAllAvailablePharmacyIds {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 
@@ -59,12 +59,12 @@ public class GetAllAvailablePharmacyIds {
 
             // Get ids from all dates
 
-            // It should start from yesterday to the end of the next month.
+            // It should get about last ten days.
             var stringDates = new ArrayList<String>();
-            for (var i = 26; i <= 31; i++) {
+            for (var i = 28; i <= 31; i++) {
                 stringDates.add(i + "/12/2019");
             }
-            for (var i = 1; i <= 31; i++) {
+            for (var i = 1; i <= 5; i++) {
                 stringDates.add(i + "/1/2020");
             }
 
@@ -111,6 +111,8 @@ public class GetAllAvailablePharmacyIds {
             for (var singlePage : pages) {
                 jsoupdoc = Jsoup.parse(singlePage.asXml());
                 pharmacyLinksJs = jsoupdoc.select("html body table tbody tr td:eq(1) table tbody tr:eq(3) td table tbody tr a").eachAttr("onclick");
+
+                // an error seems to occur at next or previous line
                 tempLinkJs = pharmacyLinksJs.toArray()[0].toString().trim();
 
                 getPositionOfSecondEqualsChar = tempLinkJs.indexOf("=", tempLinkJs.indexOf("=") + 1);
@@ -132,5 +134,9 @@ public class GetAllAvailablePharmacyIds {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private static ArrayList<String> getLastStringDates(int numOfDays) {
+        return null;
     }
 }
