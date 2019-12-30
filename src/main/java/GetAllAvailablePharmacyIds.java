@@ -59,15 +59,9 @@ public class GetAllAvailablePharmacyIds {
 
             // Get ids from all dates
 
-            // It should get from yesterday, until 5/1/2020.
+            // It should get from yesterday, until 3/1/2020.
             // If we won't include yesterday, we should also not include today.
-            var stringDates = new ArrayList<String>();
-            for (var i = 28; i <= 31; i++) {
-                stringDates.add(i + "/12/2019");
-            }
-            for (var i = 1; i <= 5; i++) {
-                stringDates.add(i + "/1/2020");
-            }
+            var stringDates = getLastStringDatesFromYesterday(5);
 
             System.out.println(Arrays.toString(stringDates.toArray()));
 
@@ -135,7 +129,14 @@ public class GetAllAvailablePharmacyIds {
         }
     }
 
-    private static ArrayList<String> getLastStringDates(int numOfDays) {
-        return null;
+    private static ArrayList<String> getLastStringDatesFromYesterday(int numOfDays) {
+        var stringDates = new ArrayList<String>();
+
+        // it starts from -1 to numOfDays -2 because it starts from yesterday
+        for (var i = -1; i <= numOfDays - 2; i++) {
+            stringDates.add(Helper.dateToString(Helper.getDateFromTodayPlusDays(i)));
+        }
+
+        return stringDates;
     }
 }
