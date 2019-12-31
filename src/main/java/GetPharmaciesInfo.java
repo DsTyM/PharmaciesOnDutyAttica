@@ -28,7 +28,6 @@ public class GetPharmaciesInfo {
 
         var listOfPharmacies = new ArrayList<Pharmacy>();
 
-//        for (var pId : pharmacyIds) {
         for (var pId : ids) {
             url = tempUrl + pId + "&programmeid=1";
 
