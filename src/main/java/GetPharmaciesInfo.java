@@ -35,9 +35,9 @@ public class GetPharmaciesInfo {
             try {
                 jsoupdoc = Jsoup.connect(url).get();
             } catch (Exception e) {
-                System.out.println("Url: " + url + " does not exist!");
+                System.out.println("Pharmacy with URL: " + url + " does not exist!");
 
-                // if pharmacy does not exist
+                // if pharmacy url does not exist
                 continue;
             }
 
@@ -61,7 +61,6 @@ public class GetPharmaciesInfo {
             }
 
             // transfer pharmacy info from tempArr to Pharmacy class
-//            var pharmacy = new Pharmacy(Integer.parseInt(pId), tempArr[0], tempArr[1], tempArr[2], tempArr[3]);
             var pharmacy = new Pharmacy(Integer.parseInt(String.valueOf(pId)), tempArr[0], tempArr[1], tempArr[2], tempArr[3]);
 
             listOfPharmacies.add(pharmacy);
