@@ -19,17 +19,6 @@ public class GetPharmaciesInfo {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 
-//        var pharmacyIds = new ArrayList<String>();
-//
-//        File file = new File("pharmacyIds.txt");
-//
-//        BufferedReader br = new BufferedReader(new FileReader(file));
-//
-//        String pharmacyId;
-//        while ((pharmacyId = br.readLine()) != null) {
-//            pharmacyIds.add(pharmacyId);
-//        }
-
         var ids = IntStream.range(4020, 7920).toArray();
 
         final var tempUrl = "http://www.fsa.gr/pharmacyshow.asp?pharmacyid=";
@@ -48,8 +37,7 @@ public class GetPharmaciesInfo {
             } catch (Exception e) {
                 System.out.println("Url: " + url + " does not exist!");
 
-                // if not exists get a random pharmacy to not break the jsoup
-//                jsoupdoc = Jsoup.connect("http://www.fsa.gr/pharmacyshow.asp?pharmacyid=4123&programmeid=1").get();
+                // if pharmacy does not exist
                 continue;
             }
 
