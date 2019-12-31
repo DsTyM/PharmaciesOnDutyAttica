@@ -42,7 +42,6 @@ public class GetAllAvailablePharmacyIds {
         HtmlOption option;
 
         List<String> pharmacyLinksJs;
-        String tempLinkJs;
 
         int getPositionOfSecondEqualsChar;
         int getPositionOfAndSymbolChar;
@@ -59,9 +58,8 @@ public class GetAllAvailablePharmacyIds {
 
             // Get ids from all dates
 
-            // It should get from yesterday, until 3/1/2020.
             // If we won't include yesterday, we should also not include today.
-            var stringDates = getLastStringDatesFromYesterday(5);
+            var stringDates = getLastStringDatesFromYesterday(36);
 
             System.out.println(Arrays.toString(stringDates.toArray()));
 
@@ -89,6 +87,7 @@ public class GetAllAvailablePharmacyIds {
                     numOfPages = Integer.parseInt(numOfPagesAsText.substring(numOfPagesAsText.lastIndexOf(" ") + 1));
                 } else {
                     numOfPages = 1;
+
                 }
 
                 pages.add(page);
@@ -106,12 +105,14 @@ public class GetAllAvailablePharmacyIds {
             for (var singlePage : pages) {
                 jsoupdoc = Jsoup.parse(singlePage.asXml());
                 pharmacyLinksJs = jsoupdoc.select("html body table tbody tr td:eq(1) table tbody tr:eq(3) td table tbody tr a").eachAttr("onclick");
-                tempLinkJs = pharmacyLinksJs.toArray()[0].toString().trim();
 
-                getPositionOfSecondEqualsChar = tempLinkJs.indexOf("=", tempLinkJs.indexOf("=") + 1);
-                getPositionOfAndSymbolChar = tempLinkJs.indexOf("&", getPositionOfSecondEqualsChar);
-                pharmacyId = tempLinkJs.substring(getPositionOfSecondEqualsChar + 1, getPositionOfAndSymbolChar);
-                setOfIds.add(pharmacyId);
+                for (String linkJs : pharmacyLinksJs) {
+                    linkJs = linkJs.trim();
+                    getPositionOfSecondEqualsChar = linkJs.indexOf("=", linkJs.indexOf("=") + 1);
+                    getPositionOfAndSymbolChar = linkJs.indexOf("&", getPositionOfSecondEqualsChar);
+                    pharmacyId = linkJs.substring(getPositionOfSecondEqualsChar + 1, getPositionOfAndSymbolChar);
+                    setOfIds.add(pharmacyId);
+                }
             }
 
             Files.deleteIfExists(Paths.get("pharmacyIds.txt"));
