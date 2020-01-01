@@ -11,11 +11,11 @@ public class AvailablePharmacy {
 
     }
 
-    public AvailablePharmacy(int id, int pharmacyId, int workingHourId, Date pulledDateTime, int pulledVersion) {
+    public AvailablePharmacy(int id, int pharmacyId, int workingHourId, Date date, int pulledVersion) {
         this.id = id;
         this.pharmacyId = pharmacyId;
         this.workingHourId = workingHourId;
-        this.date = pulledDateTime;
+        this.date = date;
         this.pulledVersion = pulledVersion;
     }
 
@@ -65,7 +65,7 @@ public class AvailablePharmacy {
                 "id=" + id +
                 ", pharmacyId=" + pharmacyId +
                 ", workingHourId=" + workingHourId +
-                ", pulledDateTime=" + date +
+                ", date=" + date +
                 '}';
     }
 }
