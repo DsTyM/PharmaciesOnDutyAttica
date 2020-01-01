@@ -1,27 +1,29 @@
 import java.util.Date;
 
 public class AvailablePharmacy {
-    private int id;
+    private long id;
     private int pharmacyId;
     private int workingHourId;
-    private Date pulledDateTime;
+    private Date date;
+    private int pulledVersion;
 
     public AvailablePharmacy() {
 
     }
 
-    public AvailablePharmacy(int id, int pharmacyId, int workingHourId, Date pulledDateTime) {
+    public AvailablePharmacy(int id, int pharmacyId, int workingHourId, Date pulledDateTime, int pulledVersion) {
         this.id = id;
         this.pharmacyId = pharmacyId;
         this.workingHourId = workingHourId;
-        this.pulledDateTime = pulledDateTime;
+        this.date = pulledDateTime;
+        this.pulledVersion = pulledVersion;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -41,12 +43,20 @@ public class AvailablePharmacy {
         this.workingHourId = workingHourId;
     }
 
-    public Date getPulledDateTime() {
-        return pulledDateTime;
+    public Date getDate() {
+        return date;
     }
 
-    public void setPulledDateTime(Date pulledDateTime) {
-        this.pulledDateTime = pulledDateTime;
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public int getPulledVersion() {
+        return pulledVersion;
+    }
+
+    public void setPulledVersion(int pulledVersion) {
+        this.pulledVersion = pulledVersion;
     }
 
     @Override
@@ -55,7 +65,7 @@ public class AvailablePharmacy {
                 "id=" + id +
                 ", pharmacyId=" + pharmacyId +
                 ", workingHourId=" + workingHourId +
-                ", pulledDateTime=" + pulledDateTime +
+                ", pulledDateTime=" + date +
                 '}';
     }
 }
