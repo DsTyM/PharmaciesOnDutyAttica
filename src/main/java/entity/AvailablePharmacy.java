@@ -1,3 +1,5 @@
+package entity;
+
 import java.util.Date;
 
 public class AvailablePharmacy {
@@ -61,7 +63,7 @@ public class AvailablePharmacy {
 
     @Override
     public String toString() {
-        return "AvailablePharmacy{" +
+        return "entity.AvailablePharmacy{" +
                 "id=" + id +
                 ", pharmacyId=" + pharmacyId +
                 ", workingHourId=" + workingHourId +

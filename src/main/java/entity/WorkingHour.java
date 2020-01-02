@@ -1,3 +1,5 @@
+package entity;
+
 public class WorkingHour {
     private int id;
     private String workingHourText;
@@ -29,7 +31,7 @@ public class WorkingHour {
 
     @Override
     public String toString() {
-        return "WorkingHour{" +
+        return "entity.WorkingHour{" +
                 "id=" + id +
                 ", workingHourText='" + workingHourText + '\'' +
                 '}';

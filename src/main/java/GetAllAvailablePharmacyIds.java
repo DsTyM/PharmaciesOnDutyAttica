@@ -16,12 +16,12 @@ import java.util.HashSet;
 import java.util.List;
 
 /*
-    Script to get a set of all the available Pharmacy Ids.
+    Script to get a set of all the available entity.Pharmacy Ids.
     And save them to file: pharmacyIds.txt .
  */
 
 public class GetAllAvailablePharmacyIds {
-    public static void main(String[] args) {
+    public static void getAllAvailablePharmacyIds() {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 

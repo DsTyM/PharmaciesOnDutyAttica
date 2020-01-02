@@ -1,3 +1,4 @@
+import entity.Pharmacy;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -15,7 +16,7 @@ import java.util.stream.IntStream;
  */
 
 public class GetPharmaciesInfo {
-    public static void main(String[] args) throws IOException {
+    public static void getPharmaciesInfo() throws IOException {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 
@@ -34,7 +35,7 @@ public class GetPharmaciesInfo {
             try {
                 jsoupdoc = Jsoup.connect(url).get();
             } catch (Exception e) {
-                System.out.println("Pharmacy with URL: " + url + " does not exist!");
+                System.out.println("entity.Pharmacy with URL: " + url + " does not exist!");
 
                 // if pharmacy url does not exist
                 continue;
@@ -46,7 +47,7 @@ public class GetPharmaciesInfo {
             // temp String Array to temporarily save the pharmacy info taken from the web
             var tempArr = new String[4];
             /*
-                1) Pharmacy Name
+                1) entity.Pharmacy Name
                 2) Address
                 3) Area
                 4) Phone Number
@@ -59,7 +60,7 @@ public class GetPharmaciesInfo {
                 tempArr[i - 2] = pageInfo;
             }
 
-            // transfer pharmacy info from tempArr to Pharmacy class
+            // transfer pharmacy info from tempArr to entity.Pharmacy class
             var pharmacy = new Pharmacy(Integer.parseInt(String.valueOf(pId)), tempArr[0], tempArr[1], tempArr[2], tempArr[3]);
 
             listOfPharmacies.add(pharmacy);

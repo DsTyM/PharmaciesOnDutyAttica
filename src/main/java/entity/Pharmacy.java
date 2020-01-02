@@ -1,3 +1,5 @@
+package entity;
+
 public class Pharmacy {
     private int id;
     private String name;
@@ -59,7 +61,7 @@ public class Pharmacy {
 
     @Override
     public String toString() {
-        return "Pharmacy{" +
+        return "entity.Pharmacy{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
