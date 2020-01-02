@@ -1,3 +1,5 @@
+package scraper;
+
 import entity.WorkingHour;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

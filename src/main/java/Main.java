@@ -1,3 +1,5 @@
+import scraper.AvailablePharmacies;
+
 import java.io.IOException;
 
 public class Main {
@@ -12,7 +14,7 @@ public class Main {
 
         // 2. Get all WorkingHours (instances)
 
-//        var listOfWorkingHours = WorkingHoursInfo.getWorkingHoursInfo();
+//        var listOfWorkingHours = scraper.WorkingHoursInfo.getWorkingHoursInfo();
 //
 //        for (var workingHour : listOfWorkingHours) {
 //            System.out.println(workingHour);
@@ -20,7 +22,7 @@ public class Main {
 
         // 3. Get all Pharmacies (instances)
 
-//        var listOfPharmacies = PharmaciesInfo.getPharmaciesInfo();
+//        var listOfPharmacies = scraper.PharmaciesInfo.getPharmaciesInfo();
 //
 //        for (var pharmacy : listOfPharmacies) {
 //            System.out.println(pharmacy);

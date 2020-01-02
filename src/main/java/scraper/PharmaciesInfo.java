@@ -1,3 +1,5 @@
+package scraper;
+
 import entity.Pharmacy;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

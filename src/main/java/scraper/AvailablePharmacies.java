@@ -1,8 +1,11 @@
+package scraper;
+
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import util.DateUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,7 +58,7 @@ public class AvailablePharmacies {
 
             // Get ids from all dates
 
-            var date = DateHelper.dateToString(DateHelper.getDateFromTodayPlusDays(daysFromToday));
+            var date = DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday));
 
             System.out.println(date);
             select = page.getForms().get(0).getSelectByName("dateduty");
