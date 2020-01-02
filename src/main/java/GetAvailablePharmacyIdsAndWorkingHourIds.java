@@ -13,7 +13,7 @@ import java.util.List;
  */
 
 public class GetAvailablePharmacyIdsAndWorkingHourIds {
-    public static void getAvailablePharmacyIdsAndWorkingHourIds() {
+    public static void getAvailablePharmacyIdsAndWorkingHourIds(int daysFromToday) {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 
@@ -28,6 +28,18 @@ public class GetAvailablePharmacyIdsAndWorkingHourIds {
         Document jsoupdoc;
         int numOfPages;
 
+        HtmlSelect select;
+        HtmlOption option;
+
+        List<String> pharmacyLinksJs;
+
+        int getPositionOfSecondEqualsChar;
+        int getPositionOfAndSymbolChar;
+        int getPositionOfLastEqualsChar;
+        int getPositionOfLastApostropheChar;
+        String pharmacyId;
+        String workingHourId;
+
         try {
             webClient = new WebClient(BrowserVersion.CHROME);
             webClient.getOptions().setJavaScriptEnabled(true);
@@ -37,24 +49,28 @@ public class GetAvailablePharmacyIdsAndWorkingHourIds {
 
             page = webClient.getPage(url);
 
-            // Select Date
-            HtmlSelect select = page.getForms().get(0).getSelectByName("dateduty");
-            HtmlOption option = select.getOptionByValue(DateHelper.dateToString(DateHelper.getDateFromTodayPlusDays(1)));
+            // Get ids from all dates
+
+            var date = DateHelper.dateToString(DateHelper.getDateFromTodayPlusDays(daysFromToday));
+
+            System.out.println(date);
+            select = page.getForms().get(0).getSelectByName("dateduty");
+            option = select.getOptionByValue(date);
             select.setSelectedAttribute(option, true);
 
-            // if we won't select a date, get(2)
-            // if we select a date except from today, get(1)
-            // if we select a specifically today, it is not sure if we should get(1) or get(2) yet
-            input = page.getForms().get(0).getInputsByValue("").get(1);
+            if(daysFromToday < -1) {
+                return;
+            } else if(daysFromToday == 0) {
+                input = page.getForms().get(0).getInputsByValue("").get(2);
+            } else {
+                input = page.getForms().get(0).getInputsByValue("").get(1);
+            }
 
             // Click Search
 
             page = input.click();
 
             // jsoup Code
-
-            // Convert XPath to jsoup path:
-            // https://stackoverflow.com/q/16335820/6151784
 
             jsoupdoc = Jsoup.parse(page.asXml());
             var numOfPagesAsText = jsoupdoc.select("html body table tbody tr td:eq(1) table tbody tr:eq(4) td table tbody tr td nobr").text().trim();
@@ -66,29 +82,10 @@ public class GetAvailablePharmacyIdsAndWorkingHourIds {
                 numOfPages = Integer.parseInt(numOfPagesAsText.substring(numOfPagesAsText.lastIndexOf(" ") + 1));
             } else {
                 numOfPages = 1;
+
             }
 
-            // Getting pharmacyId and workingHoursId from DOM.
-
-            var pharmacyLinksJs = jsoupdoc.select("html body table tbody tr td:eq(1) table tbody tr:eq(3) td table tbody tr a").eachAttr("onclick");
-            var tempLinkJs = pharmacyLinksJs.toArray()[0].toString().trim();
-
-            var getPositionOfSecondEqualsChar = tempLinkJs.indexOf("=", tempLinkJs.indexOf("=") + 1);
-            var getPositionOfAndSymbolChar = tempLinkJs.indexOf("&", getPositionOfSecondEqualsChar);
-            var pharmacyId = tempLinkJs.substring(getPositionOfSecondEqualsChar + 1, getPositionOfAndSymbolChar);
-//            System.out.println(pharmacyId);
-
-            var getPositionOfLastEqualsChar = tempLinkJs.lastIndexOf("=");
-            var getPositionOfLastApostropheChar = tempLinkJs.lastIndexOf("'");
-            var workingHoursId = tempLinkJs.substring(getPositionOfLastEqualsChar + 1, getPositionOfLastApostropheChar);
-//            System.out.println(workingHoursId);
-
-//            for (var link : pharmacyLinksJs) {
-//                System.out.println(link);
-//            }
-
             pages.add(page);
-//            System.out.println(page.asXml());
 
             // Click next until the last page.
 
@@ -100,7 +97,21 @@ public class GetAvailablePharmacyIdsAndWorkingHourIds {
             }
 
             for (var singlePage : pages) {
-                System.out.println(singlePage.asText());
+                jsoupdoc = Jsoup.parse(singlePage.asXml());
+                pharmacyLinksJs = jsoupdoc.select("html body table tbody tr td:eq(1) table tbody tr:eq(3) td table tbody tr a").eachAttr("onclick");
+
+                for (String linkJs : pharmacyLinksJs) {
+                    linkJs = linkJs.trim();
+                    getPositionOfSecondEqualsChar = linkJs.indexOf("=", linkJs.indexOf("=") + 1);
+                    getPositionOfAndSymbolChar = linkJs.indexOf("&", getPositionOfSecondEqualsChar);
+                    pharmacyId = linkJs.substring(getPositionOfSecondEqualsChar + 1, getPositionOfAndSymbolChar);
+                    System.out.print(pharmacyId + "\t");
+
+                    getPositionOfLastEqualsChar = linkJs.lastIndexOf("=");
+                    getPositionOfLastApostropheChar = linkJs.lastIndexOf("'");
+                    workingHourId = linkJs.substring(getPositionOfLastEqualsChar + 1, getPositionOfLastApostropheChar);
+                    System.out.println(workingHourId);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

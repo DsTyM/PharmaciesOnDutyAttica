@@ -6,7 +6,7 @@ public class Main {
         // An array list of HashMaps that will contain every <PharmacyId, WorkingHourId> would be
         // a good implementation.
 
-        GetAvailablePharmacyIdsAndWorkingHourIds.getAvailablePharmacyIdsAndWorkingHourIds();
+        GetAvailablePharmacyIdsAndWorkingHourIds.getAvailablePharmacyIdsAndWorkingHourIds(0);
 
         // 2. Get all WorkingHours (instances)
 
