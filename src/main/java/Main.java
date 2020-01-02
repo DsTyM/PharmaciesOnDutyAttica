@@ -12,7 +12,7 @@ public class Main {
 
         // 2. Get all WorkingHours (instances)
 
-//        var listOfWorkingHours = GetWorkingHoursInfo.getWorkingHoursInfo();
+//        var listOfWorkingHours = WorkingHoursInfo.getWorkingHoursInfo();
 //
 //        for (var workingHour : listOfWorkingHours) {
 //            System.out.println(workingHour);
@@ -20,7 +20,7 @@ public class Main {
 
         // 3. Get all Pharmacies (instances)
 
-//        var listOfPharmacies = GetPharmaciesInfo.getPharmaciesInfo();
+//        var listOfPharmacies = PharmaciesInfo.getPharmaciesInfo();
 //
 //        for (var pharmacy : listOfPharmacies) {
 //            System.out.println(pharmacy);

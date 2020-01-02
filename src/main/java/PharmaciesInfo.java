@@ -10,7 +10,7 @@ import java.util.stream.IntStream;
     This is a simple script to get info from all pharmacyIds.
  */
 
-public class GetPharmaciesInfo {
+public class PharmaciesInfo {
     public static ArrayList<Pharmacy> getPharmaciesInfo() throws IOException {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);

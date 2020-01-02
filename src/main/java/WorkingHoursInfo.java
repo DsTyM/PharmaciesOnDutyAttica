@@ -10,7 +10,7 @@ import java.util.stream.IntStream;
     This is a simple script to get all Working Hours given the workingHoursId.
  */
 
-public class GetWorkingHoursInfo {
+public class WorkingHoursInfo {
     public static ArrayList<WorkingHour> getWorkingHoursInfo() throws IOException {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
