@@ -3,10 +3,12 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) throws IOException {
         // 1. Get all available PharmacyIds with WorkingHourIds
-        // An array list of HashMaps that will contain every <PharmacyId, WorkingHourId> would be
-        // a good implementation.
 
-        GetAvailablePharmacyIdsAndWorkingHourIds.getAvailablePharmacyIdsAndWorkingHourIds(0);
+        var workingHoursIdByPharmacyId = AvailablePharmacies.getAvailablePharmacyIdsAndWorkingHourIds(0);
+
+        if (workingHoursIdByPharmacyId != null)
+            workingHoursIdByPharmacyId
+                    .forEach((pharmacyId, workingHourId) -> System.out.println(pharmacyId + "\t" + workingHourId));
 
         // 2. Get all WorkingHours (instances)
 

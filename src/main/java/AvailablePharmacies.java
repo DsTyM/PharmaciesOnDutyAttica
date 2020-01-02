@@ -5,6 +5,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /*
@@ -12,8 +13,8 @@ import java.util.List;
     Later it will be refactored into Classes, Methods, Best Practices, etc.
  */
 
-public class GetAvailablePharmacyIdsAndWorkingHourIds {
-    public static void getAvailablePharmacyIdsAndWorkingHourIds(int daysFromToday) {
+public class AvailablePharmacies {
+    public static HashMap<Integer, Integer> getAvailablePharmacyIdsAndWorkingHourIds(int daysFromToday) {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 
@@ -40,6 +41,9 @@ public class GetAvailablePharmacyIdsAndWorkingHourIds {
         String pharmacyId;
         String workingHourId;
 
+        // HashMap<PharmacyId, WorkingHoursId>
+        var workingHoursIdByPharmacyId = new HashMap<Integer, Integer>();
+
         try {
             webClient = new WebClient(BrowserVersion.CHROME);
             webClient.getOptions().setJavaScriptEnabled(true);
@@ -58,9 +62,9 @@ public class GetAvailablePharmacyIdsAndWorkingHourIds {
             option = select.getOptionByValue(date);
             select.setSelectedAttribute(option, true);
 
-            if(daysFromToday < -1) {
-                return;
-            } else if(daysFromToday == 0) {
+            if (daysFromToday < -1) {
+                return null;
+            } else if (daysFromToday == 0) {
                 input = page.getForms().get(0).getInputsByValue("").get(2);
             } else {
                 input = page.getForms().get(0).getInputsByValue("").get(1);
@@ -75,7 +79,6 @@ public class GetAvailablePharmacyIdsAndWorkingHourIds {
             jsoupdoc = Jsoup.parse(page.asXml());
             var numOfPagesAsText = jsoupdoc.select("html body table tbody tr td:eq(1) table tbody tr:eq(4) td table tbody tr td nobr").text().trim();
             // this equals this XPath: /html/body/table/tbody/tr/td[2]/table/tbody/tr[5]/td/table/tbody/tr[1]/td/nobr
-
 
             // If there are more than one pages.
             if (!numOfPagesAsText.equals("")) {
@@ -105,16 +108,20 @@ public class GetAvailablePharmacyIdsAndWorkingHourIds {
                     getPositionOfSecondEqualsChar = linkJs.indexOf("=", linkJs.indexOf("=") + 1);
                     getPositionOfAndSymbolChar = linkJs.indexOf("&", getPositionOfSecondEqualsChar);
                     pharmacyId = linkJs.substring(getPositionOfSecondEqualsChar + 1, getPositionOfAndSymbolChar);
-                    System.out.print(pharmacyId + "\t");
 
                     getPositionOfLastEqualsChar = linkJs.lastIndexOf("=");
                     getPositionOfLastApostropheChar = linkJs.lastIndexOf("'");
                     workingHourId = linkJs.substring(getPositionOfLastEqualsChar + 1, getPositionOfLastApostropheChar);
-                    System.out.println(workingHourId);
+
+                    workingHoursIdByPharmacyId.put(Integer.parseInt(pharmacyId), Integer.parseInt(workingHourId));
                 }
             }
+
+            return workingHoursIdByPharmacyId;
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return null;
     }
 }
