@@ -1,6 +1,6 @@
-package scraper;
+package com.dstym.pharmaciesondutyattica.scraper;
 
-import entity.WorkingHour;
+import com.dstym.pharmaciesondutyattica.entity.WorkingHour;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 

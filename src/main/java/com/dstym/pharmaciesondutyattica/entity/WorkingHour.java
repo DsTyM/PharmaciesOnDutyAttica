@@ -1,4 +1,4 @@
-package entity;
+package com.dstym.pharmaciesondutyattica.entity;
 
 public class WorkingHour {
     private int id;

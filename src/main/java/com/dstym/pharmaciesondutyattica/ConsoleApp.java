@@ -1,8 +1,10 @@
-import scraper.AvailablePharmacies;
+package com.dstym.pharmaciesondutyattica;
+
+import com.dstym.pharmaciesondutyattica.scraper.AvailablePharmacies;
 
 import java.io.IOException;
 
-public class Main {
+public class ConsoleApp {
     public static void main(String[] args) throws IOException {
         // 1. Get all available PharmacyIds with WorkingHourIds
 
@@ -14,7 +16,7 @@ public class Main {
 
         // 2. Get all WorkingHours (instances)
 
-//        var listOfWorkingHours = scraper.WorkingHoursInfo.getWorkingHoursInfo();
+//        var listOfWorkingHours = WorkingHoursInfo.getWorkingHoursInfo();
 //
 //        for (var workingHour : listOfWorkingHours) {
 //            System.out.println(workingHour);
@@ -22,7 +24,7 @@ public class Main {
 
         // 3. Get all Pharmacies (instances)
 
-//        var listOfPharmacies = scraper.PharmaciesInfo.getPharmaciesInfo();
+//        var listOfPharmacies = PharmaciesInfo.getPharmaciesInfo();
 //
 //        for (var pharmacy : listOfPharmacies) {
 //            System.out.println(pharmacy);

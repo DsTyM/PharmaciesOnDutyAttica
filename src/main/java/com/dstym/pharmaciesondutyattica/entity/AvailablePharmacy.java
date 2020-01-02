@@ -1,4 +1,4 @@
-package entity;
+package com.dstym.pharmaciesondutyattica.entity;
 
 import java.util.Date;
 

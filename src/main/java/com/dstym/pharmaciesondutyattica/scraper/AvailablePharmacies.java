@@ -1,11 +1,11 @@
-package scraper;
+package com.dstym.pharmaciesondutyattica.scraper;
 
+import com.dstym.pharmaciesondutyattica.util.DateUtils;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import util.DateUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,6 +1,6 @@
-package scraper;
+package com.dstym.pharmaciesondutyattica.scraper;
 
-import entity.Pharmacy;
+import com.dstym.pharmaciesondutyattica.entity.Pharmacy;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
