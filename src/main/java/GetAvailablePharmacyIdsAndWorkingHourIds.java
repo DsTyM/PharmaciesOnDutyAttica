@@ -12,8 +12,8 @@ import java.util.List;
     Later it will be refactored into Classes, Methods, Best Practices, etc.
  */
 
-public class PrintAvailablePharmacies {
-    public static void printAvailablePharmacies() {
+public class GetAvailablePharmacyIdsAndWorkingHourIds {
+    public static void getAvailablePharmacyIdsAndWorkingHourIds() {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 

@@ -6,16 +6,22 @@ public class Main {
         // An array list of HashMaps that will contain every <PharmacyId, WorkingHourId> would be
         // a good implementation.
 
-        PrintAvailablePharmacies.printAvailablePharmacies();
+        GetAvailablePharmacyIdsAndWorkingHourIds.getAvailablePharmacyIdsAndWorkingHourIds();
 
         // 2. Get all WorkingHours (instances)
-        // An array list of WorkingHour would be a good implementation.
 
-//        GetWorkingHoursInfo.getWorkingHoursInfo();
+//        var listOfWorkingHours = GetWorkingHoursInfo.getWorkingHoursInfo();
+//
+//        for (var workingHour : listOfWorkingHours) {
+//            System.out.println(workingHour);
+//        }
 
         // 3. Get all Pharmacies (instances)
-        // An array list of Pharmacy would be a good implementation.
 
-//        GetPharmaciesInfo.getPharmaciesInfo();
+//        var listOfPharmacies = GetPharmaciesInfo.getPharmaciesInfo();
+//
+//        for (var pharmacy : listOfPharmacies) {
+//            System.out.println(pharmacy);
+//        }
     }
 }

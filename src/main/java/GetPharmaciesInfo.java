@@ -2,12 +2,7 @@ import entity.Pharmacy;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.stream.IntStream;
 
@@ -16,11 +11,12 @@ import java.util.stream.IntStream;
  */
 
 public class GetPharmaciesInfo {
-    public static void getPharmaciesInfo() throws IOException {
+    public static ArrayList<Pharmacy> getPharmaciesInfo() throws IOException {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 
-        var ids = IntStream.range(4020, 7920).toArray();
+//        var ids = IntStream.range(4020, 7920).toArray();
+        var ids = IntStream.range(4020, 4030).toArray();
 
         final var tempUrl = "http://www.fsa.gr/pharmacyshow.asp?pharmacyid=";
         String url;
@@ -66,15 +62,6 @@ public class GetPharmaciesInfo {
             listOfPharmacies.add(pharmacy);
         }
 
-        Files.deleteIfExists(Paths.get("pharmaciesInfo.txt"));
-        try (FileWriter fw = new FileWriter("pharmaciesInfo.txt", true);
-             BufferedWriter bw = new BufferedWriter(fw);
-             PrintWriter out = new PrintWriter(bw)) {
-            for (var pharmacy : listOfPharmacies) {
-                out.println(pharmacy);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return listOfPharmacies;
     }
 }

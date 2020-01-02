@@ -11,7 +11,7 @@ import java.util.stream.IntStream;
  */
 
 public class GetWorkingHoursInfo {
-    public static void getWorkingHoursInfo() throws IOException {
+    public static ArrayList<WorkingHour> getWorkingHoursInfo() throws IOException {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 
@@ -43,8 +43,6 @@ public class GetWorkingHoursInfo {
             listOfWorkingHours.add(workingHour);
         }
 
-        for (var workingHour : listOfWorkingHours) {
-            System.out.println(workingHour);
-        }
+        return listOfWorkingHours;
     }
 }
