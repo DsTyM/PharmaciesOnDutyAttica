@@ -12,7 +12,7 @@ import java.util.List;
     Later it will be refactored into Classes, Methods, Best Practices, etc.
  */
 
-public class Main {
+public class PrintAvailablePharmacies {
     public static void main(String[] args) {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
@@ -32,10 +32,6 @@ public class Main {
             webClient = new WebClient(BrowserVersion.CHROME);
             webClient.getOptions().setJavaScriptEnabled(true);
             webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
-//            webClient.getOptions().setPrintContentOnFailingStatusCode(false);
-//            webClient.getOptions().setThrowExceptionOnScriptError(false);
-//            webClient.getCookieManager().setCookiesEnabled(true);
-//            webClient.setRefreshHandler(new ThreadedRefreshHandler());
 
             // Load the page
 
@@ -43,7 +39,7 @@ public class Main {
 
             // Select Date
             HtmlSelect select = page.getForms().get(0).getSelectByName("dateduty");
-            HtmlOption option = select.getOptionByValue(Helper.dateToString(Helper.getDateFromTodayPlusDays(1)));
+            HtmlOption option = select.getOptionByValue(DateHelper.dateToString(DateHelper.getDateFromTodayPlusDays(1)));
             select.setSelectedAttribute(option, true);
 
             // if we won't select a date, get(2)
@@ -80,12 +76,12 @@ public class Main {
             var getPositionOfSecondEqualsChar = tempLinkJs.indexOf("=", tempLinkJs.indexOf("=") + 1);
             var getPositionOfAndSymbolChar = tempLinkJs.indexOf("&", getPositionOfSecondEqualsChar);
             var pharmacyId = tempLinkJs.substring(getPositionOfSecondEqualsChar + 1, getPositionOfAndSymbolChar);
-            System.out.println(pharmacyId);
+//            System.out.println(pharmacyId);
 
             var getPositionOfLastEqualsChar = tempLinkJs.lastIndexOf("=");
             var getPositionOfLastApostropheChar = tempLinkJs.lastIndexOf("'");
             var workingHoursId = tempLinkJs.substring(getPositionOfLastEqualsChar + 1, getPositionOfLastApostropheChar);
-            System.out.println(workingHoursId);
+//            System.out.println(workingHoursId);
 
 //            for (var link : pharmacyLinksJs) {
 //                System.out.println(link);

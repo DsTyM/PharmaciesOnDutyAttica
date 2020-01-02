@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
-public class Helper {
+public class DateHelper {
     public static Date getDateFromTodayPlusDays(int days) {
         // one nice way of formatting would be: "yyyy-MM-dd HH:mm:ss"
         LocalDateTime now = LocalDateTime.now().plusDays(days);

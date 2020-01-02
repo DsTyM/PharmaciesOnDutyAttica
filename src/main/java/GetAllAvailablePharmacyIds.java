@@ -135,7 +135,7 @@ public class GetAllAvailablePharmacyIds {
 
         // it starts from -1 to numOfDays -2 because it starts from yesterday
         for (var i = -1; i <= numOfDays - 2; i++) {
-            stringDates.add(Helper.dateToString(Helper.getDateFromTodayPlusDays(i)));
+            stringDates.add(DateHelper.dateToString(DateHelper.getDateFromTodayPlusDays(i)));
         }
 
         return stringDates;
