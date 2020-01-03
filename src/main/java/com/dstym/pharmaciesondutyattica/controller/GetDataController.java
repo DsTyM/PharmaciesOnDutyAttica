@@ -1,8 +1,13 @@
 package com.dstym.pharmaciesondutyattica.controller;
 
+import com.dstym.pharmaciesondutyattica.entity.AvailablePharmacy;
+import com.dstym.pharmaciesondutyattica.repository.AvailablePharmacyRepository;
 import com.dstym.pharmaciesondutyattica.repository.PharmacyRepository;
 import com.dstym.pharmaciesondutyattica.repository.WorkingHourRepository;
+import com.dstym.pharmaciesondutyattica.scraper.AvailablePharmacies;
+import com.dstym.pharmaciesondutyattica.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,11 +16,39 @@ import org.springframework.web.bind.annotation.RestController;
 public class GetDataController {
     private WorkingHourRepository workingHourRepository;
     private PharmacyRepository pharmacyRepository;
+    private AvailablePharmacyRepository availablePharmacyRepository;
 
     @Autowired
-    public GetDataController(WorkingHourRepository workingHourRepository, PharmacyRepository pharmacyRepository) {
+    public GetDataController(WorkingHourRepository workingHourRepository, PharmacyRepository pharmacyRepository,
+                             AvailablePharmacyRepository availablePharmacyRepository) {
         this.workingHourRepository = workingHourRepository;
         this.pharmacyRepository = pharmacyRepository;
+        this.availablePharmacyRepository = availablePharmacyRepository;
+    }
+
+    @GetMapping("/get-available-pharmacies")
+    public String getAvailablePharmacies() {
+        var daysFromToday = 0;
+        var workingHoursIdByPharmacyId = AvailablePharmacies.getAvailablePharmacyIdsAndWorkingHourIds(daysFromToday);
+        AvailablePharmacy availablePharmacy;
+
+        if (workingHoursIdByPharmacyId != null) {
+            for (var pair : workingHoursIdByPharmacyId.keySet()) {
+                int pharmacyId = pair;
+                int workingHourId = workingHoursIdByPharmacyId.get(pair);
+
+                availablePharmacy = new AvailablePharmacy();
+                availablePharmacy.setId(0);
+                availablePharmacy.setPharmacyId(pharmacyId);
+                availablePharmacy.setWorkingHourId(workingHourId);
+                availablePharmacy.setDate(DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday)));
+                availablePharmacy.setPulledVersion(2);
+
+                System.out.println(availablePharmacy);
+                availablePharmacyRepository.save(availablePharmacy);
+            }
+        }
+        return "Operation Completed!";
     }
 
     // commented to not be triggered second time

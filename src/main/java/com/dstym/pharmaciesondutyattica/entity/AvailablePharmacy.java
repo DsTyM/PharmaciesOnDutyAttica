@@ -1,27 +1,25 @@
 package com.dstym.pharmaciesondutyattica.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "available-pharmacies")
+@Table(name = "`available-pharmacies`")
 public class AvailablePharmacy {
     @Id
-    @Column(name = "id")
+    @Column(name = "`id`")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "pharmacy-id")
+    @Column(name = "`pharmacy-id`")
     private int pharmacyId;
 
-    @Column(name = "working-hour-id")
+    @Column(name = "`working-hour-id`")
     private int workingHourId;
 
-    @Column(name = "date")
+    @Column(name = "`date`")
     private String date;
 
-    @Column(name = "pulled-version")
+    @Column(name = "`pulled-version`")
     private int pulledVersion;
 
     public AvailablePharmacy() {
