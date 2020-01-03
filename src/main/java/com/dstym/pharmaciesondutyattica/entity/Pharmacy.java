@@ -1,10 +1,27 @@
 package com.dstym.pharmaciesondutyattica.entity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "pharmacies")
 public class Pharmacy {
+    @Id
+    @Column(name = "id")
     private int id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "address")
     private String address;
+
+    @Column(name = "region")
     private String region;
+
+    @Column(name = "phone-number")
     private String phoneNumber;
 
     public Pharmacy() {

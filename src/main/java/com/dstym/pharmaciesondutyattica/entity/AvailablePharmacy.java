@@ -1,19 +1,34 @@
 package com.dstym.pharmaciesondutyattica.entity;
 
-import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "available-pharmacies")
 public class AvailablePharmacy {
+    @Id
+    @Column(name = "id")
     private long id;
+
+    @Column(name = "pharmacy-id")
     private int pharmacyId;
+
+    @Column(name = "working-hour-id")
     private int workingHourId;
-    private Date date;
+
+    @Column(name = "date")
+    private String date;
+
+    @Column(name = "pulled-version")
     private int pulledVersion;
 
     public AvailablePharmacy() {
 
     }
 
-    public AvailablePharmacy(int id, int pharmacyId, int workingHourId, Date date, int pulledVersion) {
+    public AvailablePharmacy(int id, int pharmacyId, int workingHourId, String date, int pulledVersion) {
         this.id = id;
         this.pharmacyId = pharmacyId;
         this.workingHourId = workingHourId;
@@ -45,11 +60,11 @@ public class AvailablePharmacy {
         this.workingHourId = workingHourId;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
