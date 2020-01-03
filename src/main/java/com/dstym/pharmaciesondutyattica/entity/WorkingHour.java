@@ -1,7 +1,18 @@
 package com.dstym.pharmaciesondutyattica.entity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "working-hours")
 public class WorkingHour {
+    @Id
+    @Column(name = "id")
     private int id;
+
+    @Column(name = "working-hour-text")
     private String workingHourText;
 
     public WorkingHour() {
