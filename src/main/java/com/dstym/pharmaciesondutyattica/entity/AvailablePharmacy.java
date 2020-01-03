@@ -80,6 +80,7 @@ public class AvailablePharmacy {
                 "id=" + id +
                 ", pharmacyId=" + pharmacyId +
                 ", workingHourId=" + workingHourId +
+                ", pulledVersion=" + pulledVersion +
                 ", date=" + date +
                 '}';
     }

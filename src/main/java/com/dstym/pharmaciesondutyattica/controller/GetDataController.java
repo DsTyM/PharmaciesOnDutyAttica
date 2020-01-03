@@ -29,8 +29,14 @@ public class GetDataController {
     @GetMapping("/get-available-pharmacies")
     public String getAvailablePharmacies() {
         var daysFromToday = 0;
+        var date = DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday));
         var workingHoursIdByPharmacyId = AvailablePharmacies.getAvailablePharmacyIdsAndWorkingHourIds(daysFromToday);
         AvailablePharmacy availablePharmacy;
+
+
+        var tempAvailablePharmacy =
+                (AvailablePharmacy) availablePharmacyRepository.getLastPulledVersion(date).toArray()[0];
+        var lastPulledVersion = tempAvailablePharmacy.getPulledVersion();
 
         if (workingHoursIdByPharmacyId != null) {
             for (var pair : workingHoursIdByPharmacyId.keySet()) {
@@ -41,8 +47,8 @@ public class GetDataController {
                 availablePharmacy.setId(0);
                 availablePharmacy.setPharmacyId(pharmacyId);
                 availablePharmacy.setWorkingHourId(workingHourId);
-                availablePharmacy.setDate(DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday)));
-                availablePharmacy.setPulledVersion(3);
+                availablePharmacy.setDate(date);
+                availablePharmacy.setPulledVersion(lastPulledVersion + 1);
 
                 System.out.println(availablePharmacy);
                 availablePharmacyRepository.save(availablePharmacy);
