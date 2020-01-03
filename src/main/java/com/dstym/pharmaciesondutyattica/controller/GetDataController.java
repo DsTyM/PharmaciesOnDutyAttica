@@ -20,8 +20,10 @@ public class GetDataController {
     @GetMapping("/get-working-hours")
     public String getWorkingHours() {
 
-        WorkingHour workingHour = new WorkingHour(12345, "this is a test");
+        WorkingHour workingHour = new WorkingHour(12354, "this is a test");
 
+        // if id found, update
+        // else add
         workingHourRepository.save(workingHour);
 
         return "Operation Completed!";
