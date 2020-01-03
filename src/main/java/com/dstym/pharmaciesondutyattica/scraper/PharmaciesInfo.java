@@ -17,8 +17,7 @@ public class PharmaciesInfo {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 
-//        var ids = IntStream.range(4020, 7920).toArray();
-        var ids = IntStream.range(4020, 4030).toArray();
+        var ids = IntStream.range(4020, 7920).toArray();
 
         final var tempUrl = "http://www.fsa.gr/pharmacyshow.asp?pharmacyid=";
         String url;

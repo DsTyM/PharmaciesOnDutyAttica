@@ -6,22 +6,22 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "pharmacies")
+@Table(name = "`pharmacies`")
 public class Pharmacy {
     @Id
-    @Column(name = "id")
+    @Column(name = "`id`")
     private int id;
 
-    @Column(name = "name")
+    @Column(name = "`name`")
     private String name;
 
-    @Column(name = "address")
+    @Column(name = "`address`")
     private String address;
 
-    @Column(name = "region")
+    @Column(name = "`region`")
     private String region;
 
-    @Column(name = "phone-number")
+    @Column(name = "`phone-number`")
     private String phoneNumber;
 
     public Pharmacy() {
