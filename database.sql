@@ -57,7 +57,7 @@ CREATE TABLE `pharmacies` (
   `name` varchar(250) NOT NULL,
   `address` varchar(250) NOT NULL,
   `region` varchar(250) NOT NULL,
-  `phone-number` varchar(20) DEFAULT NULL,
+  `phone-number` varchar(250) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
