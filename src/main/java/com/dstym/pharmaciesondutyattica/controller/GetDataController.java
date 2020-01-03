@@ -42,7 +42,7 @@ public class GetDataController {
                 availablePharmacy.setPharmacyId(pharmacyId);
                 availablePharmacy.setWorkingHourId(workingHourId);
                 availablePharmacy.setDate(DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday)));
-                availablePharmacy.setPulledVersion(2);
+                availablePharmacy.setPulledVersion(3);
 
                 System.out.println(availablePharmacy);
                 availablePharmacyRepository.save(availablePharmacy);
