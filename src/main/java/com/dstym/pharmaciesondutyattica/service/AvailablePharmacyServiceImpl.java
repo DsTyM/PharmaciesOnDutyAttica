@@ -2,6 +2,7 @@ package com.dstym.pharmaciesondutyattica.service;
 
 import com.dstym.pharmaciesondutyattica.entity.AvailablePharmacy;
 import com.dstym.pharmaciesondutyattica.repository.AvailablePharmacyRepository;
+import com.dstym.pharmaciesondutyattica.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,16 +26,29 @@ public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
     // not implemented yet
     @Override
     public List<AvailablePharmacy> findAllToday() {
-//        var daysFromToday = 0;
-//        var date = DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday));
-//        AvailablePharmacy availablePharmacy;
-//        var tempAvailablePharmacy =
-//                (AvailablePharmacy) availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date).toArray()[0];
-//        var lastPulledVersion = tempAvailablePharmacy.getPulledVersion();
-//
-//        return availablePharmacyRepository.findAll();
+        var daysFromToday = 0;
+        var date = DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday));
+        var tempAvailablePharmacy =
+                (AvailablePharmacy) availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date)
+                        .toArray()[0];
+        var lastPulledVersion = tempAvailablePharmacy.getPulledVersion();
 
-        return null;
+        System.out.println(lastPulledVersion);
+
+        return availablePharmacyRepository.findByDateAndAndPulledVersion(date, lastPulledVersion);
+    }
+
+    @Override
+    public List<AvailablePharmacy> findAllByDate(String urlDate) {
+        var date = urlDate.replaceAll("-", "/");
+
+        var tempAvailablePharmacy =
+                (AvailablePharmacy) availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date)
+                        .toArray()[0];
+
+        var lastPulledVersion = tempAvailablePharmacy.getPulledVersion();
+
+        return availablePharmacyRepository.findByDateAndAndPulledVersion(date, lastPulledVersion);
     }
 
     @Override

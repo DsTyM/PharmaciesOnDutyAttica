@@ -4,6 +4,7 @@ import com.dstym.pharmaciesondutyattica.entity.AvailablePharmacy;
 import com.dstym.pharmaciesondutyattica.service.AvailablePharmacyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,8 +20,13 @@ public class AvailablePharmacyRestController {
         this.availablePharmacyService = availablePharmacyService;
     }
 
-    @GetMapping("/available-pharmacies")
-    public List<AvailablePharmacy> findAll() {
-        return availablePharmacyService.findAll();
+    @GetMapping("/available-pharmacies-today")
+    public List<AvailablePharmacy> findAllToday() {
+        return availablePharmacyService.findAllToday();
+    }
+
+    @GetMapping("/available-pharmacies/{date}")
+    public List<AvailablePharmacy> findAllByDate(@PathVariable String date) {
+        return availablePharmacyService.findAllByDate(date);
     }
 }

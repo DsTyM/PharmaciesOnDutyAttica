@@ -9,6 +9,8 @@ public interface AvailablePharmacyService {
 
     List<AvailablePharmacy> findAllToday();
 
+    List<AvailablePharmacy> findAllByDate(String urlDate);
+
     AvailablePharmacy findById(long theId);
 
     void save(AvailablePharmacy availablePharmacy);
