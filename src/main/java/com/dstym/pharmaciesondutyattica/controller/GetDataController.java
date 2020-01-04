@@ -30,9 +30,9 @@ public class GetDataController {
 //        var workingHoursIdByPharmacyId = AvailablePharmacies.getAvailablePharmacyIdsAndWorkingHourIds(daysFromToday);
 //        AvailablePharmacy availablePharmacy;
 //
-//
 //        var tempAvailablePharmacy =
-//                (AvailablePharmacy) availablePharmacyRepository.getLastPulledVersion(date).toArray()[0];
+//                (AvailablePharmacy) availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date)
+//                        .toArray()[0];
 //        var lastPulledVersion = tempAvailablePharmacy.getPulledVersion();
 //
 //        if (workingHoursIdByPharmacyId != null) {
