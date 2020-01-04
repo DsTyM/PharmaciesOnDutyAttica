@@ -5,6 +5,8 @@ import com.dstym.pharmaciesondutyattica.repository.PharmacyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +37,19 @@ public class PharmacyServiceImpl implements PharmacyService {
         }
 
         return pharmacy;
+    }
+
+    @Override
+    public List<Pharmacy> findByRegion(String urlRegion) {
+        String region = URLDecoder.decode(urlRegion, StandardCharsets.UTF_8);
+
+        List<Pharmacy> result = pharmacyRepository.findByRegion(region);
+
+        if (result.isEmpty()) {
+            throw new RuntimeException("Did not find pharmacy in region: " + region);
+        }
+
+        return result;
     }
 
     @Override

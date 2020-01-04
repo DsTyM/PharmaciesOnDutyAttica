@@ -9,6 +9,8 @@ public interface PharmacyService {
 
     Pharmacy findById(int theId);
 
+    List<Pharmacy> findByRegion(String urlRegion);
+
     void save(Pharmacy pharmacy);
 
     void deleteById(int theId);
