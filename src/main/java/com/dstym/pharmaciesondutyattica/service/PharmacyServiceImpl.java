@@ -3,10 +3,12 @@ package com.dstym.pharmaciesondutyattica.service;
 import com.dstym.pharmaciesondutyattica.entity.Pharmacy;
 import com.dstym.pharmaciesondutyattica.repository.PharmacyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class PharmacyServiceImpl implements PharmacyService {
     private PharmacyRepository pharmacyRepository;
 

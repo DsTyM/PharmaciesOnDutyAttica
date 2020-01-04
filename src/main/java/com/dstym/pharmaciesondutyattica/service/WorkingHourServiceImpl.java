@@ -3,10 +3,12 @@ package com.dstym.pharmaciesondutyattica.service;
 import com.dstym.pharmaciesondutyattica.entity.WorkingHour;
 import com.dstym.pharmaciesondutyattica.repository.WorkingHourRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class WorkingHourServiceImpl implements WorkingHourService {
     private WorkingHourRepository workingHourRepository;
 

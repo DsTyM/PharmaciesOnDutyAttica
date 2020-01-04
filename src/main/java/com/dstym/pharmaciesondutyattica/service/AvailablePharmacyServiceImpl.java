@@ -2,11 +2,14 @@ package com.dstym.pharmaciesondutyattica.service;
 
 import com.dstym.pharmaciesondutyattica.entity.AvailablePharmacy;
 import com.dstym.pharmaciesondutyattica.repository.AvailablePharmacyRepository;
+import com.dstym.pharmaciesondutyattica.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
     private AvailablePharmacyRepository availablePharmacyRepository;
 
@@ -17,6 +20,18 @@ public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
 
     @Override
     public List<AvailablePharmacy> findAll() {
+        return availablePharmacyRepository.findAll();
+    }
+
+    @Override
+    public List<AvailablePharmacy> findAllToday() {
+        var daysFromToday = 0;
+        var date = DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday));
+        AvailablePharmacy availablePharmacy;
+        var tempAvailablePharmacy =
+                (AvailablePharmacy) availablePharmacyRepository.getLastPulledVersion(date).toArray()[0];
+        var lastPulledVersion = tempAvailablePharmacy.getPulledVersion();
+
         return availablePharmacyRepository.findAll();
     }
 
