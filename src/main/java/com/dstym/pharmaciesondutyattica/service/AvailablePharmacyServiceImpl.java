@@ -1,6 +1,7 @@
 package com.dstym.pharmaciesondutyattica.service;
 
 import com.dstym.pharmaciesondutyattica.entity.AvailablePharmacy;
+import com.dstym.pharmaciesondutyattica.entity.Pharmacy;
 import com.dstym.pharmaciesondutyattica.repository.AvailablePharmacyRepository;
 import com.dstym.pharmaciesondutyattica.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +43,14 @@ public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
     public List<AvailablePharmacy> findAllByDate(String urlDate) {
         var date = urlDate.replaceAll("-", "/");
 
+        List<AvailablePharmacy> result = availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date);
+
+        if (result.isEmpty()){
+            throw new RuntimeException("Did not find availablePharmacy for date: " + date);
+        }
+
         var tempAvailablePharmacy =
-                (AvailablePharmacy) availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date)
-                        .toArray()[0];
+                (AvailablePharmacy) result.toArray()[0];
 
         var lastPulledVersion = tempAvailablePharmacy.getPulledVersion();
 
