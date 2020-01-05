@@ -1,7 +1,6 @@
 package com.dstym.pharmaciesondutyattica.service;
 
 import com.dstym.pharmaciesondutyattica.entity.AvailablePharmacy;
-import com.dstym.pharmaciesondutyattica.entity.Pharmacy;
 import com.dstym.pharmaciesondutyattica.repository.AvailablePharmacyRepository;
 import com.dstym.pharmaciesondutyattica.repository.PharmacyRepository;
 import com.dstym.pharmaciesondutyattica.util.DateUtils;
@@ -31,52 +30,30 @@ public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
     }
 
     @Override
-    public List<AvailablePharmacy> findAllTodayByRegion(String urlRegion) {
-        String region = URLDecoder.decode(urlRegion, StandardCharsets.UTF_8);
-
-        List<Pharmacy> result = pharmacyRepository.findByRegion(region);
-
-        if (result.isEmpty()) {
-            throw new RuntimeException("Did not find pharmacy in region: " + region);
-        }
-
-        var daysFromToday = 0;
-        var date = DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday));
-        var tempAvailablePharmacy =
-                (AvailablePharmacy) availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date)
-                        .toArray()[0];
-        var lastPulledVersion = tempAvailablePharmacy.getPulledVersion();
-
-        return availablePharmacyRepository.findByDateAndAndPulledVersionAndPharmacyRegion(date, lastPulledVersion, region);
-    }
-
-    @Override
-    public List<AvailablePharmacy> findAllToday() {
-        var daysFromToday = 0;
-        var date = DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday));
-        var tempAvailablePharmacy =
-                (AvailablePharmacy) availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date)
-                        .toArray()[0];
-        var lastPulledVersion = tempAvailablePharmacy.getPulledVersion();
-
-        return availablePharmacyRepository.findByDateAndAndPulledVersion(date, lastPulledVersion);
-    }
-
-    @Override
-    public List<AvailablePharmacy> findAllByDate(String urlDate) {
+    public List<AvailablePharmacy> findAllByRegionAndDate(String urlRegion, String urlDate) {
         var date = urlDate.replaceAll("-", "/");
 
-        List<AvailablePharmacy> result = availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date);
+        String region = URLDecoder.decode(urlRegion, StandardCharsets.UTF_8);
+
+        if (date.equals("today")) {
+            var daysFromToday = 0;
+            date = DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday));
+        }
+
+        var result = availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date);
 
         if (result.isEmpty()) {
-            throw new RuntimeException("Did not find availablePharmacy for date: " + date);
+            throw new RuntimeException("Could not find pharmacies for the given date!");
         }
 
         var tempAvailablePharmacy = (AvailablePharmacy) result.toArray()[0];
-
         var lastPulledVersion = tempAvailablePharmacy.getPulledVersion();
 
-        return availablePharmacyRepository.findByDateAndAndPulledVersion(date, lastPulledVersion);
+        if (region.equals("all")) {
+            return availablePharmacyRepository.findByDateAndAndPulledVersion(date, lastPulledVersion);
+        }
+
+        return availablePharmacyRepository.findByDateAndAndPulledVersionAndPharmacyRegion(date, lastPulledVersion, region);
     }
 
     @Override

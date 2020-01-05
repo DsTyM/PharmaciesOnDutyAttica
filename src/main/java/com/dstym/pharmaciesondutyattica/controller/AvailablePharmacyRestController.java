@@ -3,7 +3,10 @@ package com.dstym.pharmaciesondutyattica.controller;
 import com.dstym.pharmaciesondutyattica.entity.AvailablePharmacy;
 import com.dstym.pharmaciesondutyattica.service.AvailablePharmacyService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -17,18 +20,16 @@ public class AvailablePharmacyRestController {
         this.availablePharmacyService = availablePharmacyService;
     }
 
-    @GetMapping("/available-pharmacies-today")
-    @ResponseBody
-    public List<AvailablePharmacy> findAllToday(@RequestParam(required = false) String region) {
-        if (region != null) {
-            return availablePharmacyService.findAllTodayByRegion(region);
+    @GetMapping("/available-pharmacies")
+    public List<AvailablePharmacy> findAllByDate(@RequestParam(required = false) String date, @RequestParam(required = false) String region) {
+        if (date == null || date.equals("")) {
+            date = "today";
         }
 
-        return availablePharmacyService.findAllToday();
-    }
+        if (region == null || region.equals("")) {
+            region = "all";
+        }
 
-    @GetMapping("/available-pharmacies/{date}")
-    public List<AvailablePharmacy> findAllByDate(@PathVariable String date) {
-        return availablePharmacyService.findAllByDate(date);
+        return availablePharmacyService.findAllByRegionAndDate(region, date);
     }
 }
