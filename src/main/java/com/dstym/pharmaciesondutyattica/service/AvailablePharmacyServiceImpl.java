@@ -40,7 +40,9 @@ public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
             throw new RuntimeException("Did not find pharmacy in region: " + region);
         }
 
-        return this.findAllToday();
+        var tempap = findAllToday();
+
+        return tempap;
     }
 
     @Override

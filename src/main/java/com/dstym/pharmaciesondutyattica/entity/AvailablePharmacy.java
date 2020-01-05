@@ -10,11 +10,29 @@ public class AvailablePharmacy {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "`pharmacy-id`")
-    private int pharmacyId;
+    @ManyToOne(optional = false,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name = "`pharmacy-id`")
+    private Pharmacy pharmacy;
 
-    @Column(name = "`working-hour-id`")
-    private int workingHourId;
+//    @Column(name = "`pharmacy-id`")
+//    private int pharmacyId;
+
+//    @Column(name = "`working-hour-id`")
+//    private int workingHourId;
+
+    public WorkingHour getWorkingHour() {
+        return workingHour;
+    }
+
+    public void setWorkingHour(WorkingHour workingHour) {
+        this.workingHour = workingHour;
+    }
+
+    @ManyToOne(optional = false,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name = "`working-hour-id`")
+    private WorkingHour workingHour;
 
     @Column(name = "`date`")
     private String date;
@@ -28,8 +46,8 @@ public class AvailablePharmacy {
 
     public AvailablePharmacy(int id, int pharmacyId, int workingHourId, String date, int pulledVersion) {
         this.id = id;
-        this.pharmacyId = pharmacyId;
-        this.workingHourId = workingHourId;
+//        this.pharmacyId = pharmacyId;
+//        this.workingHourId = workingHourId;
         this.date = date;
         this.pulledVersion = pulledVersion;
     }
@@ -42,21 +60,37 @@ public class AvailablePharmacy {
         this.id = id;
     }
 
-    public int getPharmacyId() {
-        return pharmacyId;
+    public Pharmacy getPharmacy() {
+        return this.pharmacy;
     }
 
-    public void setPharmacyId(int pharmacyId) {
-        this.pharmacyId = pharmacyId;
+    public void setPharmacy(Pharmacy pharmacy) {
+        this.pharmacy = pharmacy;
     }
 
-    public int getWorkingHourId() {
-        return workingHourId;
-    }
+//    public void add(Pharmacy pharmacy) {
+//        if(pharmacies == null) {
+//            pharmacies = new ArrayList<>();
+//        }
+//
+//        pharmacies.add(pharmacy);
+//    }
 
-    public void setWorkingHourId(int workingHourId) {
-        this.workingHourId = workingHourId;
-    }
+//    public int getPharmacyId() {
+//        return pharmacyId;
+//    }
+//
+//    public void setPharmacyId(int pharmacyId) {
+//        this.pharmacyId = pharmacyId;
+//    }
+
+//    public int getWorkingHourId() {
+//        return workingHourId;
+//    }
+//
+//    public void setWorkingHourId(int workingHourId) {
+//        this.workingHourId = workingHourId;
+//    }
 
     public String getDate() {
         return date;
@@ -78,8 +112,10 @@ public class AvailablePharmacy {
     public String toString() {
         return "entity.AvailablePharmacy{" +
                 "id=" + id +
-                ", pharmacyId=" + pharmacyId +
-                ", workingHourId=" + workingHourId +
+//                ", pharmacyId=" + pharmacyId +
+                ", pharmacy=" + pharmacy +
+//                ", workingHourId=" + workingHourId +
+                ", workingHour=" + workingHour +
                 ", pulledVersion=" + pulledVersion +
                 ", date=" + date +
                 '}';

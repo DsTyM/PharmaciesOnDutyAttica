@@ -49,8 +49,8 @@ public class GetDataController {
 
                 availablePharmacy = new AvailablePharmacy();
                 availablePharmacy.setId(0);
-                availablePharmacy.setPharmacyId(pharmacyId);
-                availablePharmacy.setWorkingHourId(workingHourId);
+//                availablePharmacy.setPharmacyId(pharmacyId);
+//                availablePharmacy.setWorkingHourId(workingHourId);
                 availablePharmacy.setDate(date);
                 availablePharmacy.setPulledVersion(lastPulledVersion + 1);
 
