@@ -2,7 +2,6 @@ package com.dstym.pharmaciesondutyattica.service;
 
 import com.dstym.pharmaciesondutyattica.entity.AvailablePharmacy;
 import com.dstym.pharmaciesondutyattica.repository.AvailablePharmacyRepository;
-import com.dstym.pharmaciesondutyattica.repository.PharmacyRepository;
 import com.dstym.pharmaciesondutyattica.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,13 +14,10 @@ import java.util.Optional;
 @Service
 public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
     private AvailablePharmacyRepository availablePharmacyRepository;
-    private PharmacyRepository pharmacyRepository;
 
     @Autowired
-    public AvailablePharmacyServiceImpl(AvailablePharmacyRepository availablePharmacyRepository,
-                                        PharmacyRepository pharmacyRepository) {
+    public AvailablePharmacyServiceImpl(AvailablePharmacyRepository availablePharmacyRepository) {
         this.availablePharmacyRepository = availablePharmacyRepository;
-        this.pharmacyRepository = pharmacyRepository;
     }
 
     @Override

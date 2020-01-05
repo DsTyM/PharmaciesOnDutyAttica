@@ -1,10 +1,12 @@
 package com.dstym.pharmaciesondutyattica.scraper;
 
 import com.dstym.pharmaciesondutyattica.entity.WorkingHour;
+import com.dstym.pharmaciesondutyattica.repository.WorkingHourRepository;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.stream.IntStream;
 
@@ -12,8 +14,27 @@ import java.util.stream.IntStream;
     This is a simple script to get all Working Hours given the workingHoursId.
  */
 
-public class WorkingHoursInfo {
-    public static ArrayList<WorkingHour> getWorkingHoursInfo() throws IOException {
+@Component
+public class WorkingHourScraper {
+    private static WorkingHourRepository workingHourRepository;
+
+    @Autowired
+    WorkingHourScraper(WorkingHourRepository workingHourRepository) {
+        WorkingHourScraper.workingHourRepository = workingHourRepository;
+    }
+
+    public static void getWorkingHours() {
+        var listOfWorkingHours = WorkingHourScraper.getWorkingHoursInfo();
+        for (var workingHour : listOfWorkingHours) {
+            // if id found, update
+            // else add
+            workingHourRepository.save(workingHour);
+        }
+
+        System.out.println("Operation Completed!");
+    }
+
+    private static ArrayList<WorkingHour> getWorkingHoursInfo() {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 

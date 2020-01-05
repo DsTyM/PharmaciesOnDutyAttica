@@ -1,10 +1,12 @@
 package com.dstym.pharmaciesondutyattica.scraper;
 
 import com.dstym.pharmaciesondutyattica.entity.Pharmacy;
+import com.dstym.pharmaciesondutyattica.repository.PharmacyRepository;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.stream.IntStream;
 
@@ -12,8 +14,27 @@ import java.util.stream.IntStream;
     This is a simple script to get info from all pharmacyIds.
  */
 
-public class PharmaciesInfo {
-    public static ArrayList<Pharmacy> getPharmaciesInfo() throws IOException {
+@Component
+public class PharmacyScraper {
+    private static PharmacyRepository pharmacyRepository;
+
+    @Autowired
+    PharmacyScraper(PharmacyRepository pharmacyRepository) {
+        PharmacyScraper.pharmacyRepository = pharmacyRepository;
+    }
+
+    public static void getPharmacies() {
+        var listOfPharmacies = getPharmaciesInfo();
+        for (var pharmacy : listOfPharmacies) {
+            // if id found, update
+            // else add
+            pharmacyRepository.save(pharmacy);
+        }
+
+        System.out.println("Operation Completed!");
+    }
+
+    private static ArrayList<Pharmacy> getPharmaciesInfo() {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 

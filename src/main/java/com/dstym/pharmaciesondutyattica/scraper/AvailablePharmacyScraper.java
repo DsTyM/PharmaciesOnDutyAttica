@@ -23,12 +23,12 @@ import java.util.List;
  */
 
 @Component
-public class AvailablePharmacies {
+public class AvailablePharmacyScraper {
     private static AvailablePharmacyRepository availablePharmacyRepository;
 
     @Autowired
-    public AvailablePharmacies(AvailablePharmacyRepository availablePharmacyRepository) {
-        AvailablePharmacies.availablePharmacyRepository = availablePharmacyRepository;
+    public AvailablePharmacyScraper(AvailablePharmacyRepository availablePharmacyRepository) {
+        AvailablePharmacyScraper.availablePharmacyRepository = availablePharmacyRepository;
     }
 
     public static void getAvailablePharmaciesForLastDays(int numOfDays) {
