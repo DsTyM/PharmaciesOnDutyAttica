@@ -1,11 +1,17 @@
 package com.dstym.pharmaciesondutyattica.scraper;
 
+import com.dstym.pharmaciesondutyattica.entity.AvailablePharmacy;
+import com.dstym.pharmaciesondutyattica.entity.Pharmacy;
+import com.dstym.pharmaciesondutyattica.entity.WorkingHour;
+import com.dstym.pharmaciesondutyattica.repository.AvailablePharmacyRepository;
 import com.dstym.pharmaciesondutyattica.util.DateUtils;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,8 +22,61 @@ import java.util.List;
     Later it will be refactored into Classes, Methods, Best Practices, etc.
  */
 
+@Component
 public class AvailablePharmacies {
-    public static HashMap<Integer, Integer> getAvailablePharmacyIdsAndWorkingHourIds(int daysFromToday) {
+    private static AvailablePharmacyRepository availablePharmacyRepository;
+
+    @Autowired
+    public AvailablePharmacies(AvailablePharmacyRepository availablePharmacyRepository) {
+        AvailablePharmacies.availablePharmacyRepository = availablePharmacyRepository;
+    }
+
+    public static void getAvailablePharmaciesForLastDays(int numOfDays) {
+        for (var i = 0; i < numOfDays; i++) {
+            getAvailablePharmacies(i);
+        }
+    }
+
+    public static void getAvailablePharmacies(int daysFromToday) {
+        var date = DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday));
+        var workingHoursIdByPharmacyId = getAvailablePharmacyIdsAndWorkingHourIds(daysFromToday);
+        AvailablePharmacy availablePharmacy;
+
+        var result = availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date);
+
+        int lastPulledVersion = 0;
+
+        if (!result.isEmpty()) {
+            var tempAvailablePharmacy = (AvailablePharmacy) result.toArray()[0];
+            lastPulledVersion = tempAvailablePharmacy.getPulledVersion();
+        }
+
+        if (workingHoursIdByPharmacyId != null) {
+            for (var pair : workingHoursIdByPharmacyId.keySet()) {
+                int pharmacyId = pair;
+                int workingHourId = workingHoursIdByPharmacyId.get(pair);
+
+                var tempPharmacy = new Pharmacy();
+                tempPharmacy.setId(pharmacyId);
+
+                var tempWorkingHour = new WorkingHour();
+                tempWorkingHour.setId(workingHourId);
+
+                availablePharmacy = new AvailablePharmacy();
+                availablePharmacy.setId(0);
+                availablePharmacy.setPharmacy(tempPharmacy);
+                availablePharmacy.setWorkingHour(tempWorkingHour);
+                availablePharmacy.setDate(date);
+                availablePharmacy.setPulledVersion(lastPulledVersion + 1);
+
+                System.out.println(availablePharmacy);
+                availablePharmacyRepository.save(availablePharmacy);
+            }
+        }
+        System.out.println("Operation Completed!");
+    }
+
+    private static HashMap<Integer, Integer> getAvailablePharmacyIdsAndWorkingHourIds(int daysFromToday) {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 

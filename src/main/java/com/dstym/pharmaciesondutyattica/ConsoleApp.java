@@ -1,18 +1,16 @@
 package com.dstym.pharmaciesondutyattica;
 
-import com.dstym.pharmaciesondutyattica.scraper.AvailablePharmacies;
-
 import java.io.IOException;
 
 public class ConsoleApp {
     public static void main(String[] args) throws IOException {
         // 1. Get all available PharmacyIds with WorkingHourIds
 
-        var workingHoursIdByPharmacyId = AvailablePharmacies.getAvailablePharmacyIdsAndWorkingHourIds(0);
-
-        if (workingHoursIdByPharmacyId != null)
-            workingHoursIdByPharmacyId
-                    .forEach((pharmacyId, workingHourId) -> System.out.println(pharmacyId + "\t" + workingHourId));
+//        var workingHoursIdByPharmacyId = AvailablePharmacies.getAvailablePharmacyIdsAndWorkingHourIds(0);
+//
+//        if (workingHoursIdByPharmacyId != null)
+//            workingHoursIdByPharmacyId
+//                    .forEach((pharmacyId, workingHourId) -> System.out.println(pharmacyId + "\t" + workingHourId));
 
         // 2. Get all WorkingHours (instances)
 
