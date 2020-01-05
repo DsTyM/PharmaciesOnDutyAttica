@@ -1,6 +1,8 @@
 package com.dstym.pharmaciesondutyattica.controller;
 
 import com.dstym.pharmaciesondutyattica.entity.AvailablePharmacy;
+import com.dstym.pharmaciesondutyattica.entity.Pharmacy;
+import com.dstym.pharmaciesondutyattica.entity.WorkingHour;
 import com.dstym.pharmaciesondutyattica.repository.AvailablePharmacyRepository;
 import com.dstym.pharmaciesondutyattica.repository.PharmacyRepository;
 import com.dstym.pharmaciesondutyattica.repository.WorkingHourRepository;
@@ -47,10 +49,16 @@ public class GetDataController {
                 int pharmacyId = pair;
                 int workingHourId = workingHoursIdByPharmacyId.get(pair);
 
+                var tempPharmacy = new Pharmacy();
+                tempPharmacy.setId(pharmacyId);
+
+                var tempWorkingHour = new WorkingHour();
+                tempWorkingHour.setId(workingHourId);
+
                 availablePharmacy = new AvailablePharmacy();
                 availablePharmacy.setId(0);
-//                availablePharmacy.setPharmacyId(pharmacyId);
-//                availablePharmacy.setWorkingHourId(workingHourId);
+                availablePharmacy.setPharmacy(tempPharmacy);
+                availablePharmacy.setWorkingHour(tempWorkingHour);
                 availablePharmacy.setDate(date);
                 availablePharmacy.setPulledVersion(lastPulledVersion + 1);
 
