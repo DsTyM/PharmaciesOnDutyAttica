@@ -22,8 +22,8 @@ public class WorkingHoursInfo {
         String url;
         Document jsoupdoc;
 
-        // Working Hours Ids seem to be from 1 to 40
-        var workingHoursIds = IntStream.range(1, 40).toArray();
+        // Working Hours Ids seem to be from 1 to 41
+        var workingHoursIds = IntStream.range(1, 41).toArray();
 
         var listOfWorkingHours = new ArrayList<WorkingHour>();
 

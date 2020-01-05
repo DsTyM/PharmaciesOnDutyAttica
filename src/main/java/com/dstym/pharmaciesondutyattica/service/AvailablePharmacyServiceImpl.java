@@ -3,20 +3,26 @@ package com.dstym.pharmaciesondutyattica.service;
 import com.dstym.pharmaciesondutyattica.entity.AvailablePharmacy;
 import com.dstym.pharmaciesondutyattica.entity.Pharmacy;
 import com.dstym.pharmaciesondutyattica.repository.AvailablePharmacyRepository;
+import com.dstym.pharmaciesondutyattica.repository.PharmacyRepository;
 import com.dstym.pharmaciesondutyattica.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
     private AvailablePharmacyRepository availablePharmacyRepository;
+    private PharmacyRepository pharmacyRepository;
 
     @Autowired
-    public AvailablePharmacyServiceImpl(AvailablePharmacyRepository availablePharmacyRepository) {
+    public AvailablePharmacyServiceImpl(AvailablePharmacyRepository availablePharmacyRepository,
+                                        PharmacyRepository pharmacyRepository) {
         this.availablePharmacyRepository = availablePharmacyRepository;
+        this.pharmacyRepository = pharmacyRepository;
     }
 
     @Override
@@ -24,7 +30,19 @@ public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
         return availablePharmacyRepository.findAll();
     }
 
-    // not implemented yet
+    @Override
+    public List<AvailablePharmacy> findAllTodayByRegion(String urlRegion) {
+        String region = URLDecoder.decode(urlRegion, StandardCharsets.UTF_8);
+
+        List<Pharmacy> result = pharmacyRepository.findByRegion(region);
+
+        if (result.isEmpty()) {
+            throw new RuntimeException("Did not find pharmacy in region: " + region);
+        }
+
+        return this.findAllToday();
+    }
+
     @Override
     public List<AvailablePharmacy> findAllToday() {
         var daysFromToday = 0;
@@ -33,8 +51,6 @@ public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
                 (AvailablePharmacy) availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date)
                         .toArray()[0];
         var lastPulledVersion = tempAvailablePharmacy.getPulledVersion();
-
-        System.out.println(lastPulledVersion);
 
         return availablePharmacyRepository.findByDateAndAndPulledVersion(date, lastPulledVersion);
     }
@@ -49,8 +65,7 @@ public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
             throw new RuntimeException("Did not find availablePharmacy for date: " + date);
         }
 
-        var tempAvailablePharmacy =
-                (AvailablePharmacy) result.toArray()[0];
+        var tempAvailablePharmacy = (AvailablePharmacy) result.toArray()[0];
 
         var lastPulledVersion = tempAvailablePharmacy.getPulledVersion();
 
