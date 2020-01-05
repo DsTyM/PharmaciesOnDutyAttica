@@ -20,7 +20,7 @@ public class PharmacyRestController {
     @GetMapping("/pharmacies")
     @ResponseBody
     public List<Pharmacy> findAll(@RequestParam(required = false) String region) {
-        if(region != null) {
+        if (region != null) {
             return pharmacyService.findByRegion(region);
         }
 
