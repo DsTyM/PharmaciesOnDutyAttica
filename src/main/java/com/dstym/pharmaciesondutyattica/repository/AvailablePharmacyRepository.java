@@ -9,4 +9,5 @@ public interface AvailablePharmacyRepository extends JpaRepository<AvailablePhar
     List<AvailablePharmacy> findFirstByDateOrderByPulledVersionDesc(String date);
 
     List<AvailablePharmacy> findByDateAndAndPulledVersion(String date, int pulledVersion);
+    List<AvailablePharmacy> findByDateAndAndPulledVersionAndPharmacyRegion(String date, int pulledVersion, String region);
 }

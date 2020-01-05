@@ -40,9 +40,14 @@ public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
             throw new RuntimeException("Did not find pharmacy in region: " + region);
         }
 
-        var tempap = findAllToday();
+        var daysFromToday = 0;
+        var date = DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday));
+        var tempAvailablePharmacy =
+                (AvailablePharmacy) availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date)
+                        .toArray()[0];
+        var lastPulledVersion = tempAvailablePharmacy.getPulledVersion();
 
-        return tempap;
+        return availablePharmacyRepository.findByDateAndAndPulledVersionAndPharmacyRegion(date, lastPulledVersion, region);
     }
 
     @Override
@@ -63,7 +68,7 @@ public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
 
         List<AvailablePharmacy> result = availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date);
 
-        if (result.isEmpty()){
+        if (result.isEmpty()) {
             throw new RuntimeException("Did not find availablePharmacy for date: " + date);
         }
 
