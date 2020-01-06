@@ -60,7 +60,7 @@ public class AvailablePharmacyScraper {
 
     private static int getLastPulledVersion(String date) {
         var result = availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date);
-        int lastPulledVersion = 0;
+        var lastPulledVersion = 0;
 
         if (!result.isEmpty()) {
             var tempAvailablePharmacy = (AvailablePharmacy) result.toArray()[0];
@@ -74,15 +74,12 @@ public class AvailablePharmacyScraper {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 
-        HtmlPage page;
         List<HtmlPage> pages = new ArrayList<>();
-
-        int numOfPages;
 
         try {
             var date = DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday));
 
-            page = getHTMLPageFromWebClient();
+            var page = getHTMLPageFromWebClient();
 
             selectDateFromHTMLPage(page, date);
 
@@ -95,7 +92,7 @@ public class AvailablePharmacyScraper {
             // saves the first page before it'll navigate to the next pages
             pages.add(page);
 
-            numOfPages = getNumOfPagesWithPharmacies(page);
+            var numOfPages = getNumOfPagesWithPharmacies(page);
 
             // Click next until the last page.
 
