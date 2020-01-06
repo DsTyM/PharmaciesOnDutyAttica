@@ -54,8 +54,8 @@ public class AvailablePharmacyScraper {
 
                 availablePharmacyRepository.save(availablePharmacy);
             }
+            System.out.println("Available pharmacies have been updated for " + date + "!");
         }
-        System.out.println("Available pharmacies have been updated!");
     }
 
     private static HashMap<Integer, Integer> getAvailablePharmacies(int daysFromToday) {
