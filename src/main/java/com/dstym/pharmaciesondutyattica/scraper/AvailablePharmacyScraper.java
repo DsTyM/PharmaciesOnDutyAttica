@@ -156,18 +156,7 @@ public class AvailablePharmacyScraper {
                 pages.add(page);
             }
 
-            for (var singlePage : pages) {
-                jsoupdoc = Jsoup.parse(singlePage.asXml());
-                pharmacyLinksJs = jsoupdoc.select("html body table tbody tr td:eq(1) table tbody tr:eq(3) td table tbody tr a").eachAttr("onclick");
-
-                for (String linkJs : pharmacyLinksJs) {
-                    pharmacyId = getSinglePharmacyIdFromUrl(linkJs);
-                    workingHourId = getSingleWorkingHourIdFromUrl(linkJs);
-
-                    workingHoursIdByPharmacyId.put(pharmacyId, workingHourId);
-                }
-            }
-            return workingHoursIdByPharmacyId;
+            return getPharmacyIdWorkingHourIdPairFromHTMLDOM(pages);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -175,7 +164,33 @@ public class AvailablePharmacyScraper {
         return null;
     }
 
-    private static int getSinglePharmacyIdFromUrl(String linkJs) {
+    private static HashMap<Integer, Integer> getPharmacyIdWorkingHourIdPairFromHTMLDOM(List<HtmlPage> pages) {
+        Document jsoupdoc;
+
+        List<String> pharmacyLinksJs;
+        int pharmacyId;
+        int workingHourId;
+
+        // HashMap<PharmacyId, WorkingHoursId>
+        var workingHoursIdByPharmacyId = new HashMap<Integer, Integer>();
+
+        for (var singlePage : pages) {
+            jsoupdoc = Jsoup.parse(singlePage.asXml());
+            pharmacyLinksJs = jsoupdoc
+                    .select("html body table tbody tr td:eq(1) table tbody tr:eq(3) td table tbody tr a")
+                    .eachAttr("onclick");
+
+            for (String linkJs : pharmacyLinksJs) {
+                pharmacyId = getSinglePharmacyIdFromURL(linkJs);
+                workingHourId = getSingleWorkingHourIdFromURL(linkJs);
+
+                workingHoursIdByPharmacyId.put(pharmacyId, workingHourId);
+            }
+        }
+        return workingHoursIdByPharmacyId;
+    }
+
+    private static int getSinglePharmacyIdFromURL(String linkJs) {
         int getPositionOfSecondEqualsChar;
         int getPositionOfAndSymbolChar;
         String stringPharmacyId;
@@ -188,7 +203,7 @@ public class AvailablePharmacyScraper {
         return Integer.parseInt(stringPharmacyId);
     }
 
-    private static int getSingleWorkingHourIdFromUrl(String linkJs) {
+    private static int getSingleWorkingHourIdFromURL(String linkJs) {
         int getPositionOfLastEqualsChar;
         int getPositionOfLastApostropheChar;
         String stringWorkingHourId;
