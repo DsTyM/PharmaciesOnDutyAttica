@@ -23,13 +23,13 @@ public class Scheduler {
 //        var daysFromToday = 0;
 //        AvailablePharmacyScraper.getAvailablePharmacies(daysFromToday);
 //    }
-//
+
 //    @EventListener(ApplicationReadyEvent.class)
 //    public void getAvailablePharmaciesForLastDaysAfterStartup() {
 //        var numOfDays = 5;
 //        AvailablePharmacyScraper.getAvailablePharmaciesForLastDays(numOfDays);
 //    }
-//
+
 //    @EventListener(ApplicationReadyEvent.class)
 //    public void getPharmaciesAndWorkingHoursAfterStartup() {
 //        PharmacyScraper.getPharmacies();
