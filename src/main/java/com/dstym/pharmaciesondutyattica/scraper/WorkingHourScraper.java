@@ -56,10 +56,9 @@ public class WorkingHourScraper {
 
         final var tempUrl = "http://www.fsa.gr/pharmacyshow.asp?pharmacyid=4028&programmeid=";
 
-        String url;
         Document jsoupdoc;
 
-        url = tempUrl + id;
+        var url = tempUrl + id;
 
         try {
             jsoupdoc = Jsoup.connect(url).get();

@@ -56,11 +56,9 @@ public class PharmacyScraper {
 
         final var tempUrl = "http://www.fsa.gr/pharmacyshow.asp?pharmacyid=";
 
-        String url;
-
         Document jsoupdoc;
 
-        url = tempUrl + id + "&programmeid=1";
+        var url = tempUrl + id + "&programmeid=1";
 
         try {
             jsoupdoc = Jsoup.connect(url).get();
