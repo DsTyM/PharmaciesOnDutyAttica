@@ -7,9 +7,9 @@ import com.dstym.pharmaciesondutyattica.repository.AvailablePharmacyRepository;
 import com.dstym.pharmaciesondutyattica.util.DateUtils;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.*;
+import com.gargoylesoftware.htmlunit.html.HtmlInput;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -35,22 +35,13 @@ public class AvailablePharmacyScraper {
 
     public static void saveAvailablePharmacies(int daysFromToday) {
         var date = DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday));
-        var workingHoursIdByPharmacyId = getAvailablePharmacies(daysFromToday);
-        AvailablePharmacy availablePharmacy;
+        var pharmacyIdWorkingHourIdPair = getAvailablePharmacies(daysFromToday);
 
-        var result = availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date);
+        var lastPulledVersion = getLastPulledVersion(date);
 
-        int lastPulledVersion = 0;
-
-        if (!result.isEmpty()) {
-            var tempAvailablePharmacy = (AvailablePharmacy) result.toArray()[0];
-            lastPulledVersion = tempAvailablePharmacy.getPulledVersion();
-        }
-
-        if (workingHoursIdByPharmacyId != null) {
-            for (var pair : workingHoursIdByPharmacyId.keySet()) {
-                int pharmacyId = pair;
-                int workingHourId = workingHoursIdByPharmacyId.get(pair);
+        if (pharmacyIdWorkingHourIdPair != null) {
+            for (var pharmacyId : pharmacyIdWorkingHourIdPair.keySet()) {
+                var workingHourId = pharmacyIdWorkingHourIdPair.get(pharmacyId);
 
                 var tempPharmacy = new Pharmacy();
                 tempPharmacy.setId(pharmacyId);
@@ -58,18 +49,25 @@ public class AvailablePharmacyScraper {
                 var tempWorkingHour = new WorkingHour();
                 tempWorkingHour.setId(workingHourId);
 
-                availablePharmacy = new AvailablePharmacy();
-                availablePharmacy.setId(0);
-                availablePharmacy.setPharmacy(tempPharmacy);
-                availablePharmacy.setWorkingHour(tempWorkingHour);
-                availablePharmacy.setDate(date);
-                availablePharmacy.setPulledVersion(lastPulledVersion + 1);
+                var availablePharmacy = new AvailablePharmacy(0, tempPharmacy, tempWorkingHour, date,
+                        lastPulledVersion + 1);
 
-//                System.out.println(availablePharmacy);
                 availablePharmacyRepository.save(availablePharmacy);
             }
         }
         System.out.println("Available pharmacies have been updated!");
+    }
+
+    private static int getLastPulledVersion(String date) {
+        var result = availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date);
+        int lastPulledVersion = 0;
+
+        if (!result.isEmpty()) {
+            var tempAvailablePharmacy = (AvailablePharmacy) result.toArray()[0];
+            lastPulledVersion = tempAvailablePharmacy.getPulledVersion();
+        }
+
+        return lastPulledVersion;
     }
 
     private static HashMap<Integer, Integer> getAvailablePharmacies(int daysFromToday) {
@@ -77,7 +75,6 @@ public class AvailablePharmacyScraper {
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 
         HtmlPage page;
-        List<HtmlAnchor> anchors;
         List<HtmlPage> pages = new ArrayList<>();
 
         int numOfPages;
@@ -102,10 +99,10 @@ public class AvailablePharmacyScraper {
 
             // Click next until the last page.
 
-            anchors = page.getAnchors();
+            var clickForNextPageURL = page.getAnchors().get(10);
 
             for (var i = 0; i < numOfPages - 1; i++) {
-                page = anchors.get(10).click();
+                page = clickForNextPageURL.click();
                 pages.add(page);
             }
 
