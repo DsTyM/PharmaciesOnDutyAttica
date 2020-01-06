@@ -65,7 +65,7 @@ public class AvailablePharmacyScraper {
                 availablePharmacy.setDate(date);
                 availablePharmacy.setPulledVersion(lastPulledVersion + 1);
 
-                System.out.println(availablePharmacy);
+//                System.out.println(availablePharmacy);
                 availablePharmacyRepository.save(availablePharmacy);
             }
         }
@@ -77,38 +77,24 @@ public class AvailablePharmacyScraper {
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 
         HtmlPage page;
-        HtmlInput input;
         List<HtmlAnchor> anchors;
         List<HtmlPage> pages = new ArrayList<>();
 
         Document jsoupdoc;
         int numOfPages;
 
-        HtmlSelect select;
-        HtmlOption option;
         try {
-            page = getHTMLPageFromWebClient();
-
-            // Get ids from all dates
-
             var date = DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday));
 
-            System.out.println(date);
-            select = page.getForms().get(0).getSelectByName("dateduty");
-            option = select.getOptionByValue(date);
-            select.setSelectedAttribute(option, true);
+            page = getHTMLPageFromWebClient();
+
+            selectDateFromHTMLPage(page, date);
 
             if (daysFromToday < -1) {
                 return null;
-            } else if (daysFromToday == 0) {
-                input = page.getForms().get(0).getInputsByValue("").get(2);
-            } else {
-                input = page.getForms().get(0).getInputsByValue("").get(1);
             }
 
-            // Click Search
-
-            page = input.click();
+            page = clickToSearchForAvailablePharmacies(page, daysFromToday);
 
             // jsoup Code
 
@@ -141,6 +127,31 @@ public class AvailablePharmacyScraper {
         }
 
         return null;
+    }
+
+    private static HtmlPage clickToSearchForAvailablePharmacies(HtmlPage page, int daysFromToday) throws IOException {
+        HtmlInput input;
+
+        if (daysFromToday == 0) {
+            try {
+                input = page.getForms().get(0).getInputsByValue("").get(2);
+            } catch (Exception e) {
+                input = page.getForms().get(0).getInputsByValue("").get(1);
+            }
+        } else {
+            input = page.getForms().get(0).getInputsByValue("").get(1);
+        }
+
+        return input.click();
+    }
+
+    private static void selectDateFromHTMLPage(HtmlPage page, String date) {
+        HtmlSelect select;
+        HtmlOption option;
+
+        select = page.getForms().get(0).getSelectByName("dateduty");
+        option = select.getOptionByValue(date);
+        select.setSelectedAttribute(option, true);
     }
 
     private static HtmlPage getHTMLPageFromWebClient() throws IOException {
