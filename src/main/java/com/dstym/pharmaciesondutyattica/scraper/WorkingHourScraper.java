@@ -10,10 +10,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.stream.IntStream;
 
-/*
-    This is a simple script to get all Working Hours given the workingHoursId.
- */
-
 @Component
 public class WorkingHourScraper {
     private static WorkingHourRepository workingHourRepository;
@@ -34,7 +30,7 @@ public class WorkingHourScraper {
     }
 
     private static ArrayList<WorkingHour> getWorkingHours() {
-        // Working Hours Ids seem to be from 1 to 41
+        // Working Hour Ids seem to be from 1 to 41
         var workingHoursIds = IntStream.range(1, 41).toArray();
 
         var listOfWorkingHours = new ArrayList<WorkingHour>();
@@ -71,7 +67,7 @@ public class WorkingHourScraper {
             return null;
         }
 
-        String pageInfo = getWorkingHourIdFromHTMLDOM(jsoupdoc);
+        var pageInfo = getWorkingHourIdFromHTMLDOM(jsoupdoc);
 
         return new WorkingHour(id, pageInfo);
     }

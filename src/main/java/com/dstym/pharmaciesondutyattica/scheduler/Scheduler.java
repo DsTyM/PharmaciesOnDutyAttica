@@ -1,7 +1,5 @@
 package com.dstym.pharmaciesondutyattica.scheduler;
 
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Component;
 
@@ -30,9 +28,9 @@ public class Scheduler {
 //        AvailablePharmacyScraper.getAvailablePharmaciesForLastDays(numOfDays);
 //    }
 
-    @EventListener(ApplicationReadyEvent.class)
-    public void getPharmaciesAndWorkingHoursAfterStartup() {
-//        PharmacyScraper.getPharmacies();
+//    @EventListener(ApplicationReadyEvent.class)
+//    public void getPharmaciesAndWorkingHoursAfterStartup() {
+//        PharmacyScraper.savePharmacies();
 //        WorkingHourScraper.saveWorkingHours();
-    }
+//    }
 }
