@@ -117,10 +117,9 @@ public class AvailablePharmacyScraper {
     }
 
     private static int getNumOfPagesWithPharmacies(HtmlPage page) {
-        Document jsoupdoc;
         int numOfPages;
 
-        jsoupdoc = Jsoup.parse(page.asXml());
+        var jsoupdoc = Jsoup.parse(page.asXml());
         var numOfPagesAsText = jsoupdoc
                 .select("html body table tbody tr td:eq(1) table tbody tr:eq(4) td table tbody tr td nobr")
                 .text().trim();
@@ -153,11 +152,8 @@ public class AvailablePharmacyScraper {
     }
 
     private static void selectDateFromHTMLPage(HtmlPage page, String date) {
-        HtmlSelect select;
-        HtmlOption option;
-
-        select = page.getForms().get(0).getSelectByName("dateduty");
-        option = select.getOptionByValue(date);
+        var select = page.getForms().get(0).getSelectByName("dateduty");
+        var option = select.getOptionByValue(date);
         select.setSelectedAttribute(option, true);
     }
 
@@ -172,24 +168,18 @@ public class AvailablePharmacyScraper {
     }
 
     private static HashMap<Integer, Integer> getPharmacyIdWorkingHourIdPairFromHTMLDOM(List<HtmlPage> pages) {
-        Document jsoupdoc;
-
-        List<String> pharmacyLinksJs;
-        int pharmacyId;
-        int workingHourId;
-
         // HashMap<PharmacyId, WorkingHoursId>
         var workingHoursIdByPharmacyId = new HashMap<Integer, Integer>();
 
         for (var singlePage : pages) {
-            jsoupdoc = Jsoup.parse(singlePage.asXml());
-            pharmacyLinksJs = jsoupdoc
+            var jsoupdoc = Jsoup.parse(singlePage.asXml());
+            var pharmacyLinksJs = jsoupdoc
                     .select("html body table tbody tr td:eq(1) table tbody tr:eq(3) td table tbody tr a")
                     .eachAttr("onclick");
 
             for (String linkJs : pharmacyLinksJs) {
-                pharmacyId = getSinglePharmacyIdFromURL(linkJs);
-                workingHourId = getSingleWorkingHourIdFromURL(linkJs);
+                var pharmacyId = getSinglePharmacyIdFromURL(linkJs);
+                var workingHourId = getSingleWorkingHourIdFromURL(linkJs);
 
                 workingHoursIdByPharmacyId.put(pharmacyId, workingHourId);
             }
@@ -198,26 +188,18 @@ public class AvailablePharmacyScraper {
     }
 
     private static int getSinglePharmacyIdFromURL(String linkJs) {
-        int getPositionOfSecondEqualsChar;
-        int getPositionOfAndSymbolChar;
-        String stringPharmacyId;
-
         linkJs = linkJs.trim();
-        getPositionOfSecondEqualsChar = linkJs.indexOf("=", linkJs.indexOf("=") + 1);
-        getPositionOfAndSymbolChar = linkJs.indexOf("&", getPositionOfSecondEqualsChar);
-        stringPharmacyId = linkJs.substring(getPositionOfSecondEqualsChar + 1, getPositionOfAndSymbolChar);
+        var getPositionOfSecondEqualsChar = linkJs.indexOf("=", linkJs.indexOf("=") + 1);
+        var getPositionOfAndSymbolChar = linkJs.indexOf("&", getPositionOfSecondEqualsChar);
+        var stringPharmacyId = linkJs.substring(getPositionOfSecondEqualsChar + 1, getPositionOfAndSymbolChar);
 
         return Integer.parseInt(stringPharmacyId);
     }
 
     private static int getSingleWorkingHourIdFromURL(String linkJs) {
-        int getPositionOfLastEqualsChar;
-        int getPositionOfLastApostropheChar;
-        String stringWorkingHourId;
-
-        getPositionOfLastEqualsChar = linkJs.lastIndexOf("=");
-        getPositionOfLastApostropheChar = linkJs.lastIndexOf("'");
-        stringWorkingHourId = linkJs.substring(getPositionOfLastEqualsChar + 1, getPositionOfLastApostropheChar);
+        var getPositionOfLastEqualsChar = linkJs.lastIndexOf("=");
+        var getPositionOfLastApostropheChar = linkJs.lastIndexOf("'");
+        var stringWorkingHourId = linkJs.substring(getPositionOfLastEqualsChar + 1, getPositionOfLastApostropheChar);
 
         return Integer.parseInt(stringWorkingHourId);
     }
