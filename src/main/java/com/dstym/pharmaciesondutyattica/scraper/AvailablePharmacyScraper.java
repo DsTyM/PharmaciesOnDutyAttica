@@ -58,23 +58,15 @@ public class AvailablePharmacyScraper {
         System.out.println("Available pharmacies have been updated!");
     }
 
-    private static int getLastPulledVersion(String date) {
-        var result = availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date);
-        var lastPulledVersion = 0;
-
-        if (!result.isEmpty()) {
-            var tempAvailablePharmacy = (AvailablePharmacy) result.toArray()[0];
-            lastPulledVersion = tempAvailablePharmacy.getPulledVersion();
-        }
-
-        return lastPulledVersion;
-    }
-
     private static HashMap<Integer, Integer> getAvailablePharmacies(int daysFromToday) {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 
         List<HtmlPage> pages = new ArrayList<>();
+
+        if (daysFromToday < -1) {
+            return null;
+        }
 
         try {
             var date = DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday));
@@ -82,10 +74,6 @@ public class AvailablePharmacyScraper {
             var page = getHTMLPageFromWebClient();
 
             selectDateFromHTMLPage(page, date);
-
-            if (daysFromToday < -1) {
-                return null;
-            }
 
             page = clickToSearchForAvailablePharmacies(page, daysFromToday);
 
@@ -108,6 +96,18 @@ public class AvailablePharmacyScraper {
             e.printStackTrace();
             return null;
         }
+    }
+
+    private static int getLastPulledVersion(String date) {
+        var result = availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date);
+        var lastPulledVersion = 0;
+
+        if (!result.isEmpty()) {
+            var tempAvailablePharmacy = (AvailablePharmacy) result.toArray()[0];
+            lastPulledVersion = tempAvailablePharmacy.getPulledVersion();
+        }
+
+        return lastPulledVersion;
     }
 
     private static int getNumOfPagesWithPharmacies(HtmlPage page) {
