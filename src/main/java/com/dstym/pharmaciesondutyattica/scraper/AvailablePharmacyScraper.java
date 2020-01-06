@@ -62,8 +62,6 @@ public class AvailablePharmacyScraper {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 
-        List<HtmlPage> pages = new ArrayList<>();
-
         if (daysFromToday < -1) {
             return null;
         }
@@ -77,25 +75,32 @@ public class AvailablePharmacyScraper {
 
             page = clickToSearchForAvailablePharmacies(page, daysFromToday);
 
-            // saves the first page before it'll navigate to the next pages
-            pages.add(page);
-
-            var numOfPages = getNumOfPagesWithPharmacies(page);
-
-            // Click next until the last page.
-
-            var clickForNextPageURL = page.getAnchors().get(10);
-
-            for (var i = 0; i < numOfPages - 1; i++) {
-                page = clickForNextPageURL.click();
-                pages.add(page);
-            }
+            var pages = getAllPages(page);
 
             return getPharmacyIdWorkingHourIdPairFromHTMLDOM(pages);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    private static ArrayList<HtmlPage> getAllPages(HtmlPage page) throws IOException {
+        var pages = new ArrayList<HtmlPage>();
+
+        // saves the first page before it'll navigate to the next pages
+        pages.add(page);
+
+        var numOfPages = getNumOfPagesWithPharmacies(page);
+
+        var clickForNextPageURL = page.getAnchors().get(10);
+
+        // Click next until the last page.
+        for (var i = 0; i < numOfPages - 1; i++) {
+            page = clickForNextPageURL.click();
+            pages.add(page);
+        }
+
+        return pages;
     }
 
     private static int getLastPulledVersion(String date) {
