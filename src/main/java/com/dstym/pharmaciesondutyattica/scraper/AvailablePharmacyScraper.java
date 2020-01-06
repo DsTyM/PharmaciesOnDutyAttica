@@ -80,7 +80,6 @@ public class AvailablePharmacyScraper {
         List<HtmlAnchor> anchors;
         List<HtmlPage> pages = new ArrayList<>();
 
-        Document jsoupdoc;
         int numOfPages;
 
         try {
@@ -96,21 +95,10 @@ public class AvailablePharmacyScraper {
 
             page = clickToSearchForAvailablePharmacies(page, daysFromToday);
 
-            // jsoup Code
-
-            jsoupdoc = Jsoup.parse(page.asXml());
-            var numOfPagesAsText = jsoupdoc.select("html body table tbody tr td:eq(1) table tbody tr:eq(4) td table tbody tr td nobr").text().trim();
-            // this equals this XPath: /html/body/table/tbody/tr/td[2]/table/tbody/tr[5]/td/table/tbody/tr[1]/td/nobr
-
-            // If there are more than one pages.
-            if (!numOfPagesAsText.equals("")) {
-                numOfPages = Integer.parseInt(numOfPagesAsText.substring(numOfPagesAsText.lastIndexOf(" ") + 1));
-            } else {
-                numOfPages = 1;
-
-            }
-
+            // saves the first page before it'll navigate to the next pages
             pages.add(page);
+
+            numOfPages = getNumOfPagesWithPharmacies(page);
 
             // Click next until the last page.
 
@@ -124,9 +112,28 @@ public class AvailablePharmacyScraper {
             return getPharmacyIdWorkingHourIdPairFromHTMLDOM(pages);
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
+        }
+    }
+
+    private static int getNumOfPagesWithPharmacies(HtmlPage page) {
+        Document jsoupdoc;
+        int numOfPages;
+
+        jsoupdoc = Jsoup.parse(page.asXml());
+        var numOfPagesAsText = jsoupdoc
+                .select("html body table tbody tr td:eq(1) table tbody tr:eq(4) td table tbody tr td nobr")
+                .text().trim();
+        // this equals this XPath: /html/body/table/tbody/tr/td[2]/table/tbody/tr[5]/td/table/tbody/tr[1]/td/nobr
+
+        // If there are more than one pages.
+        if (!numOfPagesAsText.equals("")) {
+            numOfPages = Integer.parseInt(numOfPagesAsText.substring(numOfPagesAsText.lastIndexOf(" ") + 1));
+        } else {
+            numOfPages = 1;
         }
 
-        return null;
+        return numOfPages;
     }
 
     private static HtmlPage clickToSearchForAvailablePharmacies(HtmlPage page, int daysFromToday) throws IOException {
