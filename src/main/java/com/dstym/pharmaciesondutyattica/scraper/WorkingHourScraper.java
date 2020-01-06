@@ -23,18 +23,38 @@ public class WorkingHourScraper {
         WorkingHourScraper.workingHourRepository = workingHourRepository;
     }
 
-    public static void getWorkingHours() {
-        var listOfWorkingHours = WorkingHourScraper.getWorkingHoursInfo();
+    public static void saveWorkingHours() {
+        var listOfWorkingHours = WorkingHourScraper.getWorkingHours();
         for (var workingHour : listOfWorkingHours) {
-            // if id found, update
-            // else add
+            // add or update
             workingHourRepository.save(workingHour);
         }
 
-        System.out.println("Operation Completed!");
+        System.out.println("All working hours have been updated!");
     }
 
-    private static ArrayList<WorkingHour> getWorkingHoursInfo() {
+    private static ArrayList<WorkingHour> getWorkingHours() {
+        // Working Hours Ids seem to be from 1 to 41
+        var workingHoursIds = IntStream.range(1, 41).toArray();
+
+        var listOfWorkingHours = new ArrayList<WorkingHour>();
+
+        WorkingHour workingHour;
+
+        for (var id : workingHoursIds) {
+            workingHour = getSingleWorkingHour(id);
+
+            if (workingHour == null) {
+                continue;
+            }
+
+            listOfWorkingHours.add(workingHour);
+        }
+
+        return listOfWorkingHours;
+    }
+
+    private static WorkingHour getSingleWorkingHour(int id) {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 
@@ -43,29 +63,22 @@ public class WorkingHourScraper {
         String url;
         Document jsoupdoc;
 
-        // Working Hours Ids seem to be from 1 to 41
-        var workingHoursIds = IntStream.range(1, 41).toArray();
+        url = tempUrl + id;
 
-        var listOfWorkingHours = new ArrayList<WorkingHour>();
-
-        for (var id : workingHoursIds) {
-            url = tempUrl + id;
-
-            try {
-                jsoupdoc = Jsoup.connect(url).get();
-            } catch (Exception e) {
-                continue;
-            }
-
-            String pageInfo;
-            var xPath = "html body center table tbody tr:eq(1) td table tbody tr:eq(1)";
-            pageInfo = jsoupdoc.select(xPath).text();
-            pageInfo = pageInfo.substring(pageInfo.indexOf(":") + 1).trim();
-
-            var workingHour = new WorkingHour(id, pageInfo);
-            listOfWorkingHours.add(workingHour);
+        try {
+            jsoupdoc = Jsoup.connect(url).get();
+        } catch (Exception e) {
+            return null;
         }
 
-        return listOfWorkingHours;
+        String pageInfo = getWorkingHourIdFromHTMLDOM(jsoupdoc);
+
+        return new WorkingHour(id, pageInfo);
+    }
+
+    private static String getWorkingHourIdFromHTMLDOM(Document jsoupdoc) {
+        var xPath = "html body center table tbody tr:eq(1) td table tbody tr:eq(1)";
+        var pageInfo = jsoupdoc.select(xPath).text();
+        return pageInfo.substring(pageInfo.indexOf(":") + 1).trim();
     }
 }
