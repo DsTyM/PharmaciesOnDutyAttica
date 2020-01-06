@@ -12,20 +12,20 @@ public class Scheduler {
 //    @Scheduled(cron = "0 5/12 * * * *")
 //    public void getAvailablePharmaciesTwicePerDay() {
 //        var daysFromToday = 0;
-//        AvailablePharmacyScraper.getAvailablePharmacies(daysFromToday);
+//        AvailablePharmacyScraper.saveAvailablePharmacies(daysFromToday);
 //    }
 
     // run only once after startup
 //    @EventListener(ApplicationReadyEvent.class)
 //    public void getAvailablePharmaciesAfterStartup() {
 //        var daysFromToday = 0;
-//        AvailablePharmacyScraper.getAvailablePharmacies(daysFromToday);
+//        AvailablePharmacyScraper.saveAvailablePharmacies(daysFromToday);
 //    }
 
 //    @EventListener(ApplicationReadyEvent.class)
 //    public void getAvailablePharmaciesForLastDaysAfterStartup() {
 //        var numOfDays = 5;
-//        AvailablePharmacyScraper.getAvailablePharmaciesForLastDays(numOfDays);
+//        AvailablePharmacyScraper.saveAvailablePharmaciesForLastDays(numOfDays);
 //    }
 
 //    @EventListener(ApplicationReadyEvent.class)

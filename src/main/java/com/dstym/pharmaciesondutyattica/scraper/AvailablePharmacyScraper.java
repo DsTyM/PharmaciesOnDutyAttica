@@ -17,11 +17,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/*
-    This code is just for playing with HtmlUnit and Jsoup.
-    Later it will be refactored into Classes, Methods, Best Practices, etc.
- */
-
 @Component
 public class AvailablePharmacyScraper {
     private static AvailablePharmacyRepository availablePharmacyRepository;
@@ -31,15 +26,15 @@ public class AvailablePharmacyScraper {
         AvailablePharmacyScraper.availablePharmacyRepository = availablePharmacyRepository;
     }
 
-    public static void getAvailablePharmaciesForLastDays(int numOfDays) {
+    public static void saveAvailablePharmaciesForLastDays(int numOfDays) {
         for (var i = 0; i < numOfDays; i++) {
-            getAvailablePharmacies(i);
+            saveAvailablePharmacies(i);
         }
     }
 
-    public static void getAvailablePharmacies(int daysFromToday) {
+    public static void saveAvailablePharmacies(int daysFromToday) {
         var date = DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday));
-        var workingHoursIdByPharmacyId = getAvailablePharmacyIdsAndWorkingHourIds(daysFromToday);
+        var workingHoursIdByPharmacyId = getAvailablePharmacies(daysFromToday);
         AvailablePharmacy availablePharmacy;
 
         var result = availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date);
@@ -76,7 +71,7 @@ public class AvailablePharmacyScraper {
         System.out.println("Operation Completed!");
     }
 
-    private static HashMap<Integer, Integer> getAvailablePharmacyIdsAndWorkingHourIds(int daysFromToday) {
+    private static HashMap<Integer, Integer> getAvailablePharmacies(int daysFromToday) {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 
