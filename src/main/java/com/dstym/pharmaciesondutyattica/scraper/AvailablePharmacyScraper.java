@@ -13,6 +13,7 @@ import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -68,16 +69,13 @@ public class AvailablePharmacyScraper {
                 availablePharmacyRepository.save(availablePharmacy);
             }
         }
-        System.out.println("Operation Completed!");
+        System.out.println("Available pharmacies have been updated!");
     }
 
     private static HashMap<Integer, Integer> getAvailablePharmacies(int daysFromToday) {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 
-        final var url = "http://www.fsa.gr/duties.asp";
-
-        WebClient webClient;
         HtmlPage page;
         HtmlInput input;
         List<HtmlAnchor> anchors;
@@ -88,27 +86,8 @@ public class AvailablePharmacyScraper {
 
         HtmlSelect select;
         HtmlOption option;
-
-        List<String> pharmacyLinksJs;
-
-        int getPositionOfSecondEqualsChar;
-        int getPositionOfAndSymbolChar;
-        int getPositionOfLastEqualsChar;
-        int getPositionOfLastApostropheChar;
-        int pharmacyId;
-        int workingHourId;
-
-        // HashMap<PharmacyId, WorkingHoursId>
-        var workingHoursIdByPharmacyId = new HashMap<Integer, Integer>();
-
         try {
-            webClient = new WebClient(BrowserVersion.CHROME);
-            webClient.getOptions().setJavaScriptEnabled(true);
-            webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
-
-            // Load the page
-
-            page = webClient.getPage(url);
+            page = getHTMLPageFromWebClient();
 
             // Get ids from all dates
 
@@ -162,6 +141,16 @@ public class AvailablePharmacyScraper {
         }
 
         return null;
+    }
+
+    private static HtmlPage getHTMLPageFromWebClient() throws IOException {
+        final var url = "http://www.fsa.gr/duties.asp";
+
+        var webClient = new WebClient(BrowserVersion.CHROME);
+        webClient.getOptions().setJavaScriptEnabled(true);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+
+        return webClient.getPage(url);
     }
 
     private static HashMap<Integer, Integer> getPharmacyIdWorkingHourIdPairFromHTMLDOM(List<HtmlPage> pages) {
