@@ -1,5 +1,8 @@
 package com.dstym.pharmaciesondutyattica.scheduler;
 
+import com.dstym.pharmaciesondutyattica.scraper.AvailablePharmacyScraper;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Component;
 
@@ -16,11 +19,11 @@ public class Scheduler {
 //    }
 
     // run only once after startup
-//    @EventListener(ApplicationReadyEvent.class)
-//    public void getAvailablePharmaciesAfterStartup() {
-//        var daysFromToday = 0;
-//        AvailablePharmacyScraper.saveAvailablePharmacies(daysFromToday);
-//    }
+    @EventListener(ApplicationReadyEvent.class)
+    public void getAvailablePharmaciesAfterStartup() {
+        var daysFromToday = 0;
+        AvailablePharmacyScraper.saveAvailablePharmacies(daysFromToday);
+    }
 
 //    @EventListener(ApplicationReadyEvent.class)
 //    public void getAvailablePharmaciesForLastDaysAfterStartup() {

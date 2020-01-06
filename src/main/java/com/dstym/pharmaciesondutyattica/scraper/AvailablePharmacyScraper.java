@@ -95,8 +95,8 @@ public class AvailablePharmacyScraper {
         int getPositionOfAndSymbolChar;
         int getPositionOfLastEqualsChar;
         int getPositionOfLastApostropheChar;
-        String pharmacyId;
-        String workingHourId;
+        int pharmacyId;
+        int workingHourId;
 
         // HashMap<PharmacyId, WorkingHoursId>
         var workingHoursIdByPharmacyId = new HashMap<Integer, Integer>();
@@ -161,24 +161,42 @@ public class AvailablePharmacyScraper {
                 pharmacyLinksJs = jsoupdoc.select("html body table tbody tr td:eq(1) table tbody tr:eq(3) td table tbody tr a").eachAttr("onclick");
 
                 for (String linkJs : pharmacyLinksJs) {
-                    linkJs = linkJs.trim();
-                    getPositionOfSecondEqualsChar = linkJs.indexOf("=", linkJs.indexOf("=") + 1);
-                    getPositionOfAndSymbolChar = linkJs.indexOf("&", getPositionOfSecondEqualsChar);
-                    pharmacyId = linkJs.substring(getPositionOfSecondEqualsChar + 1, getPositionOfAndSymbolChar);
+                    pharmacyId = getSinglePharmacyIdFromUrl(linkJs);
+                    workingHourId = getSingleWorkingHourIdFromUrl(linkJs);
 
-                    getPositionOfLastEqualsChar = linkJs.lastIndexOf("=");
-                    getPositionOfLastApostropheChar = linkJs.lastIndexOf("'");
-                    workingHourId = linkJs.substring(getPositionOfLastEqualsChar + 1, getPositionOfLastApostropheChar);
-
-                    workingHoursIdByPharmacyId.put(Integer.parseInt(pharmacyId), Integer.parseInt(workingHourId));
+                    workingHoursIdByPharmacyId.put(pharmacyId, workingHourId);
                 }
             }
-
             return workingHoursIdByPharmacyId;
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         return null;
+    }
+
+    private static int getSinglePharmacyIdFromUrl(String linkJs) {
+        int getPositionOfSecondEqualsChar;
+        int getPositionOfAndSymbolChar;
+        String stringPharmacyId;
+
+        linkJs = linkJs.trim();
+        getPositionOfSecondEqualsChar = linkJs.indexOf("=", linkJs.indexOf("=") + 1);
+        getPositionOfAndSymbolChar = linkJs.indexOf("&", getPositionOfSecondEqualsChar);
+        stringPharmacyId = linkJs.substring(getPositionOfSecondEqualsChar + 1, getPositionOfAndSymbolChar);
+
+        return Integer.parseInt(stringPharmacyId);
+    }
+
+    private static int getSingleWorkingHourIdFromUrl(String linkJs) {
+        int getPositionOfLastEqualsChar;
+        int getPositionOfLastApostropheChar;
+        String stringWorkingHourId;
+
+        getPositionOfLastEqualsChar = linkJs.lastIndexOf("=");
+        getPositionOfLastApostropheChar = linkJs.lastIndexOf("'");
+        stringWorkingHourId = linkJs.substring(getPositionOfLastEqualsChar + 1, getPositionOfLastApostropheChar);
+
+        return Integer.parseInt(stringWorkingHourId);
     }
 }
