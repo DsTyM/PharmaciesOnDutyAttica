@@ -30,12 +30,6 @@ public class PharmacyRestController {
     @GetMapping("/pharmacies/{pharmacyId}")
     public Pharmacy getPharmacy(@PathVariable int pharmacyId) {
 
-        var pharmacy = pharmacyService.findById(pharmacyId);
-
-        if (pharmacy == null) {
-            throw new RuntimeException("Pharmacy with id not found: " + pharmacyId);
-        }
-
-        return pharmacy;
+        return pharmacyService.findById(pharmacyId);
     }
 }

@@ -28,12 +28,6 @@ public class WorkingHourRestController {
     @GetMapping("/working-hours/{workingHourId}")
     public WorkingHour getEmployee(@PathVariable int workingHourId) {
 
-        WorkingHour workingHour = workingHourService.findById(workingHourId);
-
-        if (workingHour == null) {
-            throw new RuntimeException("WorkingHour with id not found: " + workingHourId);
-        }
-
-        return workingHour;
+        return workingHourService.findById(workingHourId);
     }
 }
