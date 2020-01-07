@@ -13,11 +13,11 @@ import java.util.Optional;
 
 @Service
 public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
-    private AvailablePharmacyRepository availablePharmacyRepository;
+    private static AvailablePharmacyRepository availablePharmacyRepository;
 
     @Autowired
     public AvailablePharmacyServiceImpl(AvailablePharmacyRepository availablePharmacyRepository) {
-        this.availablePharmacyRepository = availablePharmacyRepository;
+        AvailablePharmacyServiceImpl.availablePharmacyRepository = availablePharmacyRepository;
     }
 
     @Override
@@ -36,20 +36,31 @@ public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
             date = DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday));
         }
 
-        var result = availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date);
-
-        if (result.isEmpty()) {
-            throw new RuntimeException("Could not find pharmacies for the given date!");
-        }
-
-        var tempAvailablePharmacy = (AvailablePharmacy) result.toArray()[0];
-        var lastPulledVersion = tempAvailablePharmacy.getPulledVersion();
+        var lastPulledVersion = getLastPulledVersion(date);
 
         if (region.equals("all")) {
             return availablePharmacyRepository.findByDateAndAndPulledVersion(date, lastPulledVersion);
         }
 
-        return availablePharmacyRepository.findByDateAndAndPulledVersionAndPharmacyRegion(date, lastPulledVersion, region);
+        var result = availablePharmacyRepository.findByDateAndAndPulledVersionAndPharmacyRegion(date,
+                lastPulledVersion, region);
+
+        if (!result.isEmpty()) {
+            return result;
+        } else {
+            throw new RuntimeException("Did not find available pharmacies in region: " + region);
+        }
+    }
+
+    private static int getLastPulledVersion(String date) {
+        var result = availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date);
+
+        if (result.isEmpty()) {
+            throw new RuntimeException("Did not find available pharmacies for date: " + date);
+        }
+
+        var tempAvailablePharmacy = (AvailablePharmacy) result.toArray()[0];
+        return tempAvailablePharmacy.getPulledVersion();
     }
 
     @Override

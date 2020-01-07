@@ -21,7 +21,8 @@ public class AvailablePharmacyRestController {
     }
 
     @GetMapping("/available-pharmacies")
-    public List<AvailablePharmacy> findAllByDate(@RequestParam(required = false) String date, @RequestParam(required = false) String region) {
+    public List<AvailablePharmacy> findAllByDate(@RequestParam(required = false) String date,
+                                                 @RequestParam(required = false) String region) {
         if (date == null || date.equals("")) {
             date = "today";
         }
