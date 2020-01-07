@@ -31,6 +31,8 @@ CREATE TABLE `available-pharmacies` (
   PRIMARY KEY (`id`),
   KEY `id_idx` (`pharmacy-id`),
   KEY `id_idx1` (`working-hour-id`),
+  KEY `idx_available-pharmacies_date` (`date`),
+  KEY `idx_available_pharmacies_pulled_version_per_date` (`date`,`pulled-version`),
   CONSTRAINT `pharmacy-id` FOREIGN KEY (`pharmacy-id`) REFERENCES `pharmacies` (`id`),
   CONSTRAINT `working-hour-id` FOREIGN KEY (`working-hour-id`) REFERENCES `working-hours` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -58,7 +60,8 @@ CREATE TABLE `pharmacies` (
   `address` varchar(250) NOT NULL,
   `region` varchar(250) NOT NULL,
   `phone-number` varchar(250) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `idx_pharmacies_region` (`region`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -103,4 +106,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-01-03  1:12:49
+-- Dump completed on 2020-01-07  3:56:50

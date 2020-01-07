@@ -24,7 +24,7 @@ public class Scheduler {
 
 //    @EventListener(ApplicationReadyEvent.class)
 //    public void getAvailablePharmaciesForLastDaysAfterStartup() {
-//        var numOfDays = 5;
+//        var numOfDays = 10;
 //        AvailablePharmacyScraper.saveAvailablePharmaciesForLastDays(numOfDays);
 //    }
 

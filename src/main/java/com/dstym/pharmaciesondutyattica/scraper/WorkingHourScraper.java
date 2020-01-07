@@ -50,7 +50,7 @@ public class WorkingHourScraper {
         return listOfWorkingHours;
     }
 
-    private static WorkingHour getSingleWorkingHour(int id) {
+    public static WorkingHour getSingleWorkingHour(int id) {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 

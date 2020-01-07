@@ -4,6 +4,8 @@ import com.dstym.pharmaciesondutyattica.entity.AvailablePharmacy;
 import com.dstym.pharmaciesondutyattica.entity.Pharmacy;
 import com.dstym.pharmaciesondutyattica.entity.WorkingHour;
 import com.dstym.pharmaciesondutyattica.repository.AvailablePharmacyRepository;
+import com.dstym.pharmaciesondutyattica.repository.PharmacyRepository;
+import com.dstym.pharmaciesondutyattica.repository.WorkingHourRepository;
 import com.dstym.pharmaciesondutyattica.util.DateUtils;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -21,10 +23,16 @@ import java.util.List;
 @Component
 public class AvailablePharmacyScraper {
     private static AvailablePharmacyRepository availablePharmacyRepository;
+    private static PharmacyRepository pharmacyRepository;
+    private static WorkingHourRepository workingHourRepository;
 
     @Autowired
-    public AvailablePharmacyScraper(AvailablePharmacyRepository availablePharmacyRepository) {
+    public AvailablePharmacyScraper(AvailablePharmacyRepository availablePharmacyRepository,
+                                    PharmacyRepository pharmacyRepository,
+                                    WorkingHourRepository workingHourRepository) {
         AvailablePharmacyScraper.availablePharmacyRepository = availablePharmacyRepository;
+        AvailablePharmacyScraper.pharmacyRepository = pharmacyRepository;
+        AvailablePharmacyScraper.workingHourRepository = workingHourRepository;
     }
 
     public static void saveAvailablePharmaciesForLastDays(int numOfDays) {
@@ -52,9 +60,27 @@ public class AvailablePharmacyScraper {
                 var availablePharmacy = new AvailablePharmacy(0, tempPharmacy, tempWorkingHour, date,
                         lastPulledVersion + 1);
 
-                availablePharmacyRepository.save(availablePharmacy);
+                saveAvailablePharmacy(availablePharmacy);
             }
             System.out.println("Available pharmacies have been updated for " + date + "!");
+        }
+    }
+
+    private static void saveAvailablePharmacy(AvailablePharmacy availablePharmacy) {
+        try {
+            availablePharmacyRepository.save(availablePharmacy);
+        } catch (Exception e) {
+            var tempPharmacy = PharmacyScraper.getSinglePharmacy(availablePharmacy.getPharmacy().getId());
+            if (tempPharmacy != null) {
+                pharmacyRepository.save(tempPharmacy);
+            }
+
+            var tempWorkingHour = WorkingHourScraper.getSingleWorkingHour(availablePharmacy.getWorkingHour().getId());
+            if (tempWorkingHour != null) {
+                workingHourRepository.save(tempWorkingHour);
+            }
+
+            availablePharmacyRepository.save(availablePharmacy);
         }
     }
 

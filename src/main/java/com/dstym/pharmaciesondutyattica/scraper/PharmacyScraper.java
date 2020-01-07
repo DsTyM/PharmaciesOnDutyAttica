@@ -50,7 +50,7 @@ public class PharmacyScraper {
         return listOfPharmacies;
     }
 
-    private static Pharmacy getSinglePharmacy(int id) {
+    public static Pharmacy getSinglePharmacy(int id) {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 
