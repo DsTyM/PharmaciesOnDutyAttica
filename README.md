@@ -36,7 +36,8 @@ What's next:
 - Unit Tests (with JUnit and Mockito)
 - API Documentation (probably with Swagger)
 - Front End in Angular
+- Docker Support
 
 will soon be added to the project.
 
-This project is just for learning purposes only.
+This project is just for learning purposes.
