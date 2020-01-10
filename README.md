@@ -12,7 +12,7 @@ Here is an example of how it returns the pharmacies on duty:
 {
     "id": 866,
     "pharmacy": {
-        "id": 5251,
+        "id": 3251,
         "name": "ΓΙΩΡΓΟΣ ΠΑΠΑΔΟΠΟΥΛΟΣ",
         "address": "ΠΛΑΤ.ΑΕΡΟΠΟΡΙΑΣ 153",
         "region": "ΗΛΙΟΥΠΟΛΗ",
@@ -23,7 +23,7 @@ Here is an example of how it returns the pharmacies on duty:
         "workingHourText": "8 ΠΡΩΙ - 11 ΒΡΑΔΥ"
     },
     "date": "10/1/2020",
-    "pulledVersion": 3
+    "pulledVersion": 2
 }
 ```
 It also contains a scheduler where it refresh the available pharmacies for the given day 
@@ -31,3 +31,12 @@ when the application is started and it also use cron expressions to refresh the 
 list twice per day. This can also be customised.
 
 The final version of the API may change.
+
+What's next:
+- Unit Tests (with JUnit and Mockito)
+- API Documentation (probably with Swagger)
+- Front End in Angular
+
+will soon be added to the project.
+
+This project is just for learning purposes only.
