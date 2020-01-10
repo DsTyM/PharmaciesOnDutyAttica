@@ -5,7 +5,7 @@ and provide them as a REST API.
 
 It uses htmlunit to interact and crawl the fsa.gr website and jsoup to scrape the data 
 (the available pharmacies per day, pharmacies' information and the different working hours available).
-It also uses MySQL to save the data on the server and Spring Boot to provide the RestAPI.
+It also uses MySQL to save the data on the server and Spring Boot to provide the Rest API.
 
 Here is an example of how it returns the pharmacies on duty:
 ```json
