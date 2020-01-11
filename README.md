@@ -1,9 +1,9 @@
 # PharmaciesOnDutyAttica
 Pharmacies on duty attica is a web application where it gets the pharmacies on duty from the official 
 Pharmacists Association of Attica Website: [http://www.fsa.gr/duties.asp](http://www.fsa.gr/duties.asp)
-and provide them as a REST API.
+and provide them as a REST API in JSON format.
 
-It uses htmlunit to interact and crawl the fsa.gr website and jsoup to scrape the data 
+It uses HtmlUnit to interact and crawl the fsa.gr website and jsoup to scrape the data 
 (the available pharmacies per day, pharmacies' information and the different working hours available).
 It also uses MySQL to save the data on the server and Spring Boot to provide the Rest API.
 
@@ -26,6 +26,8 @@ Here is an example of how it returns the pharmacies on duty:
     "pulledVersion": 2
 }
 ```
+It can also search for a specific date or for a specific region.
+
 It also contains a scheduler where it refresh the available pharmacies for the given day 
 when the application is started and it also use cron expressions to refresh the available pharmacies 
 list twice per day. This can also be customised.
@@ -37,7 +39,5 @@ What's next:
 - API Documentation (probably with Swagger)
 - Front End in Angular
 - Docker Support
-
-will soon be added to the project.
 
 This project is just for learning purposes.
