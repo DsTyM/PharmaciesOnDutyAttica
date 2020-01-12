@@ -1,5 +1,5 @@
 1) At first we need to have mysql_client installed on the host machine.
-	On Linux we can install it with this command:
+	On Ubuntu we can install it with this command:
 	sudo apt install mysql-client
 2) Then we run this command:
 	docker container run --name mysql-for-pharmacies -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=pharmacies -e MYSQL_USER=developer -e MYSQL_PASSWORD=developer -d mysql:8.0.18
