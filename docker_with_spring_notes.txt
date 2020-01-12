@@ -16,7 +16,7 @@
 	show tables;
 
 	then we make sure that the tables have been imported.
-6) We open the spring boot project with IntelliJ we open the maven file named: pom.xml
+6) We open the spring boot project with IntelliJ, then we open the maven file named: pom.xml
 	and we change this:
 	<build>
         <plugins>
