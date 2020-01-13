@@ -37,8 +37,18 @@ The final version of the API may change.
 To start the project using docker, just run:
 ```
 $ git clone https://github.com/DsTyM/PharmaciesOnDutyAttica.git
+$ cd PharmaciesOnDutyAttica
 $ docker-compose up
 ```
+The application can be accessed on:
+```
+http://localhost:8080
+```
+So for example to get the pharmacies on duty you make a simple GET request on:
+```
+http://localhost:8080/api/available-pharmacies
+```
+Full API Documentation is coming soon.
 
 What's next:
 - Unit Tests (with JUnit and Mockito)
