@@ -34,10 +34,15 @@ list twice per day. This can also be customised.
 
 The final version of the API may change.
 
+To start the project using docker, just run:
+```
+$ git clone https://github.com/DsTyM/PharmaciesOnDutyAttica.git
+$ docker-compose up
+```
+
 What's next:
 - Unit Tests (with JUnit and Mockito)
 - API Documentation (probably with Swagger)
 - Front End in Angular
-- Docker Support
 
 This project is just for learning purposes.
