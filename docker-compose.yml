@@ -16,6 +16,7 @@ services:
     depends_on:
       - db # This service depends on mysql. Start that first.
     environment: # Pass environment variables to the service
+      TZ: "Europe/Athens"
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/pharmacies?useSSL=false&serverTimezone=UTC&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: developer
       SPRING_DATASOURCE_PASSWORD: developer

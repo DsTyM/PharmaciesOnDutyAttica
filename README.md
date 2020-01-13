@@ -26,7 +26,6 @@ Here is an example of how it returns the pharmacies on duty:
     "pulledVersion": 2
 }
 ```
-It can also search for a specific date or for a specific region.
 
 It also contains a scheduler where it refresh the available pharmacies for the given day 
 when the application is started and it also use cron expressions to refresh the available pharmacies 
@@ -38,21 +37,18 @@ To start the project using docker, just run:
 ```
 $ git clone https://github.com/DsTyM/PharmaciesOnDutyAttica.git
 $ cd PharmaciesOnDutyAttica
-$ docker-compose up
+$ docker-compose up --build
 ```
 The application can be accessed on:
 ```
 http://localhost:8080
 ```
-So for example to get the pharmacies on duty you make a simple GET request on:
-```
-http://localhost:8080/api/available-pharmacies
-```
-Full API Documentation is coming soon.
+This page will redirect you to the Documentation of the API of the application. 
+It uses Swagger UI to generate the API Documentation.
 
 What's next:
 - Unit Tests (with JUnit and Mockito)
-- API Documentation (probably with Swagger)
 - Front End in Angular
+- Show pharmacy on duty address on Google Maps using Geocoding API.
 
 This project is just for learning purposes.
