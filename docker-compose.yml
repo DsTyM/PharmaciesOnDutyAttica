@@ -8,7 +8,7 @@ services:
   app-server:
     # Configuration for building the docker image for the backend service
     build:
-      context: . # Use an image built from the specified dockerfile in the `polling-app-server` directory.
+      context: . # Use an image built from the specified dockerfile in the root directory.
       dockerfile: Dockerfile
     ports:
       - "8080:8080" # Forward the exposed port 8080 on the container to port 8080 on the host machine
