@@ -1,9 +1,12 @@
 package com.dstym.pharmaciesondutyattica.entity;
 
+import io.swagger.annotations.ApiModel;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "`available-pharmacies`")
+@ApiModel(description = "Available Pharmacy Information")
 public class AvailablePharmacy {
     @Id
     @Column(name = "`id`")

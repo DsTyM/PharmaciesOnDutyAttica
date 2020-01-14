@@ -1,5 +1,7 @@
 package com.dstym.pharmaciesondutyattica.entity;
 
+import io.swagger.annotations.ApiModel;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -7,6 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "`pharmacies`")
+@ApiModel(description = "Pharmacy Information")
 public class Pharmacy {
     @Id
     @Column(name = "`id`")

@@ -1,5 +1,7 @@
 package com.dstym.pharmaciesondutyattica.entity;
 
+import io.swagger.annotations.ApiModel;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -7,6 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "`working-hours`")
+@ApiModel(description = "Working Hour Information")
 public class WorkingHour {
     @Id
     @Column(name = "`id`")
