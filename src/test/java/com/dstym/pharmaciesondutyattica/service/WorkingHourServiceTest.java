@@ -8,6 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -37,6 +38,15 @@ class WorkingHourServiceTest {
         assertEquals(19, workingHours.get(1).getId());
         assertEquals("8 ΤΟ ΠΡΩΙ ΜΕ 2 ΤΟ ΜΕΣΗΜΕΡΙ ΚΑΙ 5 ΤΟ ΑΠΟΓΕΥΜΑ ΜΕ 9 ΤΟ ΒΡΑΔΥ", workingHours.get(1)
                 .getWorkingHourText());
+    }
+
+    @Test
+    public void testFindAll_noResults() {
+        when(workingHourRepository.findAll()).thenReturn(new ArrayList<>());
+
+        var workingHours = workingHourService.findAll();
+
+        assertEquals(workingHours, new ArrayList<>());
     }
 
     @Test

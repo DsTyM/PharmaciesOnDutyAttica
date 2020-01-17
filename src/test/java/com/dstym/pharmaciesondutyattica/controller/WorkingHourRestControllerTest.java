@@ -10,9 +10,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.mockito.Mockito.when;
@@ -50,6 +50,67 @@ class WorkingHourRestControllerTest {
                 "        \"workingHourText\": \"8 ΤΟ ΠΡΩΙ ΜΕ 2 ΤΟ ΜΕΣΗΜΕΡΙ ΚΑΙ 5 ΤΟ ΑΠΟΓΕΥΜΑ ΜΕ 9 ΤΟ ΒΡΑΔΥ\"\n" +
                 "}" +
                 "]";
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(content().json(json))
+                .andReturn();
+    }
+
+    @Test
+    public void testGetWorkingHours_noResults() throws Exception {
+        when(workingHourService.findAll()).thenReturn(new ArrayList<>());
+
+        var request = MockMvcRequestBuilders
+                .get("/api/working-hours")
+                .accept(MediaType.APPLICATION_JSON);
+
+        // empty array because there are no results
+        var json = "[]";
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(content().json(json))
+                .andReturn();
+    }
+
+    @Test
+    public void testGetWorkingHour_validId() throws Exception {
+        int id = 3;
+
+        when(workingHourService.findById(id)).thenReturn(
+                new WorkingHour(id, "8 ΤΟ ΠΡΩΙ ΜΕ 9 ΤΟ ΒΡΑΔΥ")
+        );
+
+        var request = MockMvcRequestBuilders
+                .get("/api/working-hours/" + id)
+                .accept(MediaType.APPLICATION_JSON);
+
+        var json = "{\n" +
+                "        \"id\": 3,\n" +
+                "        \"workingHourText\": \"8 ΤΟ ΠΡΩΙ ΜΕ 9 ΤΟ ΒΡΑΔΥ\"\n" +
+                "}";
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(content().json(json))
+                .andReturn();
+    }
+
+    @Test
+    public void testGetWorkingHour_nonValidId() throws Exception {
+        int id = -1;
+
+        when(workingHourService.findById(id)).thenReturn(
+                new WorkingHour(id, "8 ΤΟ ΠΡΩΙ ΜΕ 9 ΤΟ ΒΡΑΔΥ")
+        );
+
+        var request = MockMvcRequestBuilders
+                .get("/api/working-hours/" + id)
+                .accept(MediaType.APPLICATION_JSON);
+
+        // we expect an empty json file
+        var json = "{}";
 
         mockMvc.perform(request)
                 .andExpect(status().isOk())
