@@ -24,14 +24,14 @@ public class WorkingHourRestController {
     @GetMapping("/working-hours")
     @ApiOperation(value = "Get Working Hours",
             notes = "Get the List of the available Working hours a Pharmacy can have.")
-    public List<WorkingHour> findAll() {
+    public List<WorkingHour> getWorkingHours() {
         return workingHourService.findAll();
     }
 
     @GetMapping("/working-hours/{workingHourId}")
     @ApiOperation(value = "Find a Working Hour by Id",
             notes = "Returns a specific Working Hour info by the given Id.")
-    public WorkingHour getEmployee(@PathVariable int workingHourId) {
+    public WorkingHour getWorkingHour(@PathVariable int workingHourId) {
 
         return workingHourService.findById(workingHourId);
     }
