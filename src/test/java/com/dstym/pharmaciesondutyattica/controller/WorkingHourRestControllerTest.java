@@ -36,7 +36,7 @@ class WorkingHourRestControllerTest {
                         new WorkingHour(19, "8 ΤΟ ΠΡΩΙ ΜΕ 2 ΤΟ ΜΕΣΗΜΕΡΙ ΚΑΙ 5 ΤΟ ΑΠΟΓΕΥΜΑ ΜΕ 9 ΤΟ ΒΡΑΔΥ"))
         );
 
-        RequestBuilder request = MockMvcRequestBuilders
+        var request = MockMvcRequestBuilders
                 .get("/api/working-hours")
                 .accept(MediaType.APPLICATION_JSON);
 

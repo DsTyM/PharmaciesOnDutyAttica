@@ -24,7 +24,7 @@ public class AvailablePharmacyRestController {
     @GetMapping("/available-pharmacies")
     @ApiOperation(value = "Get Pharmacies On Duty",
             notes = "Get the List of the Pharmacies on Duty. Today is the default date")
-    public List<AvailablePharmacy> findAllByDate(@RequestParam(required = false) String date,
+    public List<AvailablePharmacy> GetAvailablePharmacies(@RequestParam(required = false) String date,
                                                  @RequestParam(required = false) String region) {
         if (date == null || date.equals("")) {
             date = "today";

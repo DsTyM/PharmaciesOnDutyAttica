@@ -22,7 +22,7 @@ public class PharmacyRestController {
     @ResponseBody
     @ApiOperation(value = "Get Pharmacies",
             notes = "Get the List of the Pharmacies in the Database.")
-    public List<Pharmacy> findAll(@RequestParam(required = false) String region) {
+    public List<Pharmacy> getPharmacies(@RequestParam(required = false) String region) {
         if (region != null) {
             return pharmacyService.findByRegion(region);
         }
