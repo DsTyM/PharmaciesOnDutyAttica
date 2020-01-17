@@ -47,7 +47,7 @@ This page will redirect you to the Documentation of the API of the application.
 It uses Swagger UI to generate the API Documentation.
 
 What's next:
-- Unit Tests (with JUnit and Mockito)
+- More Unit Tests (with JUnit and Mockito)
 - Front End in Angular
 - Show pharmacy on duty address on Google Maps using Geocoding API.
 
