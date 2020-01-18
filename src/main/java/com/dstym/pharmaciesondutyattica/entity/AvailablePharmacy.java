@@ -33,6 +33,10 @@ public class AvailablePharmacy {
 
     }
 
+    public AvailablePharmacy(int pulledVersion) {
+        this.pulledVersion = pulledVersion;
+    }
+
     public AvailablePharmacy(int id, Pharmacy pharmacy, WorkingHour workingHour, String date, int pulledVersion) {
         this.id = id;
         this.pharmacy = pharmacy;
