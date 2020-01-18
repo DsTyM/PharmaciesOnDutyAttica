@@ -25,26 +25,20 @@ class PharmacyServiceTest {
 
     @Test
     public void testFindAll() {
+        var pharmacy1 = new Pharmacy(4050, "ΣΠΥΡΟΣ ΝΙΚΟΛΑΚΟΠΟΥΛΟΣ", "ΠΕΤΡΟΥ ΚΑΡΑΓΙΩΡΓΟΥ 147",
+                "ΠΑΓΚΡΑΤΙ", "22123 12345");
+
+        var pharmacy2 = new Pharmacy(6017, "ΠΕΤΡΟΣ ΠΑΠΑΝΙΚΟΛΑΣ", "ΧΡΗΣΤΟΥ ΜΟΝΤΕΧΡΗΣΤΟΥ 1",
+                "ΘΗΣΕΙΟ", "223430 9876");
+
         when(pharmacyRepository.findAll()).thenReturn(Arrays.asList(
-                new Pharmacy(4050, "ΣΠΥΡΟΣ ΝΙΚΟΛΑΚΟΠΟΥΛΟΣ", "ΠΕΤΡΟΥ ΚΑΡΑΓΙΩΡΓΟΥ 147", "ΠΑΓΚΡΑΤΙ",
-                        "22123 12345"),
-                new Pharmacy(6017, "ΠΕΤΡΟΣ ΠΑΠΑΝΙΚΟΛΑΣ", "ΧΡΗΣΤΟΥ ΜΟΝΤΕΧΡΗΣΤΟΥ 1", "ΘΗΣΕΙΟ",
-                        "223430 9876")
+                pharmacy1, pharmacy2
         ));
 
         var pharmacies = pharmacyService.findAll();
 
-        assertEquals(4050, pharmacies.get(0).getId());
-        assertEquals("ΣΠΥΡΟΣ ΝΙΚΟΛΑΚΟΠΟΥΛΟΣ", pharmacies.get(0).getName());
-        assertEquals("ΠΕΤΡΟΥ ΚΑΡΑΓΙΩΡΓΟΥ 147", pharmacies.get(0).getAddress());
-        assertEquals("ΠΑΓΚΡΑΤΙ", pharmacies.get(0).getRegion());
-        assertEquals("22123 12345", pharmacies.get(0).getPhoneNumber());
-
-        assertEquals(6017, pharmacies.get(1).getId());
-        assertEquals("ΠΕΤΡΟΣ ΠΑΠΑΝΙΚΟΛΑΣ", pharmacies.get(1).getName());
-        assertEquals("ΧΡΗΣΤΟΥ ΜΟΝΤΕΧΡΗΣΤΟΥ 1", pharmacies.get(1).getAddress());
-        assertEquals("ΘΗΣΕΙΟ", pharmacies.get(1).getRegion());
-        assertEquals("223430 9876", pharmacies.get(1).getPhoneNumber());
+        assertPharmaciesProperties(pharmacy1, pharmacies.get(0));
+        assertPharmaciesProperties(pharmacy2, pharmacies.get(1));
     }
 
     @Test
@@ -85,5 +79,13 @@ class PharmacyServiceTest {
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    private static void assertPharmaciesProperties(Pharmacy p1, Pharmacy p2) {
+        assertEquals(p1.getId(), p2.getId());
+        assertEquals(p1.getName(), p2.getName());
+        assertEquals(p1.getAddress(), p2.getAddress());
+        assertEquals(p1.getRegion(), p2.getRegion());
+        assertEquals(p1.getPhoneNumber(), p2.getPhoneNumber());
     }
 }

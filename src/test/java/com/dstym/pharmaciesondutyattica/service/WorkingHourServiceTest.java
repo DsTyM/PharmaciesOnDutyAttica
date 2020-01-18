@@ -25,19 +25,17 @@ class WorkingHourServiceTest {
 
     @Test
     public void testFindAll() {
+        var workingHour1 = new WorkingHour(3, "8 ΤΟ ΠΡΩΙ ΜΕ 9 ΤΟ ΒΡΑΔΥ");
+        var workingHour2 = new WorkingHour(19, "8 ΤΟ ΠΡΩΙ ΜΕ 2 ΤΟ ΜΕΣΗΜΕΡΙ ΚΑΙ 5 ΤΟ ΑΠΟΓΕΥΜΑ ΜΕ 9 ΤΟ ΒΡΑΔΥ");
+
         when(workingHourRepository.findAll()).thenReturn(Arrays.asList(
-                new WorkingHour(3, "8 ΤΟ ΠΡΩΙ ΜΕ 9 ΤΟ ΒΡΑΔΥ"),
-                new WorkingHour(19, "8 ΤΟ ΠΡΩΙ ΜΕ 2 ΤΟ ΜΕΣΗΜΕΡΙ ΚΑΙ 5 ΤΟ ΑΠΟΓΕΥΜΑ ΜΕ 9 ΤΟ ΒΡΑΔΥ")
+                workingHour1, workingHour2
         ));
 
         var workingHours = workingHourService.findAll();
 
-        assertEquals(3, workingHours.get(0).getId());
-        assertEquals("8 ΤΟ ΠΡΩΙ ΜΕ 9 ΤΟ ΒΡΑΔΥ", workingHours.get(0).getWorkingHourText());
-
-        assertEquals(19, workingHours.get(1).getId());
-        assertEquals("8 ΤΟ ΠΡΩΙ ΜΕ 2 ΤΟ ΜΕΣΗΜΕΡΙ ΚΑΙ 5 ΤΟ ΑΠΟΓΕΥΜΑ ΜΕ 9 ΤΟ ΒΡΑΔΥ", workingHours.get(1)
-                .getWorkingHourText());
+        assertWorkingHoursProperties(workingHour1, workingHours.get(0));
+        assertWorkingHoursProperties(workingHour2, workingHours.get(1));
     }
 
     @Test
@@ -74,5 +72,10 @@ class WorkingHourServiceTest {
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    private static void assertWorkingHoursProperties(WorkingHour wh1, WorkingHour wh2) {
+        assertEquals(wh1.getId(), wh2.getId());
+        assertEquals(wh1.getWorkingHourText(), wh2.getWorkingHourText());
     }
 }
