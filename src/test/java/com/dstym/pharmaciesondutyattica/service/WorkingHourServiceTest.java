@@ -49,15 +49,16 @@ class WorkingHourServiceTest {
 
     @Test
     public void testFindById_validId() {
-        int id = 3;
+        var id = 3;
+        var expectedWorkingHour = new WorkingHour(id, "8 ΤΟ ΠΡΩΙ ΜΕ 9 ΤΟ ΒΡΑΔΥ");
+
         when(workingHourRepository.findById(id)).thenReturn(
-                Optional.of(new WorkingHour(id, "8 ΤΟ ΠΡΩΙ ΜΕ 9 ΤΟ ΒΡΑΔΥ"))
+                Optional.of(expectedWorkingHour)
         );
 
-        var workingHour = workingHourService.findById(id);
+        var actualWorkingHour = workingHourService.findById(id);
 
-        assertEquals(id, workingHour.getId());
-        assertEquals("8 ΤΟ ΠΡΩΙ ΜΕ 9 ΤΟ ΒΡΑΔΥ", workingHour.getWorkingHourText());
+        assertWorkingHoursProperties(expectedWorkingHour, actualWorkingHour);
     }
 
     @Test
@@ -74,8 +75,8 @@ class WorkingHourServiceTest {
         assertTrue(actualMessage.contains(expectedMessage));
     }
 
-    private static void assertWorkingHoursProperties(WorkingHour wh1, WorkingHour wh2) {
-        assertEquals(wh1.getId(), wh2.getId());
-        assertEquals(wh1.getWorkingHourText(), wh2.getWorkingHourText());
+    private static void assertWorkingHoursProperties(WorkingHour expectedWorkingHour, WorkingHour actualWorkingHour) {
+        assertEquals(expectedWorkingHour.getId(), actualWorkingHour.getId());
+        assertEquals(expectedWorkingHour.getWorkingHourText(), actualWorkingHour.getWorkingHourText());
     }
 }

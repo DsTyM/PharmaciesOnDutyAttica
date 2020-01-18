@@ -52,19 +52,17 @@ class PharmacyServiceTest {
 
     @Test
     public void testFindById_validId() {
-        int id = 4050;
+        var id = 4050;
+        var expectedPharmacy = new Pharmacy(id, "ΣΠΥΡΟΣ ΝΙΚΟΛΑΚΟΠΟΥΛΟΣ", "ΠΕΤΡΟΥ ΚΑΡΑΓΙΩΡΓΟΥ 147",
+                "ΠΑΓΚΡΑΤΙ", "22123 12345");
+
         when(pharmacyRepository.findById(id)).thenReturn(
-                Optional.of(new Pharmacy(id, "ΣΠΥΡΟΣ ΝΙΚΟΛΑΚΟΠΟΥΛΟΣ", "ΠΕΤΡΟΥ ΚΑΡΑΓΙΩΡΓΟΥ 147",
-                        "ΠΑΓΚΡΑΤΙ", "22123 12345"))
+                Optional.of(expectedPharmacy)
         );
 
-        var pharmacy = pharmacyService.findById(id);
+        var actualPharmacy = pharmacyService.findById(id);
 
-        assertEquals(id, pharmacy.getId());
-        assertEquals("ΣΠΥΡΟΣ ΝΙΚΟΛΑΚΟΠΟΥΛΟΣ", pharmacy.getName());
-        assertEquals("ΠΕΤΡΟΥ ΚΑΡΑΓΙΩΡΓΟΥ 147", pharmacy.getAddress());
-        assertEquals("ΠΑΓΚΡΑΤΙ", pharmacy.getRegion());
-        assertEquals("22123 12345", pharmacy.getPhoneNumber());
+        assertPharmaciesProperties(expectedPharmacy, actualPharmacy);
     }
 
     @Test
@@ -81,11 +79,11 @@ class PharmacyServiceTest {
         assertTrue(actualMessage.contains(expectedMessage));
     }
 
-    private static void assertPharmaciesProperties(Pharmacy p1, Pharmacy p2) {
-        assertEquals(p1.getId(), p2.getId());
-        assertEquals(p1.getName(), p2.getName());
-        assertEquals(p1.getAddress(), p2.getAddress());
-        assertEquals(p1.getRegion(), p2.getRegion());
-        assertEquals(p1.getPhoneNumber(), p2.getPhoneNumber());
+    private static void assertPharmaciesProperties(Pharmacy expectedPharmacy, Pharmacy actualPharmacy) {
+        assertEquals(expectedPharmacy.getId(), actualPharmacy.getId());
+        assertEquals(expectedPharmacy.getName(), actualPharmacy.getName());
+        assertEquals(expectedPharmacy.getAddress(), actualPharmacy.getAddress());
+        assertEquals(expectedPharmacy.getRegion(), actualPharmacy.getRegion());
+        assertEquals(expectedPharmacy.getPhoneNumber(), actualPharmacy.getPhoneNumber());
     }
 }

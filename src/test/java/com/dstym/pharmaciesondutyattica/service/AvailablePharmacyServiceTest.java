@@ -50,35 +50,29 @@ class AvailablePharmacyServiceTest {
 
         var availablePharmacies = availablePharmacyService.findAllByRegionAndDate("all", date);
 
-        /*
-            I should add all assertEquals() to assertAvailablePharmaciesProperties().
-            I should also create assertPharmaciesProperties() and assertWorkingHoursProperties()
-            I should save new Objects to tempVariables for cleaner code.
-            I need to do this to all of my previous tests.
-         */
-
         assertAvailablePharmaciesProperties(availablePharmacy1, availablePharmacies.get(0));
         assertAvailablePharmaciesProperties(availablePharmacy2, availablePharmacies.get(1));
     }
 
-    private static void assertAvailablePharmaciesProperties(AvailablePharmacy ap1, AvailablePharmacy ap2) {
-        assertEquals(ap1.getId(), ap2.getId());
-        assertPharmaciesProperties(ap1.getPharmacy(), ap2.getPharmacy());
-        assertWorkingHoursProperties(ap1.getWorkingHour(), ap2.getWorkingHour());
-        assertEquals(ap1.getDate(), ap2.getDate());
-        assertEquals(ap1.getPulledVersion(), ap2.getPulledVersion());
+    private static void assertAvailablePharmaciesProperties(AvailablePharmacy expectedAvailablePharmacy,
+                                                            AvailablePharmacy actualAvailablePharmacy) {
+        assertEquals(expectedAvailablePharmacy.getId(), actualAvailablePharmacy.getId());
+        assertPharmaciesProperties(expectedAvailablePharmacy.getPharmacy(), actualAvailablePharmacy.getPharmacy());
+        assertWorkingHoursProperties(expectedAvailablePharmacy.getWorkingHour(), actualAvailablePharmacy.getWorkingHour());
+        assertEquals(expectedAvailablePharmacy.getDate(), actualAvailablePharmacy.getDate());
+        assertEquals(expectedAvailablePharmacy.getPulledVersion(), actualAvailablePharmacy.getPulledVersion());
     }
 
-    private static void assertPharmaciesProperties(Pharmacy p1, Pharmacy p2) {
-        assertEquals(p1.getId(), p2.getId());
-        assertEquals(p1.getName(), p2.getName());
-        assertEquals(p1.getAddress(), p2.getAddress());
-        assertEquals(p1.getRegion(), p2.getRegion());
-        assertEquals(p1.getPhoneNumber(), p2.getPhoneNumber());
+    private static void assertPharmaciesProperties(Pharmacy expectedPharmacy, Pharmacy actualPharmacy) {
+        assertEquals(expectedPharmacy.getId(), actualPharmacy.getId());
+        assertEquals(expectedPharmacy.getName(), actualPharmacy.getName());
+        assertEquals(expectedPharmacy.getAddress(), actualPharmacy.getAddress());
+        assertEquals(expectedPharmacy.getRegion(), actualPharmacy.getRegion());
+        assertEquals(expectedPharmacy.getPhoneNumber(), actualPharmacy.getPhoneNumber());
     }
 
-    private static void assertWorkingHoursProperties(WorkingHour wh1, WorkingHour wh2) {
-        assertEquals(wh1.getId(), wh2.getId());
-        assertEquals(wh1.getWorkingHourText(), wh2.getWorkingHourText());
+    private static void assertWorkingHoursProperties(WorkingHour expectedWorkingHour, WorkingHour actualWorkingHour) {
+        assertEquals(expectedWorkingHour.getId(), actualWorkingHour.getId());
+        assertEquals(expectedWorkingHour.getWorkingHourText(), actualWorkingHour.getWorkingHourText());
     }
 }
