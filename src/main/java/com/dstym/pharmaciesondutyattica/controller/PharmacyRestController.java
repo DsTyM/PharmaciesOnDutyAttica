@@ -34,7 +34,6 @@ public class PharmacyRestController {
     @ApiOperation(value = "Find a Pharmacy by Id",
             notes = "Returns a specific Pharmacy info by the given Id.")
     public Pharmacy getPharmacy(@PathVariable int pharmacyId) {
-
         return pharmacyService.findById(pharmacyId);
     }
 }

@@ -32,7 +32,6 @@ public class WorkingHourRestController {
     @ApiOperation(value = "Find a Working Hour by Id",
             notes = "Returns a specific Working Hour info by the given Id.")
     public WorkingHour getWorkingHour(@PathVariable int workingHourId) {
-
         return workingHourService.findById(workingHourId);
     }
 }
