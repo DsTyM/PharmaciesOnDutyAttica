@@ -42,17 +42,4 @@ class DateUtilsTest {
         var actualDate = new SimpleDateFormat("d/M/yyyy").parse("8/1/2020");
         assertEquals(expectedDate, actualDate);
     }
-
-    /*
-        I should not forget to implement these two tests.
-     */
-    @Test
-    void testGetDateFromTodayPlusDays_nonValidDate() {
-        assertTrue(true);
-    }
-
-    @Test
-    void testGetDateFromTodayPlusDays_validDate() {
-        assertTrue(true);
-    }
 }
