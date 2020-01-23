@@ -54,6 +54,11 @@ class AvailablePharmacyServiceTest {
         assertAvailablePharmaciesProperties(availablePharmacy2, availablePharmacies.get(1));
     }
 
+    @Test
+    public void testFindAllByRegionAndDate_nonValidDate_noRegion() {
+
+    }
+
     private static void assertAvailablePharmaciesProperties(AvailablePharmacy expectedAvailablePharmacy,
                                                             AvailablePharmacy actualAvailablePharmacy) {
         assertEquals(expectedAvailablePharmacy.getId(), actualAvailablePharmacy.getId());
