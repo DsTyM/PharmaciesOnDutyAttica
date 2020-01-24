@@ -59,6 +59,16 @@ class AvailablePharmacyServiceTest {
 
     }
 
+    @Test
+    public void testFindAllByRegionAndDate_validDate_validRegion() {
+
+    }
+
+    @Test
+    public void testFindAllByRegionAndDate_validDate_nonValidRegion() {
+
+    }
+
     private static void assertAvailablePharmaciesProperties(AvailablePharmacy expectedAvailablePharmacy,
                                                             AvailablePharmacy actualAvailablePharmacy) {
         assertEquals(expectedAvailablePharmacy.getId(), actualAvailablePharmacy.getId());
