@@ -14,6 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.mockito.Mockito.when;
@@ -87,6 +88,23 @@ class AvailablePharmacyRestControllerTest {
                 "    \"pulledVersion\": 1\n" +
                 "  }\n" +
                 "]\n";
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(content().json(json))
+                .andReturn();
+    }
+
+    @Test
+    public void testGetAvailablePharmacies_noArgs_noResults() throws Exception {
+        when(availablePharmacyService.findAllByRegionAndDate("all", "today")).thenReturn(new ArrayList<>());
+
+        var request = MockMvcRequestBuilders
+                .get("/api/available-pharmacies")
+                .accept(MediaType.APPLICATION_JSON);
+
+        // empty array because there are no results
+        var json = "[]";
 
         mockMvc.perform(request)
                 .andExpect(status().isOk())

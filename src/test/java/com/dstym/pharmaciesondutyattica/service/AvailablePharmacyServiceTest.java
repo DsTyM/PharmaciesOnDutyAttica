@@ -24,7 +24,7 @@ class AvailablePharmacyServiceTest {
     private AvailablePharmacyRepository availablePharmacyRepository;
 
     @Test
-    public void testFindAllByRegionAndDate_validDate_noRegion() {
+    public void testFindAllByRegionAndDate_validDate_noRegionSpecified() {
         var date = "18/1/2020";
         var pulledVersion = 1;
 
@@ -55,17 +55,17 @@ class AvailablePharmacyServiceTest {
     }
 
     @Test
-    public void testFindAllByRegionAndDate_nonValidDate_noRegion() {
+    public void testFindAllByRegionAndDate_nonValidDate_noRegionSpecified() {
 
     }
 
     @Test
-    public void testFindAllByRegionAndDate_validDate_validRegion() {
+    public void testFindAllByRegionAndDate_validDate_validRegionSpecified() {
 
     }
 
     @Test
-    public void testFindAllByRegionAndDate_validDate_nonValidRegion() {
+    public void testFindAllByRegionAndDate_validDate_nonValidRegionSpecified() {
 
     }
 
