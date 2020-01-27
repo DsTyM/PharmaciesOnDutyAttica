@@ -3,6 +3,7 @@ package com.dstym.pharmaciesondutyattica.controller;
 import com.dstym.pharmaciesondutyattica.entity.AvailablePharmacy;
 import com.dstym.pharmaciesondutyattica.entity.Pharmacy;
 import com.dstym.pharmaciesondutyattica.entity.WorkingHour;
+import com.dstym.pharmaciesondutyattica.repository.AvailablePharmacyRepository;
 import com.dstym.pharmaciesondutyattica.service.AvailablePharmacyService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,6 +30,9 @@ class AvailablePharmacyRestControllerTest {
 
     @MockBean
     private AvailablePharmacyService availablePharmacyService;
+
+    @MockBean
+    private AvailablePharmacyRepository availablePharmacyRepository;
 
     @Test
     public void testGetAvailablePharmacies_noArgs() throws Exception {

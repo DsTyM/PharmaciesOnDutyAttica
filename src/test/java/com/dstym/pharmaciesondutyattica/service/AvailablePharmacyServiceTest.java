@@ -11,8 +11,9 @@ import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Arrays;
+import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -38,7 +39,7 @@ class AvailablePharmacyServiceTest {
         var workingHour2 = new WorkingHour(19, "8 ΤΟ ΠΡΩΙ ΜΕ 2 ΤΟ ΜΕΣΗΜΕΡΙ ΚΑΙ 5 ΤΟ ΑΠΟΓΕΥΜΑ ΜΕ 9 ΤΟ ΒΡΑΔΥ");
         var availablePharmacy2 = new AvailablePharmacy(101, pharmacy2, workingHour2, date, pulledVersion);
 
-        when(availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date)).thenReturn(Arrays.asList(
+        when(availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date)).thenReturn(Collections.singletonList(
                 new AvailablePharmacy(pulledVersion)
         ));
 
@@ -56,17 +57,45 @@ class AvailablePharmacyServiceTest {
 
     @Test
     public void testFindAllByRegionAndDate_nonValidDate_noRegionSpecified() {
+        var date = "18/1/2020";
 
-    }
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            availablePharmacyService.findAllByRegionAndDate("all", date);
+        });
 
-    @Test
-    public void testFindAllByRegionAndDate_validDate_validRegionSpecified() {
+        String expectedMessage = "Did not find available pharmacies for date";
+        String actualMessage = exception.getMessage();
 
+        assertTrue(actualMessage.contains(expectedMessage));
     }
 
     @Test
     public void testFindAllByRegionAndDate_validDate_nonValidRegionSpecified() {
+        var date = "18/1/2020";
+        var pulledVersion = 1;
+        var region = "ΠΑΓΚΡΑΤΙ";
 
+        when(availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date)).thenReturn(Collections.singletonList(
+                new AvailablePharmacy(pulledVersion)
+        ));
+
+        // We give an available pharmacy without any information, and without region,
+        // so it will returns no results for the given region,
+        // but it will not stop on findByDateAndAndPulledVersion(), because,
+        // it findByDateAndAndPulledVersion() will return an empty List, so
+        // it will think that the date is correct
+        when(availablePharmacyRepository.findByDateAndAndPulledVersion(date, pulledVersion)).thenReturn(
+                Collections.emptyList()
+        );
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            availablePharmacyService.findAllByRegionAndDate(region, date);
+        });
+
+        String expectedMessage = "Did not find available pharmacies in region";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
     }
 
     private static void assertAvailablePharmaciesProperties(AvailablePharmacy expectedAvailablePharmacy,
