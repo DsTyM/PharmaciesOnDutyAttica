@@ -4,14 +4,12 @@ import com.dstym.pharmaciesondutyattica.entity.AvailablePharmacy;
 import com.dstym.pharmaciesondutyattica.service.AvailablePharmacyService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api")
 public class AvailablePharmacyRestController {
     private AvailablePharmacyService availablePharmacyService;
@@ -25,7 +23,7 @@ public class AvailablePharmacyRestController {
     @ApiOperation(value = "Get Pharmacies On Duty",
             notes = "Get the List of the Pharmacies on Duty. Today is the default date.")
     public List<AvailablePharmacy> GetAvailablePharmacies(@RequestParam(required = false) String date,
-                                                 @RequestParam(required = false) String region) {
+                                                          @RequestParam(required = false) String region) {
         if (date == null || date.equals("")) {
             date = "today";
         }

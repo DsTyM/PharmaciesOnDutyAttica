@@ -6,6 +6,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {SpinnerComponent} from './spinner/spinner.component';
 import {RouterModule, Routes} from "@angular/router";
 import {AvailablePharmacyComponent} from './available-pharmacy/available-pharmacy.component';
+import {HttpClientModule} from "@angular/common/http";
 
 const appRoutes: Routes = [
   {
@@ -29,6 +30,7 @@ const appRoutes: Routes = [
   imports: [
     RouterModule.forRoot(appRoutes),
     BrowserModule,
+    HttpClientModule,
     NgbModule
   ],
   providers: [],
