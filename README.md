@@ -48,6 +48,5 @@ It uses Swagger UI to generate the API Documentation.
 
 What's next:
 - Front End in Angular
-- Show pharmacy on duty address on Google Maps using Geocoding API.
 
 This project is just for learning purposes.
