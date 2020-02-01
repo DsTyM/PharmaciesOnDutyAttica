@@ -7,6 +7,8 @@ It uses HtmlUnit to interact and crawl the fsa.gr website and jsoup to scrape th
 (the available pharmacies per day, pharmacies' information and the different working hours available).
 It also uses MySQL to save the data on the server and Spring Boot to provide the Rest API.
 
+The application has been tested using JUnit and Mockito.
+
 Here is an example of how it returns the pharmacies on duty:
 ```json
 {
@@ -30,8 +32,6 @@ Here is an example of how it returns the pharmacies on duty:
 It also contains a scheduler where it refresh the available pharmacies for the given day 
 when the application is started and it also use cron expressions to refresh the available pharmacies 
 list twice per day. This can also be customised.
-
-The application has been tested using JUnit and Mockito.
 
 The final version of the API may change.
 
