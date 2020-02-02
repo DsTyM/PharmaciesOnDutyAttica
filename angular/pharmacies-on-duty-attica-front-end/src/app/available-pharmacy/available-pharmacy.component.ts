@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {RestService} from "../rest.service";
+import {AvailablePharmacy} from "../available-pharmacy";
 
 @Component({
   selector: 'app-available-pharmacy',
@@ -7,7 +8,7 @@ import {RestService} from "../rest.service";
   styleUrls: ['./available-pharmacy.component.css']
 })
 export class AvailablePharmacyComponent implements OnInit {
-  availablePharmacies: any = [];
+  availablePharmacies: [AvailablePharmacy];
   isFetching = false;
 
   constructor(public rest: RestService) {
@@ -18,9 +19,9 @@ export class AvailablePharmacyComponent implements OnInit {
   }
 
   getAvailablePharmacies() {
-    this.availablePharmacies = [];
+    this.availablePharmacies = [new AvailablePharmacy()];
     this.isFetching = true;
-    this.rest.getAvailablePharmacies().subscribe((data: {}) => {
+    this.rest.getAvailablePharmacies().subscribe((data: [AvailablePharmacy]) => {
       console.log(data);
       this.availablePharmacies = data;
       this.isFetching = false;
