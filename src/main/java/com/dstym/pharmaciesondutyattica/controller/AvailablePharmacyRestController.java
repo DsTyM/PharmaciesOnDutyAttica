@@ -1,6 +1,6 @@
 package com.dstym.pharmaciesondutyattica.controller;
 
-import com.dstym.pharmaciesondutyattica.entity.AvailablePharmacy;
+import com.dstym.pharmaciesondutyattica.dto.AvailablePharmacyDto;
 import com.dstym.pharmaciesondutyattica.service.AvailablePharmacyService;
 import com.dstym.pharmaciesondutyattica.util.DateUtils;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,7 +12,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,7 +27,7 @@ public class AvailablePharmacyRestController {
     @GetMapping("/available-pharmacies")
     @Operation(summary = "Get Pharmacies On Duty",
             description = "Get the List of the Pharmacies on Duty. Today is the default date.")
-    public ResponseEntity<Page<AvailablePharmacy>> GetAvailablePharmacies(
+    public ResponseEntity<Page<AvailablePharmacyDto>> GetAvailablePharmacies(
             @Parameter(description = "Specify the date (Date Format: YYYY-MM-DD).")
             @RequestParam(required = false) String date,
             @Parameter(description = "Specify a region.")

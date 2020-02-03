@@ -1,17 +1,15 @@
-package com.dstym.pharmaciesondutyattica.entity;
+package com.dstym.pharmaciesondutyattica.model;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
 
-import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 
 @Entity
 @Table(name = "`available-pharmacies`")
-@Schema(description = "Available Pharmacy Information")
 @Getter
 @Setter
 @ToString

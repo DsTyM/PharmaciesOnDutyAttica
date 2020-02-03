@@ -1,6 +1,8 @@
 package com.dstym.pharmaciesondutyattica.service;
 
-import com.dstym.pharmaciesondutyattica.entity.WorkingHour;
+import com.dstym.pharmaciesondutyattica.dto.WorkingHourDto;
+import com.dstym.pharmaciesondutyattica.mapper.WorkingHourMapper;
+import com.dstym.pharmaciesondutyattica.model.WorkingHour;
 import com.dstym.pharmaciesondutyattica.repository.WorkingHourRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
@@ -10,43 +12,34 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class WorkingHourService {
     private final WorkingHourRepository workingHourRepository;
+    private final WorkingHourMapper workingHourMapper;
 
     //    @Cacheable(value = "workingHoursCache", key = "'ALL'")
     @Cacheable(value = "workingHoursCache", key = "#pageable", condition = "#pageable != null")
-    public Page<WorkingHour> findAll(Pageable pageable) {
-        Page<WorkingHour> result = workingHourRepository.findAll(pageable);
-
-        if (result.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Did not find working hours.");
-        } else {
-            return result;
-        }
+    public Page<WorkingHourDto> findAll(Pageable pageable) {
+        return Optional.of(workingHourRepository.findAll(pageable).map(workingHourMapper::getworkingHourDto))
+                .filter(Page::hasContent)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Did not find working hours."));
     }
 
-    @Cacheable(value = "workingHourCache", key = "#theId")
-    public WorkingHour findById(Integer theId) {
-        var result = workingHourRepository.findById(theId);
-
-        WorkingHour workingHour;
-
-        if (result.isPresent()) {
-            workingHour = result.get();
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Did not find working hour with id: " + theId);
-        }
-
-        return workingHour;
+    @Cacheable(value = "workingHourCache", key = "#workingHourId")
+    public WorkingHourDto findById(Integer workingHourId) {
+        return workingHourRepository.findById(workingHourId).map(workingHourMapper::getworkingHourDto)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Did not find working hour with id: " + workingHourId));
     }
 
-    public void save(WorkingHour workingHour) {
-        workingHourRepository.save(workingHour);
+    public WorkingHour save(WorkingHour workingHour) {
+        return workingHourRepository.save(workingHour);
     }
 
-    public void deleteById(Integer theId) {
-        workingHourRepository.deleteById(theId);
+    public void deleteById(Integer workingHourId) {
+        workingHourRepository.deleteById(workingHourId);
     }
 }

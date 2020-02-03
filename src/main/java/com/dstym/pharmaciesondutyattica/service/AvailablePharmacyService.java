@@ -1,6 +1,8 @@
 package com.dstym.pharmaciesondutyattica.service;
 
-import com.dstym.pharmaciesondutyattica.entity.AvailablePharmacy;
+import com.dstym.pharmaciesondutyattica.dto.AvailablePharmacyDto;
+import com.dstym.pharmaciesondutyattica.mapper.AvailablePharmacyMapper;
+import com.dstym.pharmaciesondutyattica.model.AvailablePharmacy;
 import com.dstym.pharmaciesondutyattica.repository.AvailablePharmacyRepository;
 import com.dstym.pharmaciesondutyattica.util.DateUtils;
 import lombok.RequiredArgsConstructor;
@@ -14,13 +16,13 @@ import org.springframework.web.server.ResponseStatusException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class AvailablePharmacyService {
     private final AvailablePharmacyRepository availablePharmacyRepository;
+    private final AvailablePharmacyMapper availablePharmacyMapper;
 
     /**
      * Retrieves the latest pulled version for a given date.
@@ -30,61 +32,52 @@ public class AvailablePharmacyService {
      * @throws ResponseStatusException if no available pharmacies are found for the given date.
      */
     private int getLastPulledVersion(Instant date) {
-        var result = availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date);
-
-        if (result.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Did not find available pharmacies for date: " + DateUtils.instantToString(date));
-        }
-
-        var tempAvailablePharmacy = result.getFirst();
-        return tempAvailablePharmacy.getPulledVersion();
+        return availablePharmacyRepository
+                .findFirstByDateOrderByPulledVersionDesc(date).map(AvailablePharmacy::getPulledVersion)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Did not find available pharmacies for date: " + DateUtils.instantToString(date)));
     }
 
-    public List<AvailablePharmacy> findAll() {
-        return availablePharmacyRepository.findAll();
-    }
-
+    /**
+     * Retrieves a paginated list of available pharmacies within a specific region and date.
+     *
+     * @param region   the region for which to find available pharmacies. Can be null or URL-encoded.
+     * @param date     the specific date to find available pharmacies for. If null, defaults to the current date.
+     * @param pageable the pagination and sorting information.
+     * @return a page of {@link AvailablePharmacyDto} containing the details of available pharmacies.
+     * @throws ResponseStatusException if no pharmacies are found for the specified region and date.
+     */
     @Cacheable(value = "availablePharmaciesCache", key = "{#region, #date, #pageable}")
-    public Page<AvailablePharmacy> findAllByRegionAndDate(String region, Instant date, Pageable pageable) {
+    public Page<AvailablePharmacyDto> findAllByRegionAndDate(String region, Instant date, Pageable pageable) {
         region = Optional.ofNullable(region)
                 .map(r -> URLDecoder.decode(r.trim(), StandardCharsets.UTF_8))
                 .orElse(null);
 
         var daysFromToday = 0;
-        date = Optional.ofNullable(date)
+        var finalDate = Optional.ofNullable(date)
                 .orElse(DateUtils.stringDateToInstant(DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday))));
 
-        var lastPulledVersion = getLastPulledVersion(date);
+        var lastPulledVersion = getLastPulledVersion(finalDate);
 
-        var result = availablePharmacyRepository.findAllByLastPulledVersion(
-                lastPulledVersion, date, region, pageable);
-
-        if (!result.isEmpty()) {
-            return result;
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Did not find available pharmacies for date: " + DateUtils.instantToString(date));
-        }
+        return Optional.of(availablePharmacyRepository.findAllByLastPulledVersion(lastPulledVersion, finalDate, region, pageable)
+                        .map(availablePharmacyMapper::getAvailablePharmacyDto))
+                .filter(Page::hasContent)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Did not find available pharmacies for date: " + DateUtils.instantToString(finalDate)));
     }
 
-    public AvailablePharmacy findById(Long theId) {
-        var result = availablePharmacyRepository.findById(theId);
-
-        AvailablePharmacy availablePharmacy;
-
-        if (result.isPresent()) {
-            availablePharmacy = result.get();
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Did not find available pharmacy with id: " + theId);
-        }
-
-        return availablePharmacy;
+    public AvailablePharmacyDto findById(Long availablePharmacyId) {
+        return availablePharmacyRepository.findById(availablePharmacyId)
+                .map(availablePharmacyMapper::getAvailablePharmacyDto)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Did not find pharmacy with id: " + availablePharmacyId));
     }
 
-    public void save(AvailablePharmacy availablePharmacy) {
-        availablePharmacyRepository.save(availablePharmacy);
+    public AvailablePharmacy save(AvailablePharmacy availablePharmacy) {
+        return availablePharmacyRepository.save(availablePharmacy);
     }
 
-    public void deleteById(Long theId) {
-        availablePharmacyRepository.deleteById(theId);
+    public void deleteById(Long availablePharmacyId) {
+        availablePharmacyRepository.deleteById(availablePharmacyId);
     }
 }

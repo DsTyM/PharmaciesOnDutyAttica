@@ -1,7 +1,7 @@
 package com.dstym.pharmaciesondutyattica.config;
 
-import com.dstym.pharmaciesondutyattica.entity.Pharmacy;
-import com.dstym.pharmaciesondutyattica.entity.WorkingHour;
+import com.dstym.pharmaciesondutyattica.model.Pharmacy;
+import com.dstym.pharmaciesondutyattica.model.WorkingHour;
 import java.time.Duration;
 import java.util.ArrayList;
 import javax.cache.CacheManager;

@@ -1,7 +1,7 @@
 package com.dstym.pharmaciesondutyattica.service;
 
 import com.dstym.pharmaciesondutyattica.PharmaciesOnDutyAtticaApplication;
-import com.dstym.pharmaciesondutyattica.entity.WorkingHour;
+import com.dstym.pharmaciesondutyattica.model.WorkingHour;
 import com.dstym.pharmaciesondutyattica.repository.AvailablePharmacyRepository;
 import com.dstym.pharmaciesondutyattica.repository.WorkingHourRepository;
 import org.junit.jupiter.api.BeforeEach;

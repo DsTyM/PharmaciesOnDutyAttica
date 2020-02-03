@@ -1,9 +1,9 @@
 package com.dstym.pharmaciesondutyattica.service;
 
 import com.dstym.pharmaciesondutyattica.PharmaciesOnDutyAtticaApplication;
-import com.dstym.pharmaciesondutyattica.entity.AvailablePharmacy;
-import com.dstym.pharmaciesondutyattica.entity.Pharmacy;
-import com.dstym.pharmaciesondutyattica.entity.WorkingHour;
+import com.dstym.pharmaciesondutyattica.model.AvailablePharmacy;
+import com.dstym.pharmaciesondutyattica.model.Pharmacy;
+import com.dstym.pharmaciesondutyattica.model.WorkingHour;
 import com.dstym.pharmaciesondutyattica.repository.AvailablePharmacyRepository;
 import com.dstym.pharmaciesondutyattica.repository.PharmacyRepository;
 import com.dstym.pharmaciesondutyattica.repository.WorkingHourRepository;

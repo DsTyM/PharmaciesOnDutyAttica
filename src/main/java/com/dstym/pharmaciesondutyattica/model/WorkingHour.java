@@ -1,6 +1,5 @@
-package com.dstym.pharmaciesondutyattica.entity;
+package com.dstym.pharmaciesondutyattica.model;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -10,7 +9,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "`working-hours`")
-@Schema(description = "Working Hour Information")
+@Builder
 @Getter
 @Setter
 @ToString
