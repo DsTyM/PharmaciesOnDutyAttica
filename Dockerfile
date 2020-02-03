@@ -1,4 +1,4 @@
-#### Stage 1: Build the application
+# Stage 1: Build the application
 FROM openjdk:13.0.1 as build
 
 # Set the current working directory inside the image
