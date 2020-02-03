@@ -1,16 +1,10 @@
+import {Pharmacy} from "./pharmacy";
+import {WorkingHour} from "./working-hour";
+
 export class AvailablePharmacy {
   id: number;
-  pharmacy: {
-    id: number,
-    name: string,
-    address: string,
-    region: string,
-    phoneNumber: string
-  };
-  workingHour: {
-    id: number,
-    workingHourText: string
-  };
+  pharmacy: Pharmacy;
+  workingHour: WorkingHour;
   date: string;
-  pulledVersion: number
+  pulledVersion: number;
 }
