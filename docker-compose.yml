@@ -11,11 +11,11 @@ services:
       context: . # Use an image built from the specified dockerfile in the root directory.
       dockerfile: Dockerfile
     ports:
-      - "8080:8080" # Forward the exposed port 8080 on the container to port 8080 on the host machine
+      - "8080:8080" # Forward the exposed port 8080 on the container to port 8080 on the host machine.
     restart: always
     depends_on:
       - db # This service depends on mysql. Start that first.
-    environment: # Pass environment variables to the service
+    environment: # Pass environment variables to the service.
       TZ: "Europe/Athens"
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/pharmacies?useSSL=false&serverTimezone=UTC&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: developer
