@@ -48,7 +48,4 @@ http://localhost:8080
 This page will redirect you to the Documentation of the API of the application. 
 It uses Swagger UI to generate the API Documentation.
 
-What's next:
-- Front End in Angular
-
 This project is just for learning purposes.
