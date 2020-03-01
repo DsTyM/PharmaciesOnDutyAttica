@@ -41,11 +41,22 @@ $ git clone https://github.com/DsTyM/PharmaciesOnDutyAttica.git
 $ cd PharmaciesOnDutyAttica
 $ docker-compose up --build
 ```
+
 The application can be accessed on:
 ```
 http://localhost:8080
 ```
 This page will redirect you to the Documentation of the API of the application. 
 It uses Swagger UI to generate the API Documentation.
+
+If you are using Docker and Git on Windows, then 
+an error like this (or similar) may occur:
+```
+/bin/sh not found
+```
+To fix this error, just run the following command on GIT Bash before cloning the project:
+```
+$ git config --global core.autocrlf false
+```
 
 This project is just for learning purposes.
