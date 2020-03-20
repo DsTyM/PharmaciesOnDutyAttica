@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM openjdk:13.0.1 as build
+FROM openjdk:14 as build
 
 # Set the current working directory inside the image
 WORKDIR /app
