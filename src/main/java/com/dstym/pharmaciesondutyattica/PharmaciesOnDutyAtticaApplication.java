@@ -20,6 +20,7 @@ public class PharmaciesOnDutyAtticaApplication {
         SpringApplication.run(PharmaciesOnDutyAtticaApplication.class, args);
     }
 
+    // test2
     @Bean
     public Docket swaggerConfiguration() {
         return new Docket(DocumentationType.SWAGGER_2)
