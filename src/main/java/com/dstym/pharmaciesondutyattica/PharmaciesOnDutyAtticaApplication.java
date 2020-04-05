@@ -19,7 +19,7 @@ public class PharmaciesOnDutyAtticaApplication {
     public static void main(String[] args) {
         SpringApplication.run(PharmaciesOnDutyAtticaApplication.class, args);
     }
-//t
+
     @Bean
     public Docket swaggerConfiguration() {
         return new Docket(DocumentationType.SWAGGER_2)
