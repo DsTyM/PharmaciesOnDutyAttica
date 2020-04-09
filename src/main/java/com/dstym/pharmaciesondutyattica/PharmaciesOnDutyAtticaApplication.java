@@ -23,6 +23,7 @@ public class PharmaciesOnDutyAtticaApplication {
     @Bean
     public Docket swaggerConfiguration() {
         return new Docket(DocumentationType.SWAGGER_2)
+//                .host("localhost:8080")
                 .select()
                 .paths(PathSelectors.ant("/api/**"))
                 .apis(RequestHandlerSelectors.basePackage("com.dstym"))
