@@ -3,6 +3,7 @@ package com.dstym.pharmaciesondutyattica.controller;
 import com.dstym.pharmaciesondutyattica.entity.AvailablePharmacy;
 import com.dstym.pharmaciesondutyattica.service.AvailablePharmacyService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +23,11 @@ public class AvailablePharmacyRestController {
     @GetMapping("/available-pharmacies")
     @ApiOperation(value = "Get Pharmacies On Duty",
             notes = "Get the List of the Pharmacies on Duty. Today is the default date.")
-    public List<AvailablePharmacy> GetAvailablePharmacies(@RequestParam(required = false) String date,
-                                                          @RequestParam(required = false) String region) {
+    public List<AvailablePharmacy> GetAvailablePharmacies(
+            @ApiParam("Specify the date (Date Format: D-M-YYYY).")
+            @RequestParam(required = false) String date,
+            @ApiParam("Specify a region.")
+            @RequestParam(required = false) String region) {
         if (date == null || date.equals("")) {
             date = "today";
         }
