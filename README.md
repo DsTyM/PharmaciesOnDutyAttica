@@ -67,14 +67,14 @@ an error like this (or similar) may occur:
 ```
 /bin/sh not found
 ```
-To fix this error, just run the following command on GIT Bash:
+To fix this error, just run the following command on Git Bash:
 ```
 $ git config --global core.autocrlf false
 ```
 and clone the project again.
 
 In case you mess with the Liquibase changelog, and the application won't start with Docker,
-you've most probably have messed with the database volume. To remove it, run:
+you've most probably messed with the database volume. To remove it, run:
 ```
 $ docker volume rm pharmaciesondutyattica_db-data
 ```
