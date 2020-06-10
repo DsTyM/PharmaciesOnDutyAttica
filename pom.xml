@@ -16,6 +16,7 @@
 
     <properties>
         <java.version>14</java.version>
+        <spring-boot.version>2.3.0.RELEASE</spring-boot.version>
     </properties>
 
     <dependencies>
@@ -102,8 +103,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>14</source>
-                    <target>14</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                 </configuration>
             </plugin>
 
@@ -126,13 +127,13 @@
                     <dependency>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-starter-web</artifactId>
-                        <version>2.3.0.RELEASE</version>
+                        <version>${spring-boot.version}</version>
                     </dependency>
 
                     <dependency>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-starter-data-jpa</artifactId>
-                        <version>2.3.0.RELEASE</version>
+                        <version>${spring-boot.version}</version>
                     </dependency>
                 </dependencies>
             </plugin>
