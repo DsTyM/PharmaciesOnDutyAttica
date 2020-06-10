@@ -4,25 +4,6 @@ version: '3.7'
 
 # Define services
 services:
-  # App backend service
-  app-server:
-    # Configuration for building the docker image for the backend service
-    build:
-      context: . # Use an image built from the specified dockerfile in the root directory.
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080" # Forward the exposed port 8080 on the container to port 8080 on the host machine.
-    restart: always
-    depends_on:
-      - db # This service depends on mysql. Start that first.
-    environment: # Pass environment variables to the service.
-      TZ: "Europe/Athens"
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/pharmacies?useSSL=false&serverTimezone=UTC&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
-      SPRING_DATASOURCE_USERNAME: developer
-      SPRING_DATASOURCE_PASSWORD: developer
-    networks: # Networks to join (Services on the same network can communicate with each other using their name)
-      - backend
-
   # Database Service (MySQL)
   db:
     image: mysql:8.0.19
@@ -37,6 +18,25 @@ services:
     volumes:
       - db-data:/var/lib/mysql
     networks:
+      - backend
+
+  # App backend service
+  app-server:
+    # Configuration for building the docker image for the backend service
+    build:
+      context: . # Use an image built from the specified dockerfile in the root directory.
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080" # Forward the exposed port 8080 on the container to port 8080 on the host machine.
+    restart: always
+    depends_on:
+      - db # This service depends on MySQL. Start that first.
+    environment: # Pass environment variables to the service.
+      TZ: "Europe/Athens"
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/pharmacies?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: developer
+      SPRING_DATASOURCE_PASSWORD: developer
+    networks: # Networks to join (Services on the same network can communicate with each other using their name)
       - backend
 
 # Volumes

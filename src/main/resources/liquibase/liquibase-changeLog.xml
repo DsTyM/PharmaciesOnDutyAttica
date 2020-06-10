@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.9.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+<changeSet author="stavr (generated)" id="1591784112540-1">
+<createTable tableName="available-pharmacies">
+<column autoIncrement="true" name="id" type="BIGINT">
+<constraints nullable="false" primaryKey="true" primaryKeyName="available-pharmaciesPK"/>
+</column>
+<column name="date" type="VARCHAR(255)"/>
+<column name="pulled-version" type="INT"/>
+<column name="pharmacy-id" type="INT">
+<constraints nullable="false"/>
+</column>
+<column name="working-hour-id" type="INT">
+<constraints nullable="false"/>
+</column>
+</createTable>
+</changeSet>
+<changeSet author="stavr (generated)" id="1591784112540-2">
+<createTable tableName="pharmacies">
+<column name="id" type="INT">
+<constraints nullable="false" primaryKey="true" primaryKeyName="pharmaciesPK"/>
+</column>
+<column name="address" type="VARCHAR(255)"/>
+<column name="name" type="VARCHAR(255)"/>
+<column name="phone-number" type="VARCHAR(255)"/>
+<column name="region" type="VARCHAR(255)"/>
+</createTable>
+</changeSet>
+<changeSet author="stavr (generated)" id="1591784112540-3">
+<createTable tableName="working-hours">
+<column name="id" type="INT">
+<constraints nullable="false" primaryKey="true" primaryKeyName="working-hoursPK"/>
+</column>
+<column name="working-hour-text" type="VARCHAR(255)"/>
+</createTable>
+</changeSet>
+<changeSet author="stavr (generated)" id="1591784112540-4">
+<addForeignKeyConstraint baseColumnNames="working-hour-id" baseTableName="available-pharmacies" constraintName="FK7wtid4pxs9fx8t1rhxwq32s6g" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="working-hours" validate="true"/>
+</changeSet>
+<changeSet author="stavr (generated)" id="1591784112540-5">
+<addForeignKeyConstraint baseColumnNames="pharmacy-id" baseTableName="available-pharmacies" constraintName="FKfk39uiju5awbrgcwmf65oqdr8" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="pharmacies" validate="true"/>
+</changeSet>
+</databaseChangeLog>

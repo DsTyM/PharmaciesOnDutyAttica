@@ -49,14 +49,34 @@ http://localhost:8080
 This page will redirect you to the Documentation of the API of the application. 
 It uses Swagger UI to generate the API Documentation.
 
+
+Of course, when you finish, don't forget to run:
+```
+$ docker-compose down
+```
+
+The application uses Liquibase for Database Versioning. 
+To generate a new Liquibase changelog from the entities, run:
+```
+$ mvnw package -DskipTests
+$ mvnw liquibase:diff
+```
+
 If you are using Docker and Git on Windows, then 
 an error like this (or similar) may occur:
 ```
 /bin/sh not found
 ```
-To fix this error, just run the following command on GIT Bash before cloning the project:
+To fix this error, just run the following command on GIT Bash:
 ```
 $ git config --global core.autocrlf false
+```
+and clone the project again.
+
+In case you mess with the Liquibase changelog, and the application won't start with Docker,
+you've most probably have messed with the database volume. To remove it, run:
+```
+$ docker volume rm pharmaciesondutyattica_db-data
 ```
 
 This project is just for learning purposes.
