@@ -17,6 +17,7 @@
     <properties>
         <java.version>14</java.version>
         <spring-boot.version>2.3.0.RELEASE</spring-boot.version>
+        <liquibase.version>3.9.0</liquibase.version>
     </properties>
 
     <dependencies>
@@ -83,9 +84,11 @@
             <version>2.9.2</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.liquibase/liquibase-core -->
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
+            <version>${liquibase.version}</version>
         </dependency>
     </dependencies>
 
@@ -111,17 +114,18 @@
             <plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
-                <version>3.9.0</version>
+                <version>${liquibase.version}</version>
                 <configuration>
                     <propertyFile>src/main/resources/liquibase/config/liquibase.properties
                     </propertyFile>
                     <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
                 </configuration>
                 <dependencies>
+                    <!-- https://mvnrepository.com/artifact/org.liquibase.ext/liquibase-hibernate5 -->
                     <dependency>
                         <groupId>org.liquibase.ext</groupId>
                         <artifactId>liquibase-hibernate5</artifactId>
-                        <version>3.9.0</version>
+                        <version>${liquibase.version}</version>
                     </dependency>
 
                     <dependency>
