@@ -1,6 +1,6 @@
 package com.dstym.pharmaciesondutyattica.entity;
 
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "`working-hours`")
-@ApiModel(description = "Working Hour Information")
+@Schema(description = "Working Hour Information")
 public class WorkingHour {
     @Id
     @Column(name = "`id`")

@@ -2,8 +2,8 @@ package com.dstym.pharmaciesondutyattica.controller;
 
 import com.dstym.pharmaciesondutyattica.entity.Pharmacy;
 import com.dstym.pharmaciesondutyattica.service.PharmacyService;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,10 +22,10 @@ public class PharmacyRestController {
 
     @GetMapping("/pharmacies")
     @ResponseBody
-    @ApiOperation(value = "Get Pharmacies",
-            notes = "Get the List of the Pharmacies in the Database.")
+    @Operation(summary = "Get Pharmacies",
+            description = "Get the List of the Pharmacies in the Database.")
     public List<Pharmacy> getPharmacies(
-            @ApiParam("Specify a region.")
+            @Parameter(description = "Specify a region.")
             @RequestParam(required = false) String region) {
         if (region != null) {
             return pharmacyService.findByRegion(region);
@@ -35,10 +35,10 @@ public class PharmacyRestController {
     }
 
     @GetMapping("/pharmacies/{pharmacyId}")
-    @ApiOperation(value = "Find a Pharmacy by Id",
-            notes = "Returns a specific Pharmacy info by the given Id.")
+    @Operation(summary = "Find a Pharmacy by Id",
+            description = "Returns a specific Pharmacy info by the given Id.")
     public Pharmacy getPharmacy(
-            @ApiParam("Specify the Pharmacy ID.")
+            @Parameter(description = "Specify the Pharmacy ID.")
             @PathVariable int pharmacyId) {
         return pharmacyService.findById(pharmacyId);
     }
