@@ -1,6 +1,6 @@
 databaseChangeLog:
 - changeSet:
-    id: 1592306300565-1
+    id: 1592306562051-1
     author: stavr (generated)
     changes:
     - createTable:
@@ -31,7 +31,7 @@ databaseChangeLog:
             type: INT
         tableName: available-pharmacies
 - changeSet:
-    id: 1592306300565-2
+    id: 1592306562051-2
     author: stavr (generated)
     changes:
     - createTable:
@@ -57,7 +57,7 @@ databaseChangeLog:
             type: VARCHAR(255)
         tableName: pharmacies
 - changeSet:
-    id: 1592306300565-3
+    id: 1592306562051-3
     author: stavr (generated)
     changes:
     - createTable:
@@ -74,7 +74,7 @@ databaseChangeLog:
             type: VARCHAR(255)
         tableName: working-hours
 - changeSet:
-    id: 1592306300565-4
+    id: 1592306562051-4
     author: stavr (generated)
     changes:
     - addForeignKeyConstraint:
@@ -87,7 +87,7 @@ databaseChangeLog:
         referencedTableName: working-hours
         validate: true
 - changeSet:
-    id: 1592306300565-5
+    id: 1592306562051-5
     author: stavr (generated)
     changes:
     - addForeignKeyConstraint:
