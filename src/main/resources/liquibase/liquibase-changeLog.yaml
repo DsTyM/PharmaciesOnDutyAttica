@@ -1,0 +1,102 @@
+databaseChangeLog:
+- changeSet:
+    id: 1592306300565-1
+    author: stavr (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: available-pharmaciesPK
+            name: id
+            type: BIGINT
+        - column:
+            name: date
+            type: VARCHAR(255)
+        - column:
+            name: pulled-version
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: pharmacy-id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: working-hour-id
+            type: INT
+        tableName: available-pharmacies
+- changeSet:
+    id: 1592306300565-2
+    author: stavr (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: pharmaciesPK
+            name: id
+            type: INT
+        - column:
+            name: address
+            type: VARCHAR(255)
+        - column:
+            name: name
+            type: VARCHAR(255)
+        - column:
+            name: phone-number
+            type: VARCHAR(255)
+        - column:
+            name: region
+            type: VARCHAR(255)
+        tableName: pharmacies
+- changeSet:
+    id: 1592306300565-3
+    author: stavr (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: working-hoursPK
+            name: id
+            type: INT
+        - column:
+            name: working-hour-text
+            type: VARCHAR(255)
+        tableName: working-hours
+- changeSet:
+    id: 1592306300565-4
+    author: stavr (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: working-hour-id
+        baseTableName: available-pharmacies
+        constraintName: FK7wtid4pxs9fx8t1rhxwq32s6g
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: working-hours
+        validate: true
+- changeSet:
+    id: 1592306300565-5
+    author: stavr (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: pharmacy-id
+        baseTableName: available-pharmacies
+        constraintName: FKfk39uiju5awbrgcwmf65oqdr8
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: pharmacies
+        validate: true
+
