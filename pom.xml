@@ -18,7 +18,7 @@
         <java.version>14</java.version>
         <spring-boot.version>2.3.1.RELEASE</spring-boot.version>
         <liquibase.version>3.10.0</liquibase.version>
-        <liquibase-hibernate.version>3.9.0</liquibase-hibernate.version>
+        <liquibase-hibernate.version>3.10.0</liquibase-hibernate.version>
     </properties>
 
     <dependencies>
@@ -75,7 +75,7 @@
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.4.1</version>
+            <version>1.4.2</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.liquibase/liquibase-core -->
@@ -83,6 +83,20 @@
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
             <version>${liquibase.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.liquibase.ext/liquibase-hibernate5 -->
+        <dependency>
+            <groupId>org.liquibase.ext</groupId>
+            <artifactId>liquibase-hibernate5</artifactId>
+            <version>${liquibase-hibernate.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/javax.validation/validation-api -->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>2.0.1.Final</version>
         </dependency>
     </dependencies>
 
@@ -115,7 +129,6 @@
                     <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
                 </configuration>
                 <dependencies>
-                    <!-- https://mvnrepository.com/artifact/org.liquibase.ext/liquibase-hibernate5 -->
                     <dependency>
                         <groupId>org.liquibase.ext</groupId>
                         <artifactId>liquibase-hibernate5</artifactId>
@@ -134,7 +147,6 @@
                         <version>${spring-boot.version}</version>
                     </dependency>
 
-                    <!-- https://mvnrepository.com/artifact/javax.validation/validation-api -->
                     <dependency>
                         <groupId>javax.validation</groupId>
                         <artifactId>validation-api</artifactId>
