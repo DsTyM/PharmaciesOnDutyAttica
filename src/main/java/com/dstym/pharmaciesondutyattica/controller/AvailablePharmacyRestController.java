@@ -28,11 +28,11 @@ public class AvailablePharmacyRestController {
             @RequestParam(required = false) String date,
             @Parameter(description = "Specify a region.")
             @RequestParam(required = false) String region) {
-        if (date == null || date.equals("")) {
+        if (date == null || date.trim().equals("")) {
             date = "today";
         }
 
-        if (region == null || region.equals("")) {
+        if (region == null || region.trim().equals("")) {
             region = "all";
         }
 

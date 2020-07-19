@@ -29,7 +29,7 @@ public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
     public List<AvailablePharmacy> findAllByRegionAndDate(String urlRegion, String urlDate) {
         var date = urlDate.replaceAll("-", "/");
 
-        String region = URLDecoder.decode(urlRegion, StandardCharsets.UTF_8);
+        var region = URLDecoder.decode(urlRegion, StandardCharsets.UTF_8);
 
         if (date.equals("today")) {
             var daysFromToday = 0;

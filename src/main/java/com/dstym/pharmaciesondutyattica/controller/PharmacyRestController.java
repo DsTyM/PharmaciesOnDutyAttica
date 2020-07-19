@@ -27,8 +27,8 @@ public class PharmacyRestController {
     public List<Pharmacy> getPharmacies(
             @Parameter(description = "Specify a region.")
             @RequestParam(required = false) String region) {
-        if (region != null) {
-            return pharmacyService.findByRegion(region);
+        if (region != null && !region.trim().equals("")) {
+            return pharmacyService.findByRegion(region.trim());
         }
 
         return pharmacyService.findAll();
