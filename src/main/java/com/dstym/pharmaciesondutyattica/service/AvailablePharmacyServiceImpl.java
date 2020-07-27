@@ -40,7 +40,6 @@ public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
     @Override
     @Cacheable(value = "availablePharmaciesCache", key = "{#urlRegion, #urlDate}")
     public List<AvailablePharmacy> findAllByRegionAndDate(String urlRegion, String urlDate) {
-        System.out.println("Getting AP from DB.");
         var date = urlDate.replaceAll("-", "/");
 
         var region = URLDecoder.decode(urlRegion, StandardCharsets.UTF_8);
