@@ -17,10 +17,13 @@ public class Scheduler {
     // cron properties
     // <minute> <hour> <day-of-month> <month> <day-of-week> <year>
 
-    @Autowired
-    private CacheManager cacheManager;
+    private final CacheManager cacheManager;
 
-    // 5 minutes, after refreshing he data
+    public Scheduler(CacheManager cacheManager) {
+        this.cacheManager = cacheManager;
+    }
+
+    // 5 minutes, after refreshing the data
     @Scheduled(cron = "7 0/8 * * * *")
     public void reportCurrentTime() {
         Objects.requireNonNull(cacheManager.getCache("workingHourCache")).clear();
