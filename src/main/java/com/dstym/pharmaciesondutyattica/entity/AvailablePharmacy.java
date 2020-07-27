@@ -3,11 +3,12 @@ package com.dstym.pharmaciesondutyattica.entity;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "`available-pharmacies`")
 @Schema(description = "Available Pharmacy Information")
-public class AvailablePharmacy {
+public class AvailablePharmacy implements Serializable {
     @Id
     @Column(name = "`id`")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

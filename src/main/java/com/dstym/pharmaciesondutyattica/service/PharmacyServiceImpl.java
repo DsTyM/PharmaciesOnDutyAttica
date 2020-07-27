@@ -3,6 +3,7 @@ package com.dstym.pharmaciesondutyattica.service;
 import com.dstym.pharmaciesondutyattica.entity.Pharmacy;
 import com.dstym.pharmaciesondutyattica.repository.PharmacyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.net.URLDecoder;
@@ -20,11 +21,13 @@ public class PharmacyServiceImpl implements PharmacyService {
     }
 
     @Override
+    @Cacheable(value = "pharmaciesCache", key = "'ALL'")
     public List<Pharmacy> findAll() {
         return pharmacyRepository.findAll();
     }
 
     @Override
+    @Cacheable(value = "pharmacyCache", key = "#theId")
     public Pharmacy findById(int theId) {
         Optional<Pharmacy> result = pharmacyRepository.findById(theId);
 
@@ -40,6 +43,7 @@ public class PharmacyServiceImpl implements PharmacyService {
     }
 
     @Override
+    @Cacheable(value = "pharmaciesByRegionCache", key = "#urlRegion")
     public List<Pharmacy> findByRegion(String urlRegion) {
         String region = URLDecoder.decode(urlRegion, StandardCharsets.UTF_8);
 

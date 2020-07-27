@@ -4,6 +4,7 @@ import com.dstym.pharmaciesondutyattica.entity.AvailablePharmacy;
 import com.dstym.pharmaciesondutyattica.repository.AvailablePharmacyRepository;
 import com.dstym.pharmaciesondutyattica.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.net.URLDecoder;
@@ -20,13 +21,26 @@ public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
         AvailablePharmacyServiceImpl.availablePharmacyRepository = availablePharmacyRepository;
     }
 
+    private static int getLastPulledVersion(String date) {
+        var result = availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date);
+
+        if (result.isEmpty()) {
+            throw new RuntimeException("Did not find available pharmacies for date: " + date);
+        }
+
+        var tempAvailablePharmacy = (AvailablePharmacy) result.toArray()[0];
+        return tempAvailablePharmacy.getPulledVersion();
+    }
+
     @Override
     public List<AvailablePharmacy> findAll() {
         return availablePharmacyRepository.findAll();
     }
 
     @Override
+    @Cacheable(value = "availablePharmaciesCache", key = "{#urlRegion, #urlDate}")
     public List<AvailablePharmacy> findAllByRegionAndDate(String urlRegion, String urlDate) {
+        System.out.println("Getting AP from DB.");
         var date = urlDate.replaceAll("-", "/");
 
         var region = URLDecoder.decode(urlRegion, StandardCharsets.UTF_8);
@@ -50,17 +64,6 @@ public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
         } else {
             throw new RuntimeException("Did not find available pharmacies in region: " + region);
         }
-    }
-
-    private static int getLastPulledVersion(String date) {
-        var result = availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date);
-
-        if (result.isEmpty()) {
-            throw new RuntimeException("Did not find available pharmacies for date: " + date);
-        }
-
-        var tempAvailablePharmacy = (AvailablePharmacy) result.toArray()[0];
-        return tempAvailablePharmacy.getPulledVersion();
     }
 
     @Override

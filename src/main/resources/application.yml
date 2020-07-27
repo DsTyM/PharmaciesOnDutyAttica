@@ -8,6 +8,9 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect
   liquibase:
     change-log: classpath:liquibase/liquibase-changeLog.yaml
+  cache:
+    jcache:
+      config: classpath:ehcache.xml
 
 server:
   error:

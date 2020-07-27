@@ -6,11 +6,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "`pharmacies`")
 @Schema(description = "Pharmacy Information")
-public class Pharmacy {
+public class Pharmacy implements Serializable {
     @Id
     @Column(name = "`id`")
     private int id;
