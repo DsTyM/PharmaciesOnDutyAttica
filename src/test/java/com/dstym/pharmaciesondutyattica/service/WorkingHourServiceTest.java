@@ -23,6 +23,11 @@ class WorkingHourServiceTest {
     @Mock
     private WorkingHourRepository workingHourRepository;
 
+    private static void assertWorkingHoursProperties(WorkingHour expectedWorkingHour, WorkingHour actualWorkingHour) {
+        assertEquals(expectedWorkingHour.getId(), actualWorkingHour.getId());
+        assertEquals(expectedWorkingHour.getWorkingHourText(), actualWorkingHour.getWorkingHourText());
+    }
+
     @Test
     public void testFindAll() {
         var workingHour1 = new WorkingHour(3, "8 ΤΟ ΠΡΩΙ ΜΕ 9 ΤΟ ΒΡΑΔΥ");
@@ -73,10 +78,5 @@ class WorkingHourServiceTest {
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));
-    }
-
-    private static void assertWorkingHoursProperties(WorkingHour expectedWorkingHour, WorkingHour actualWorkingHour) {
-        assertEquals(expectedWorkingHour.getId(), actualWorkingHour.getId());
-        assertEquals(expectedWorkingHour.getWorkingHourText(), actualWorkingHour.getWorkingHourText());
     }
 }

@@ -23,6 +23,14 @@ class PharmacyServiceTest {
     @Mock
     private PharmacyRepository pharmacyRepository;
 
+    private static void assertPharmaciesProperties(Pharmacy expectedPharmacy, Pharmacy actualPharmacy) {
+        assertEquals(expectedPharmacy.getId(), actualPharmacy.getId());
+        assertEquals(expectedPharmacy.getName(), actualPharmacy.getName());
+        assertEquals(expectedPharmacy.getAddress(), actualPharmacy.getAddress());
+        assertEquals(expectedPharmacy.getRegion(), actualPharmacy.getRegion());
+        assertEquals(expectedPharmacy.getPhoneNumber(), actualPharmacy.getPhoneNumber());
+    }
+
     @Test
     public void testFindAll() {
         var pharmacy1 = new Pharmacy(4050, "ΣΠΥΡΟΣ ΝΙΚΟΛΑΚΟΠΟΥΛΟΣ", "ΠΕΤΡΟΥ ΚΑΡΑΓΙΩΡΓΟΥ 147",
@@ -77,13 +85,5 @@ class PharmacyServiceTest {
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));
-    }
-
-    private static void assertPharmaciesProperties(Pharmacy expectedPharmacy, Pharmacy actualPharmacy) {
-        assertEquals(expectedPharmacy.getId(), actualPharmacy.getId());
-        assertEquals(expectedPharmacy.getName(), actualPharmacy.getName());
-        assertEquals(expectedPharmacy.getAddress(), actualPharmacy.getAddress());
-        assertEquals(expectedPharmacy.getRegion(), actualPharmacy.getRegion());
-        assertEquals(expectedPharmacy.getPhoneNumber(), actualPharmacy.getPhoneNumber());
     }
 }

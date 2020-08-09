@@ -24,6 +24,28 @@ class AvailablePharmacyServiceTest {
     @Mock
     private AvailablePharmacyRepository availablePharmacyRepository;
 
+    private static void assertAvailablePharmaciesProperties(AvailablePharmacy expectedAvailablePharmacy,
+                                                            AvailablePharmacy actualAvailablePharmacy) {
+        assertEquals(expectedAvailablePharmacy.getId(), actualAvailablePharmacy.getId());
+        assertPharmaciesProperties(expectedAvailablePharmacy.getPharmacy(), actualAvailablePharmacy.getPharmacy());
+        assertWorkingHoursProperties(expectedAvailablePharmacy.getWorkingHour(), actualAvailablePharmacy.getWorkingHour());
+        assertEquals(expectedAvailablePharmacy.getDate(), actualAvailablePharmacy.getDate());
+        assertEquals(expectedAvailablePharmacy.getPulledVersion(), actualAvailablePharmacy.getPulledVersion());
+    }
+
+    private static void assertPharmaciesProperties(Pharmacy expectedPharmacy, Pharmacy actualPharmacy) {
+        assertEquals(expectedPharmacy.getId(), actualPharmacy.getId());
+        assertEquals(expectedPharmacy.getName(), actualPharmacy.getName());
+        assertEquals(expectedPharmacy.getAddress(), actualPharmacy.getAddress());
+        assertEquals(expectedPharmacy.getRegion(), actualPharmacy.getRegion());
+        assertEquals(expectedPharmacy.getPhoneNumber(), actualPharmacy.getPhoneNumber());
+    }
+
+    private static void assertWorkingHoursProperties(WorkingHour expectedWorkingHour, WorkingHour actualWorkingHour) {
+        assertEquals(expectedWorkingHour.getId(), actualWorkingHour.getId());
+        assertEquals(expectedWorkingHour.getWorkingHourText(), actualWorkingHour.getWorkingHourText());
+    }
+
     @Test
     public void testFindAllByRegionAndDate_validDate_noRegionSpecified() {
         var date = "18/1/2020";
@@ -96,27 +118,5 @@ class AvailablePharmacyServiceTest {
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));
-    }
-
-    private static void assertAvailablePharmaciesProperties(AvailablePharmacy expectedAvailablePharmacy,
-                                                            AvailablePharmacy actualAvailablePharmacy) {
-        assertEquals(expectedAvailablePharmacy.getId(), actualAvailablePharmacy.getId());
-        assertPharmaciesProperties(expectedAvailablePharmacy.getPharmacy(), actualAvailablePharmacy.getPharmacy());
-        assertWorkingHoursProperties(expectedAvailablePharmacy.getWorkingHour(), actualAvailablePharmacy.getWorkingHour());
-        assertEquals(expectedAvailablePharmacy.getDate(), actualAvailablePharmacy.getDate());
-        assertEquals(expectedAvailablePharmacy.getPulledVersion(), actualAvailablePharmacy.getPulledVersion());
-    }
-
-    private static void assertPharmaciesProperties(Pharmacy expectedPharmacy, Pharmacy actualPharmacy) {
-        assertEquals(expectedPharmacy.getId(), actualPharmacy.getId());
-        assertEquals(expectedPharmacy.getName(), actualPharmacy.getName());
-        assertEquals(expectedPharmacy.getAddress(), actualPharmacy.getAddress());
-        assertEquals(expectedPharmacy.getRegion(), actualPharmacy.getRegion());
-        assertEquals(expectedPharmacy.getPhoneNumber(), actualPharmacy.getPhoneNumber());
-    }
-
-    private static void assertWorkingHoursProperties(WorkingHour expectedWorkingHour, WorkingHour actualWorkingHour) {
-        assertEquals(expectedWorkingHour.getId(), actualWorkingHour.getId());
-        assertEquals(expectedWorkingHour.getWorkingHourText(), actualWorkingHour.getWorkingHourText());
     }
 }
