@@ -9,9 +9,9 @@ public interface AvailablePharmacyService {
 
     List<AvailablePharmacy> findAllByRegionAndDate(String urlRegion, String urlDate);
 
-    AvailablePharmacy findById(long theId);
+    AvailablePharmacy findById(String theId);
 
     void save(AvailablePharmacy availablePharmacy);
 
-    void deleteById(long theId);
+    void deleteById(String theId);
 }

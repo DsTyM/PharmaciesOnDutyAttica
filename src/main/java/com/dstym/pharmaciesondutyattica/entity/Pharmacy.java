@@ -1,38 +1,25 @@
 package com.dstym.pharmaciesondutyattica.entity;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.annotations.ApiModel;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.io.Serializable;
-
-@Entity
-@Table(name = "`pharmacies`")
-@Schema(description = "Pharmacy Information")
-public class Pharmacy implements Serializable {
+@Document(collection = "Pharmacies")
+@ApiModel(description = "Pharmacy Information")
+public class Pharmacy {
     @Id
-    @Column(name = "`id`")
-    private int id;
+    private String id;
 
-    @Column(name = "`name`")
     private String name;
-
-    @Column(name = "`address`")
     private String address;
-
-    @Column(name = "`region`")
     private String region;
-
-    @Column(name = "`phone-number`")
     private String phoneNumber;
 
     public Pharmacy() {
 
     }
 
-    public Pharmacy(int id, String name, String address, String region, String phoneNumber) {
+    public Pharmacy(String id, String name, String address, String region, String phoneNumber) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -40,11 +27,11 @@ public class Pharmacy implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

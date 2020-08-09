@@ -57,7 +57,7 @@ public class AvailablePharmacyScraper {
                 var tempWorkingHour = new WorkingHour();
                 tempWorkingHour.setId(workingHourId);
 
-                var availablePharmacy = new AvailablePharmacy(0, tempPharmacy, tempWorkingHour, date,
+                var availablePharmacy = new AvailablePharmacy(tempPharmacy, tempWorkingHour, date,
                         lastPulledVersion + 1);
 
                 saveAvailablePharmacy(availablePharmacy);
@@ -68,15 +68,23 @@ public class AvailablePharmacyScraper {
 
     private static void saveAvailablePharmacy(AvailablePharmacy availablePharmacy) {
         try {
+            var tempPharmacy = pharmacyRepository.findById(availablePharmacy.getPharmacy().getId()).get();
+            var tempWorkingHour = workingHourRepository.findById(availablePharmacy.getWorkingHour().getId()).get();
+
+            availablePharmacy.setPharmacy(tempPharmacy);
+            availablePharmacy.setWorkingHour(tempWorkingHour);
+
             availablePharmacyRepository.save(availablePharmacy);
         } catch (Exception e) {
             var tempPharmacy = PharmacyScraper.getSinglePharmacy(availablePharmacy.getPharmacy().getId());
             if (tempPharmacy != null) {
+                availablePharmacy.setPharmacy(tempPharmacy);
                 pharmacyRepository.save(tempPharmacy);
             }
 
             var tempWorkingHour = WorkingHourScraper.getSingleWorkingHour(availablePharmacy.getWorkingHour().getId());
             if (tempWorkingHour != null) {
+                availablePharmacy.setWorkingHour(tempWorkingHour);
                 workingHourRepository.save(tempWorkingHour);
             }
 
@@ -84,7 +92,7 @@ public class AvailablePharmacyScraper {
         }
     }
 
-    private static HashMap<Integer, Integer> getAvailablePharmacies(int daysFromToday) {
+    private static HashMap<String, String> getAvailablePharmacies(int daysFromToday) {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 
@@ -192,9 +200,9 @@ public class AvailablePharmacyScraper {
         return webClient.getPage(url);
     }
 
-    private static HashMap<Integer, Integer> getPharmacyIdWorkingHourIdPairFromHTMLDOM(List<HtmlPage> pages) {
+    private static HashMap<String, String> getPharmacyIdWorkingHourIdPairFromHTMLDOM(List<HtmlPage> pages) {
         // HashMap<PharmacyId, WorkingHoursId>
-        var workingHoursIdByPharmacyId = new HashMap<Integer, Integer>();
+        var workingHoursIdByPharmacyId = new HashMap<String, String>();
 
         for (var singlePage : pages) {
             var jsoupdoc = Jsoup.parse(singlePage.asXml());
@@ -206,7 +214,7 @@ public class AvailablePharmacyScraper {
                 var pharmacyId = getSinglePharmacyIdFromURL(linkJs);
                 var workingHourId = getSingleWorkingHourIdFromURL(linkJs);
 
-                workingHoursIdByPharmacyId.put(pharmacyId, workingHourId);
+                workingHoursIdByPharmacyId.put(String.valueOf(pharmacyId), String.valueOf(workingHourId));
             }
         }
         return workingHoursIdByPharmacyId;

@@ -1,11 +1,11 @@
 package com.dstym.pharmaciesondutyattica.repository;
 
 import com.dstym.pharmaciesondutyattica.entity.AvailablePharmacy;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 
-public interface AvailablePharmacyRepository extends JpaRepository<AvailablePharmacy, Long> {
+public interface AvailablePharmacyRepository extends MongoRepository<AvailablePharmacy, String> {
     List<AvailablePharmacy> findFirstByDateOrderByPulledVersionDesc(String date);
 
     List<AvailablePharmacy> findByDateAndAndPulledVersion(String date, int pulledVersion);

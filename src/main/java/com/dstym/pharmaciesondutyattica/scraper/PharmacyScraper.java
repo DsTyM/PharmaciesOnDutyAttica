@@ -38,7 +38,7 @@ public class PharmacyScraper {
         Pharmacy pharmacy;
 
         for (var id : ids) {
-            pharmacy = getSinglePharmacy(id);
+            pharmacy = getSinglePharmacy(String.valueOf(id));
 
             if (pharmacy == null) {
                 continue;
@@ -50,7 +50,7 @@ public class PharmacyScraper {
         return listOfPharmacies;
     }
 
-    public static Pharmacy getSinglePharmacy(int id) {
+    public static Pharmacy getSinglePharmacy(String id) {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 
@@ -69,7 +69,7 @@ public class PharmacyScraper {
         var pharmacyInfo = getPharmacyInfoFromHTMLDOM(jsoupdoc);
 
         // transfer pharmacy info from tempArr to entity.Pharmacy class
-        return new Pharmacy(Integer.parseInt(String.valueOf(id)),
+        return new Pharmacy(String.valueOf(id),
                 pharmacyInfo[0], pharmacyInfo[1], pharmacyInfo[2], pharmacyInfo[3]);
     }
 

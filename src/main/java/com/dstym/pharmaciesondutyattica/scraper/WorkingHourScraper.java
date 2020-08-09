@@ -38,7 +38,7 @@ public class WorkingHourScraper {
         WorkingHour workingHour;
 
         for (var id : workingHoursIds) {
-            workingHour = getSingleWorkingHour(id);
+            workingHour = getSingleWorkingHour(String.valueOf(id));
 
             if (workingHour == null) {
                 continue;
@@ -50,7 +50,7 @@ public class WorkingHourScraper {
         return listOfWorkingHours;
     }
 
-    public static WorkingHour getSingleWorkingHour(int id) {
+    public static WorkingHour getSingleWorkingHour(String id) {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 

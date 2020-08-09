@@ -1,8 +1,8 @@
 package com.dstym.pharmaciesondutyattica.repository;
 
 import com.dstym.pharmaciesondutyattica.entity.WorkingHour;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface WorkingHourRepository extends JpaRepository<WorkingHour, Integer> {
+public interface WorkingHourRepository extends MongoRepository<WorkingHour, String> {
 
 }

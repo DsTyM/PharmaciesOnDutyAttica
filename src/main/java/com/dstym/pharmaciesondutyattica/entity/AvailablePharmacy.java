@@ -1,33 +1,18 @@
 package com.dstym.pharmaciesondutyattica.entity;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.annotations.ApiModel;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
-import java.io.Serializable;
-
-@Entity
-@Table(name = "`available-pharmacies`")
-@Schema(description = "Available Pharmacy Information")
-public class AvailablePharmacy implements Serializable {
+@Document(collection = "AvailablePharmacies")
+@ApiModel(description = "Available Pharmacy Information")
+public class AvailablePharmacy {
     @Id
-    @Column(name = "`id`")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private String id;
 
-    @ManyToOne(optional = false,
-            cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinColumn(name = "`pharmacy-id`")
     private Pharmacy pharmacy;
-
-    @ManyToOne(optional = false,
-            cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinColumn(name = "`working-hour-id`")
     private WorkingHour workingHour;
-
-    @Column(name = "`date`")
     private String date;
-
-    @Column(name = "`pulled-version`")
     private int pulledVersion;
 
     public AvailablePharmacy() {
@@ -38,7 +23,14 @@ public class AvailablePharmacy implements Serializable {
         this.pulledVersion = pulledVersion;
     }
 
-    public AvailablePharmacy(int id, Pharmacy pharmacy, WorkingHour workingHour, String date, int pulledVersion) {
+    public AvailablePharmacy(Pharmacy pharmacy, WorkingHour workingHour, String date, int pulledVersion) {
+        this.pharmacy = pharmacy;
+        this.workingHour = workingHour;
+        this.date = date;
+        this.pulledVersion = pulledVersion;
+    }
+
+    public AvailablePharmacy(String id, Pharmacy pharmacy, WorkingHour workingHour, String date, int pulledVersion) {
         this.id = id;
         this.pharmacy = pharmacy;
         this.workingHour = workingHour;
@@ -46,11 +38,11 @@ public class AvailablePharmacy implements Serializable {
         this.pulledVersion = pulledVersion;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

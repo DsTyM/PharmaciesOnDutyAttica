@@ -1,38 +1,31 @@
 package com.dstym.pharmaciesondutyattica.entity;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.annotations.ApiModel;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.io.Serializable;
-
-@Entity
-@Table(name = "`working-hours`")
-@Schema(description = "Working Hour Information")
-public class WorkingHour implements Serializable {
+@Document(collection = "WorkingHours")
+@ApiModel(description = "Working Hour Information")
+public class WorkingHour {
     @Id
-    @Column(name = "`id`")
-    private int id;
+    private String id;
 
-    @Column(name = "`working-hour-text`")
     private String workingHourText;
 
     public WorkingHour() {
 
     }
 
-    public WorkingHour(int id, String workingHourText) {
+    public WorkingHour(String id, String workingHourText) {
         this.id = id;
         this.workingHourText = workingHourText;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -7,11 +7,11 @@ import java.util.List;
 public interface PharmacyService {
     List<Pharmacy> findAll();
 
-    Pharmacy findById(int theId);
+    Pharmacy findById(String theId);
 
     List<Pharmacy> findByRegion(String urlRegion);
 
     void save(Pharmacy pharmacy);
 
-    void deleteById(int theId);
+    void deleteById(String theId);
 }

@@ -3,7 +3,6 @@ package com.dstym.pharmaciesondutyattica.service;
 import com.dstym.pharmaciesondutyattica.entity.WorkingHour;
 import com.dstym.pharmaciesondutyattica.repository.WorkingHourRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,14 +18,12 @@ public class WorkingHourServiceImpl implements WorkingHourService {
     }
 
     @Override
-    @Cacheable(value = "workingHoursCache", key = "'ALL'")
     public List<WorkingHour> findAll() {
         return workingHourRepository.findAll();
     }
 
     @Override
-    @Cacheable(value = "workingHourCache", key = "#theId")
-    public WorkingHour findById(int theId) {
+    public WorkingHour findById(String theId) {
         Optional<WorkingHour> result = workingHourRepository.findById(theId);
 
         WorkingHour workingHour;
@@ -46,7 +43,7 @@ public class WorkingHourServiceImpl implements WorkingHourService {
     }
 
     @Override
-    public void deleteById(int theId) {
+    public void deleteById(String theId) {
         workingHourRepository.deleteById(theId);
     }
 }
