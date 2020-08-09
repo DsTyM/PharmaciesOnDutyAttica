@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Service
 public class PharmacyServiceImpl implements PharmacyService {
-    private PharmacyRepository pharmacyRepository;
+    private final PharmacyRepository pharmacyRepository;
 
     @Autowired
     public PharmacyServiceImpl(PharmacyRepository pharmacyRepository) {

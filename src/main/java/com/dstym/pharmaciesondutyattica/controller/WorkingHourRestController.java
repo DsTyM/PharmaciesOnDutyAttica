@@ -13,7 +13,7 @@ import java.util.List;
 @CrossOrigin
 @RequestMapping("/api")
 public class WorkingHourRestController {
-    private WorkingHourService workingHourService;
+    private final WorkingHourService workingHourService;
 
     @Autowired
     public WorkingHourRestController(WorkingHourService workingHourService) {

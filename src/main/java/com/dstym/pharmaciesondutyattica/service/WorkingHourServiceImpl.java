@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Service
 public class WorkingHourServiceImpl implements WorkingHourService {
-    private WorkingHourRepository workingHourRepository;
+    private final WorkingHourRepository workingHourRepository;
 
     @Autowired
     public WorkingHourServiceImpl(WorkingHourRepository workingHourRepository) {

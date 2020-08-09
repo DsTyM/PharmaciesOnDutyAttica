@@ -13,7 +13,7 @@ import java.util.List;
 @CrossOrigin
 @RequestMapping("/api")
 public class AvailablePharmacyRestController {
-    private AvailablePharmacyService availablePharmacyService;
+    private final AvailablePharmacyService availablePharmacyService;
 
     @Autowired
     public AvailablePharmacyRestController(AvailablePharmacyService availablePharmacyService) {
