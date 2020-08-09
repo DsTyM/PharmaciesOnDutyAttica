@@ -1,8 +1,8 @@
 package com.dstym.pharmaciesondutyattica.repository;
 
 import com.dstym.pharmaciesondutyattica.entity.WorkingHour;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface WorkingHourRepository extends JpaRepository<WorkingHour, Integer> {
+public interface WorkingHourRepository extends PagingAndSortingRepository<WorkingHour, Integer> {
 
 }

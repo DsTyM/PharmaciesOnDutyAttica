@@ -4,6 +4,8 @@ import com.dstym.pharmaciesondutyattica.entity.WorkingHour;
 import com.dstym.pharmaciesondutyattica.repository.WorkingHourRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,7 +13,7 @@ import java.util.Optional;
 
 @Service
 public class WorkingHourServiceImpl implements WorkingHourService {
-    private WorkingHourRepository workingHourRepository;
+    private final WorkingHourRepository workingHourRepository;
 
     @Autowired
     public WorkingHourServiceImpl(WorkingHourRepository workingHourRepository) {
@@ -19,25 +21,27 @@ public class WorkingHourServiceImpl implements WorkingHourService {
     }
 
     @Override
+    @Cacheable(value = "workingHoursPageableCache", key = "#pageable")
+    public Page<WorkingHour> findAll(Pageable pageable) {
+        return workingHourRepository.findAll(pageable);
+    }
+
+    @Override
     @Cacheable(value = "workingHoursCache", key = "'ALL'")
     public List<WorkingHour> findAll() {
-        return workingHourRepository.findAll();
+        return (List<WorkingHour>) workingHourRepository.findAll();
     }
 
     @Override
     @Cacheable(value = "workingHourCache", key = "#theId")
-    public WorkingHour findById(int theId) {
+    public Optional<WorkingHour> findById(int theId) {
         Optional<WorkingHour> result = workingHourRepository.findById(theId);
 
-        WorkingHour workingHour;
-
         if (result.isPresent()) {
-            workingHour = result.get();
+            return result;
         } else {
             throw new RuntimeException("Did not find workingHour with id: " + theId);
         }
-
-        return workingHour;
     }
 
     @Override

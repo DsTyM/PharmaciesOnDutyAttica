@@ -1,10 +1,10 @@
 package com.dstym.pharmaciesondutyattica.repository;
 
 import com.dstym.pharmaciesondutyattica.entity.Pharmacy;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-import java.util.List;
-
-public interface PharmacyRepository extends JpaRepository<Pharmacy, Integer> {
-    List<Pharmacy> findByRegion(String region);
+public interface PharmacyRepository extends PagingAndSortingRepository<Pharmacy, Integer> {
+    Page<Pharmacy> findByRegion(String region, Pageable pageable);
 }

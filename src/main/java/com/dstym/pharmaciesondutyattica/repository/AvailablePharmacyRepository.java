@@ -1,14 +1,15 @@
 package com.dstym.pharmaciesondutyattica.repository;
 
 import com.dstym.pharmaciesondutyattica.entity.AvailablePharmacy;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-import java.util.List;
+public interface AvailablePharmacyRepository extends PagingAndSortingRepository<AvailablePharmacy, Long> {
+    Page<AvailablePharmacy> findFirstByDateOrderByPulledVersionDesc(String date, Pageable pageable);
 
-public interface AvailablePharmacyRepository extends JpaRepository<AvailablePharmacy, Long> {
-    List<AvailablePharmacy> findFirstByDateOrderByPulledVersionDesc(String date);
+    Page<AvailablePharmacy> findByDateAndAndPulledVersion(String date, int pulledVersion, Pageable pageable);
 
-    List<AvailablePharmacy> findByDateAndAndPulledVersion(String date, int pulledVersion);
-
-    List<AvailablePharmacy> findByDateAndAndPulledVersionAndPharmacyRegion(String date, int pulledVersion, String region);
+    Page<AvailablePharmacy> findByDateAndAndPulledVersionAndPharmacyRegion(
+            String date, int pulledVersion, String region, Pageable pageable);
 }

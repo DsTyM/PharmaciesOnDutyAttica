@@ -4,6 +4,8 @@ import com.dstym.pharmaciesondutyattica.entity.Pharmacy;
 import com.dstym.pharmaciesondutyattica.repository.PharmacyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.net.URLDecoder;
@@ -13,7 +15,7 @@ import java.util.Optional;
 
 @Service
 public class PharmacyServiceImpl implements PharmacyService {
-    private PharmacyRepository pharmacyRepository;
+    private final PharmacyRepository pharmacyRepository;
 
     @Autowired
     public PharmacyServiceImpl(PharmacyRepository pharmacyRepository) {
@@ -21,9 +23,15 @@ public class PharmacyServiceImpl implements PharmacyService {
     }
 
     @Override
+    @Cacheable(value = "pharmaciesPageableCache", key = "#pageable")
+    public Page<Pharmacy> findAll(Pageable pageable) {
+        return pharmacyRepository.findAll(pageable);
+    }
+
+    @Override
     @Cacheable(value = "pharmaciesCache", key = "'ALL'")
     public List<Pharmacy> findAll() {
-        return pharmacyRepository.findAll();
+        return (List<Pharmacy>) pharmacyRepository.findAll();
     }
 
     @Override
@@ -43,11 +51,11 @@ public class PharmacyServiceImpl implements PharmacyService {
     }
 
     @Override
-    @Cacheable(value = "pharmaciesByRegionCache", key = "#urlRegion")
-    public List<Pharmacy> findByRegion(String urlRegion) {
+    @Cacheable(value = "pharmaciesByRegionCache", key = "#urlRegion + '_' + #pageable.hashCode()")
+    public Page<Pharmacy> findByRegion(String urlRegion, Pageable pageable) {
         String region = URLDecoder.decode(urlRegion, StandardCharsets.UTF_8);
 
-        List<Pharmacy> result = pharmacyRepository.findByRegion(region);
+        Page<Pharmacy> result = pharmacyRepository.findByRegion(region, pageable);
 
         if (result.isEmpty()) {
             throw new RuntimeException("Did not find pharmacy in region: " + region);

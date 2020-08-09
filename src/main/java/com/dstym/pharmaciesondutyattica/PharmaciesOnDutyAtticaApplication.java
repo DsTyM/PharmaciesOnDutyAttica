@@ -6,6 +6,7 @@ import org.springdoc.core.GroupedOpenApi;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.filter.ForwardedHeaderFilter;
 
 @SpringBootApplication
 public class PharmaciesOnDutyAtticaApplication {
@@ -27,5 +28,10 @@ public class PharmaciesOnDutyAtticaApplication {
                 .info(new Info().title("Pharmacies On Duty Attica API")
                         .description("Getting the available pharmacies on duty in Attica, Greece.")
                         .version("1.0"));
+    }
+
+    @Bean
+    ForwardedHeaderFilter forwardedHeaderFilter() {
+        return new ForwardedHeaderFilter();
     }
 }

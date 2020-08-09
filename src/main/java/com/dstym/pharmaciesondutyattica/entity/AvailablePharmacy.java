@@ -1,6 +1,9 @@
 package com.dstym.pharmaciesondutyattica.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -8,7 +11,9 @@ import java.io.Serializable;
 @Entity
 @Table(name = "`available-pharmacies`")
 @Schema(description = "Available Pharmacy Information")
-public class AvailablePharmacy implements Serializable {
+@Relation(collectionRelation = "available-pharmacies", itemRelation = "available-pharmacy")
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class AvailablePharmacy extends RepresentationModel<AvailablePharmacy> implements Serializable {
     @Id
     @Column(name = "`id`")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

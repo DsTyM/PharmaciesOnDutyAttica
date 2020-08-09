@@ -130,11 +130,11 @@ public class AvailablePharmacyScraper {
     }
 
     private static int getLastPulledVersion(String date) {
-        var result = availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date);
+        var result = availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date, null);
         var lastPulledVersion = 0;
 
         if (!result.isEmpty()) {
-            var tempAvailablePharmacy = (AvailablePharmacy) result.toArray()[0];
+            var tempAvailablePharmacy = (AvailablePharmacy) result.get().toArray()[0];
             lastPulledVersion = tempAvailablePharmacy.getPulledVersion();
         }
 

@@ -5,6 +5,8 @@ import com.dstym.pharmaciesondutyattica.repository.AvailablePharmacyRepository;
 import com.dstym.pharmaciesondutyattica.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.net.URLDecoder;
@@ -21,25 +23,27 @@ public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
         AvailablePharmacyServiceImpl.availablePharmacyRepository = availablePharmacyRepository;
     }
 
-    private static int getLastPulledVersion(String date) {
-        var result = availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date);
+    private static int getLastPulledVersion(String date, Pageable pageable) {
+        var result = availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(
+                date, pageable);
 
         if (result.isEmpty()) {
             throw new RuntimeException("Did not find available pharmacies for date: " + date);
         }
 
-        var tempAvailablePharmacy = (AvailablePharmacy) result.toArray()[0];
+        var tempAvailablePharmacy = (AvailablePharmacy) result.get().toArray()[0];
         return tempAvailablePharmacy.getPulledVersion();
     }
 
     @Override
     public List<AvailablePharmacy> findAll() {
-        return availablePharmacyRepository.findAll();
+        return (List<AvailablePharmacy>) availablePharmacyRepository.findAll();
     }
 
     @Override
-    @Cacheable(value = "availablePharmaciesCache", key = "{#urlRegion, #urlDate}")
-    public List<AvailablePharmacy> findAllByRegionAndDate(String urlRegion, String urlDate) {
+    @Cacheable(value = "availablePharmaciesPageableCache",
+            key = "#urlRegion + '_' + #urlDate + '_' + #pageable.hashCode()")
+    public Page<AvailablePharmacy> findAllByRegionAndDate(String urlRegion, String urlDate, Pageable pageable) {
         var date = urlDate.replaceAll("-", "/");
 
         var region = URLDecoder.decode(urlRegion, StandardCharsets.UTF_8);
@@ -49,14 +53,14 @@ public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
             date = DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday));
         }
 
-        var lastPulledVersion = getLastPulledVersion(date);
+        var lastPulledVersion = getLastPulledVersion(date, pageable);
 
         if (region.equals("all")) {
-            return availablePharmacyRepository.findByDateAndAndPulledVersion(date, lastPulledVersion);
+            return availablePharmacyRepository.findByDateAndAndPulledVersion(date, lastPulledVersion, pageable);
         }
 
-        var result = availablePharmacyRepository.findByDateAndAndPulledVersionAndPharmacyRegion(date,
-                lastPulledVersion, region);
+        var result = availablePharmacyRepository.findByDateAndAndPulledVersionAndPharmacyRegion(
+                date, lastPulledVersion, region, pageable);
 
         if (!result.isEmpty()) {
             return result;

@@ -34,6 +34,18 @@
         </resources>
     </cache>
 
+    <cache alias="workingHoursPageableCache">
+        <key-type>org.springframework.data.domain.Pageable</key-type>
+        <value-type>org.springframework.data.domain.Page</value-type>
+        <expiry>
+            <ttl unit="hours">23</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">2000</heap>
+            <offheap unit="MB">100</offheap>
+        </resources>
+    </cache>
+
     <cache alias="pharmacyCache">
         <key-type>java.lang.Integer</key-type>
         <value-type>com.dstym.pharmaciesondutyattica.entity.Pharmacy</value-type>
@@ -58,9 +70,21 @@
         </resources>
     </cache>
 
+    <cache alias="pharmaciesPageableCache">
+        <key-type>org.springframework.data.domain.Pageable</key-type>
+        <value-type>org.springframework.data.domain.Page</value-type>
+        <expiry>
+            <ttl unit="hours">23</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">1000</heap>
+            <offheap unit="MB">500</offheap>
+        </resources>
+    </cache>
+
     <cache alias="pharmaciesByRegionCache">
         <key-type>java.lang.String</key-type>
-        <value-type>java.util.ArrayList</value-type>
+        <value-type>org.springframework.data.domain.Page</value-type>
         <expiry>
             <ttl unit="hours">23</ttl>
         </expiry>
@@ -70,9 +94,9 @@
         </resources>
     </cache>
 
-    <cache alias="availablePharmaciesCache">
-        <key-type>java.util.ArrayList</key-type>
-        <value-type>java.util.ArrayList</value-type>
+    <cache alias="availablePharmaciesPageableCache">
+        <key-type>java.lang.String</key-type>
+        <value-type>org.springframework.data.domain.Page</value-type>
         <expiry>
             <ttl unit="hours">23</ttl>
         </expiry>
