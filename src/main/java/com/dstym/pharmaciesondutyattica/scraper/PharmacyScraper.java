@@ -4,6 +4,8 @@ import com.dstym.pharmaciesondutyattica.entity.Pharmacy;
 import com.dstym.pharmaciesondutyattica.repository.PharmacyRepository;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +14,7 @@ import java.util.stream.IntStream;
 
 @Component
 public class PharmacyScraper {
+    private static final Logger logger = LoggerFactory.getLogger(AvailablePharmacyScraper.class);
     private static PharmacyRepository pharmacyRepository;
 
     @Autowired
@@ -26,7 +29,7 @@ public class PharmacyScraper {
             pharmacyRepository.save(pharmacy);
         }
 
-        System.out.println("All pharmacies have been updated!");
+        logger.info("All pharmacies have been updated!");
     }
 
     private static ArrayList<Pharmacy> getPharmacies() {
