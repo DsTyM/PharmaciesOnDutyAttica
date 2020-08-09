@@ -7,25 +7,80 @@ It uses HtmlUnit to interact and crawl the fsa.gr website and jsoup to scrape th
 (the available pharmacies per day, pharmacies' information and the different working hours available).
 It also uses MySQL to save the data on the server and Spring Boot to provide the Rest API.
 
+The API is HATEOAS compliant.
+
 The application has been tested using JUnit and Mockito.
 
 Here is an example of how it returns the pharmacies on duty:
 ```json
 {
-    "id": 866,
-    "pharmacy": {
-        "id": 3251,
-        "name": "ΓΙΩΡΓΟΣ ΠΑΠΑΔΟΠΟΥΛΟΣ",
-        "address": "ΠΛΑΤ.ΑΕΡΟΠΟΡΙΑΣ 153",
-        "region": "ΗΛΙΟΥΠΟΛΗ",
-        "phoneNumber": "210-1234567"
+    "_embedded": {
+        "available-pharmacies": [
+            {
+                "id": 866,
+                "pharmacy": {
+                    "id": 3251,
+                    "name": "ΓΙΩΡΓΟΣ ΠΑΠΑΔΟΠΟΥΛΟΣ",
+                    "address": "ΠΛΑΤ.ΑΕΡΟΠΟΡΙΑΣ 153",
+                    "region": "ΗΛΙΟΥΠΟΛΗ",
+                    "phoneNumber": "210-1234567",
+                    "_links": {
+                        "self": {
+                            "href": "http://localhost:8080/api/pharmacies/3251"
+                        }
+                    }
+                },
+                "workingHour": {
+                    "id": 3,
+                    "workingHourText": "8 ΠΡΩΙ - 2 ΜΕΣΗΜΕΡΙ & 5 ΑΠΟΓΕΥΜΑ ΕΩΣ 8 ΠΡΩΙ ΕΠΟΜΕΝΗΣ",
+                    "_links": {
+                        "self": {
+                            "href": "http://localhost:8080/api/working-hours/3"
+                        }
+                    }
+                },
+                "date": "9/8/2020",
+                "pulledVersion": 2
+            },
+            {
+                "id": 15114,
+                "pharmacy": {
+                    "id": 1346,
+                    "name": "ΜΑΡΙΝΑ ΒΙΒΙΕΛΣΟΠΟΥΛΟΥ",
+                    "address": "ΠΛΑΤΑΡΑ 32",
+                    "region": "ΧΑΛΑΝΔΡΙ",
+                    "phoneNumber": "210-6519166",
+                    "_links": {
+                        "self": {
+                            "href": "http://localhost:8080/api/pharmacies/1346"
+                        }
+                    }
+                },
+                "workingHour": {
+                    "id": 2,
+                    "workingHourText": "ΑΝΟΙΧΤΑ 8 ΠΡΩΙ - 2 ΜΕΣΗΜΕΡΙ & 5 ΑΠΟΓΕΥΜΑ - 8 ΠΡΩΙ ΕΠΟΜΕΝΗΣ",
+                    "_links": {
+                        "self": {
+                            "href": "http://localhost:8080/api/working-hours/2"
+                        }
+                    }
+                },
+                "date": "9/8/2020",
+                "pulledVersion": 2
+            }
+        ]
     },
-    "workingHour": {
-        "id": 7,
-        "workingHourText": "8 ΠΡΩΙ - 11 ΒΡΑΔΥ"
+   "_links": {
+           "self": {
+               "href": "http://localhost:8080/api/available-pharmacies?page=0&size=200"
+           }
     },
-    "date": "10/1/2020",
-    "pulledVersion": 2
+    "page": {
+        "size": 200,
+        "totalElements": 110,
+        "totalPages": 1,
+        "number": 0
+    }
 }
 ```
 
