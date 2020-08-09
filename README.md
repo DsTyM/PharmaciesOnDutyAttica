@@ -34,8 +34,6 @@ when the application is started, and it also uses cron expressions to refresh th
 list twice per day. This can also be customised.
 The application also uses Ehcache for In-Memory Caching.
 
-The final version of the API may change.
-
 To start the project using docker, just run:
 ```
 $ git clone https://github.com/DsTyM/PharmaciesOnDutyAttica.git
