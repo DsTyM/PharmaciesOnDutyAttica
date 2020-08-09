@@ -43,7 +43,7 @@ Here is an example of how it returns the pharmacies on duty:
                 "pulledVersion": 2
             },
             {
-                "id": 15114,
+                "id": 867,
                 "pharmacy": {
                     "id": 1346,
                     "name": "ΜΑΡΙΝΑ ΒΙΒΙΕΛΣΟΠΟΥΛΟΥ",
