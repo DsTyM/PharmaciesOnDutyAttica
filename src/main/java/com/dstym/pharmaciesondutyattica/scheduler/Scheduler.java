@@ -1,7 +1,6 @@
 package com.dstym.pharmaciesondutyattica.scheduler;
 
 import com.dstym.pharmaciesondutyattica.scraper.AvailablePharmacyScraper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.event.EventListener;
@@ -23,9 +22,7 @@ public class Scheduler {
         this.cacheManager = cacheManager;
     }
 
-    // 5 minutes, after refreshing the data
-    @Scheduled(cron = "7 0/8 * * * *")
-    public void reportCurrentTime() {
+    public void clearCache() {
         Objects.requireNonNull(cacheManager.getCache("workingHourCache")).clear();
         Objects.requireNonNull(cacheManager.getCache("workingHoursCache")).clear();
         Objects.requireNonNull(cacheManager.getCache("pharmacyCache")).clear();
@@ -38,6 +35,7 @@ public class Scheduler {
     public void getAvailablePharmaciesTwicePerDay() {
         var daysFromToday = 0;
         AvailablePharmacyScraper.saveAvailablePharmacies(daysFromToday);
+        clearCache();
     }
 
     // run only once after startup
@@ -45,17 +43,20 @@ public class Scheduler {
     public void getAvailablePharmaciesAfterStartup() {
         var daysFromToday = 0;
         AvailablePharmacyScraper.saveAvailablePharmacies(daysFromToday);
+        clearCache();
     }
 
 //    @EventListener(ApplicationReadyEvent.class)
 //    public void getAvailablePharmaciesForLastDaysAfterStartup() {
 //        var numOfDays = 10;
 //        AvailablePharmacyScraper.saveAvailablePharmaciesForLastDays(numOfDays);
+//        clearCache();
 //    }
 
 //    @EventListener(ApplicationReadyEvent.class)
 //    public void getPharmaciesAndWorkingHoursAfterStartup() {
 //        PharmacyScraper.savePharmacies();
 //        WorkingHourScraper.saveWorkingHours();
+//        clearCache();
 //    }
 }
