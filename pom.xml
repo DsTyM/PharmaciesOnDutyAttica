@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.2.RELEASE</version>
+        <version>2.3.3.RELEASE</version>
         <relativePath/>
         <!-- lookup parent from repository -->
     </parent>
@@ -19,7 +19,7 @@
 
     <properties>
         <java.version>14</java.version>
-        <spring-boot.version>2.3.2.RELEASE</spring-boot.version>
+        <spring-boot.version>2.3.3.RELEASE</spring-boot.version>
         <liquibase.version>4.0.0</liquibase.version>
         <liquibase-hibernate.version>4.0.0</liquibase-hibernate.version>
         <javax-validation-api.version>2.0.1.Final</javax-validation-api.version>
@@ -65,7 +65,7 @@
         <dependency>
             <groupId>net.sourceforge.htmlunit</groupId>
             <artifactId>htmlunit</artifactId>
-            <version>2.42.0</version>
+            <version>2.43.0</version>
         </dependency>
 
         <dependency>
