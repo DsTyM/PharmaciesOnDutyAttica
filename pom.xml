@@ -18,7 +18,7 @@
     <description>Pharmacies on Duty Attica Spring Boot Web App</description>
 
     <properties>
-        <java.version>14</java.version>
+        <java.version>15</java.version>
         <spring-boot.version>2.3.3.RELEASE</spring-boot.version>
         <liquibase.version>4.0.0</liquibase.version>
         <liquibase-hibernate.version>4.0.0</liquibase-hibernate.version>
