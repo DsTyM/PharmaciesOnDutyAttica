@@ -14,7 +14,7 @@ import java.util.Objects;
 @Component
 public class Scheduler {
     // cron properties
-    // <minute> <hour> <day-of-month> <month> <day-of-week> <year>
+    // <second> <minute> <hour> <day-of-month> <month> <year>
 
     private final CacheManager cacheManager;
 
@@ -31,7 +31,7 @@ public class Scheduler {
         Objects.requireNonNull(cacheManager.getCache("availablePharmaciesCache")).clear();
     }
 
-    @Scheduled(cron = "2 0/8 * * * *")
+    @Scheduled(cron = "0 0 0/7 * * *")
     public void getAvailablePharmaciesTwicePerDay() {
         var daysFromToday = 0;
         AvailablePharmacyScraper.saveAvailablePharmacies(daysFromToday);
