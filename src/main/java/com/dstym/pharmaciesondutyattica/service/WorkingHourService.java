@@ -1,11 +1,11 @@
 package com.dstym.pharmaciesondutyattica.service;
 
 import com.dstym.pharmaciesondutyattica.entity.WorkingHour;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface WorkingHourService {
-    List<WorkingHour> findAll();
+    Page<WorkingHour> findAll(Pageable pageable);
 
     WorkingHour findById(int theId);
 

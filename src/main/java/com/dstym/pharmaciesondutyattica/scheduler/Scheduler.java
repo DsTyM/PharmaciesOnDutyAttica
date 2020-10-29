@@ -14,7 +14,7 @@ import java.util.Objects;
 @Component
 public class Scheduler {
     // cron properties
-    // <second> <minute> <hour> <day-of-month> <month> <year>
+    // <second> <minute> <hour> <day-of-month> <month> <day of week>
 
     private final CacheManager cacheManager;
 
@@ -27,7 +27,6 @@ public class Scheduler {
         Objects.requireNonNull(cacheManager.getCache("workingHoursCache")).clear();
         Objects.requireNonNull(cacheManager.getCache("pharmacyCache")).clear();
         Objects.requireNonNull(cacheManager.getCache("pharmaciesCache")).clear();
-        Objects.requireNonNull(cacheManager.getCache("pharmaciesByRegionCache")).clear();
         Objects.requireNonNull(cacheManager.getCache("availablePharmaciesCache")).clear();
     }
 

@@ -4,9 +4,10 @@ import com.dstym.pharmaciesondutyattica.entity.WorkingHour;
 import com.dstym.pharmaciesondutyattica.repository.WorkingHourRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,9 +20,10 @@ public class WorkingHourServiceImpl implements WorkingHourService {
     }
 
     @Override
-    @Cacheable(value = "workingHoursCache", key = "'ALL'")
-    public List<WorkingHour> findAll() {
-        return workingHourRepository.findAll();
+//    @Cacheable(value = "workingHoursCache", key = "'ALL'")
+    @Cacheable(value = "workingHoursCache", key = "#pageable")
+    public Page<WorkingHour> findAll(Pageable pageable) {
+        return workingHourRepository.findAll(pageable);
     }
 
     @Override

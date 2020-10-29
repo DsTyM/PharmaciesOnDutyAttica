@@ -6,9 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -39,23 +39,14 @@ class PharmacyServiceTest {
         var pharmacy2 = new Pharmacy(6017, "ΠΕΤΡΟΣ ΠΑΠΑΝΙΚΟΛΑΣ", "ΧΡΗΣΤΟΥ ΜΟΝΤΕΧΡΗΣΤΟΥ 1",
                 "ΘΗΣΕΙΟ", "223430 9876");
 
-        when(pharmacyRepository.findAll()).thenReturn(Arrays.asList(
+        when(pharmacyRepository.findAll((String) null, null)).thenReturn(new PageImpl<>(Arrays.asList(
                 pharmacy1, pharmacy2
-        ));
+        )));
 
-        var pharmacies = pharmacyService.findAll();
+        var pharmacies = pharmacyService.findAll(null, null);
 
-        assertPharmaciesProperties(pharmacy1, pharmacies.get(0));
-        assertPharmaciesProperties(pharmacy2, pharmacies.get(1));
-    }
-
-    @Test
-    public void testFindAll_noResults() {
-        when(pharmacyRepository.findAll()).thenReturn(new ArrayList<>());
-
-        var pharmacies = pharmacyService.findAll();
-
-        assertEquals(pharmacies, new ArrayList<>());
+        assertPharmaciesProperties(pharmacy1, pharmacies.getContent().get(0));
+        assertPharmaciesProperties(pharmacy2, pharmacies.getContent().get(1));
     }
 
     @Test

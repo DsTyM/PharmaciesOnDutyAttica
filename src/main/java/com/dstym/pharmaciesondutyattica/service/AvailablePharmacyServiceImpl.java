@@ -5,6 +5,8 @@ import com.dstym.pharmaciesondutyattica.repository.AvailablePharmacyRepository;
 import com.dstym.pharmaciesondutyattica.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.net.URLDecoder;
@@ -28,7 +30,7 @@ public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
             throw new RuntimeException("Did not find available pharmacies for date: " + date);
         }
 
-        var tempAvailablePharmacy = (AvailablePharmacy) result.toArray()[0];
+        var tempAvailablePharmacy = result.get(0);
         return tempAvailablePharmacy.getPulledVersion();
     }
 
@@ -38,30 +40,26 @@ public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
     }
 
     @Override
-    @Cacheable(value = "availablePharmaciesCache", key = "{#urlRegion, #urlDate}")
-    public List<AvailablePharmacy> findAllByRegionAndDate(String urlRegion, String urlDate) {
-        var date = urlDate.replaceAll("-", "/");
+    @Cacheable(value = "availablePharmaciesCache", key = "{#region, #date, #pageable}")
+    public Page<AvailablePharmacy> findAllByRegionAndDate(String region, String date, Pageable pageable) {
+        region = Optional.ofNullable(region)
+                .map(r -> URLDecoder.decode(r.trim(), StandardCharsets.UTF_8))
+                .orElse(null);
 
-        var region = URLDecoder.decode(urlRegion, StandardCharsets.UTF_8);
-
-        if (date.equals("today")) {
-            var daysFromToday = 0;
-            date = DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday));
-        }
+        var daysFromToday = 0;
+        date = Optional.ofNullable(date)
+                .map(d -> d.replaceAll("-", "/"))
+                .orElse(DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday)));
 
         var lastPulledVersion = getLastPulledVersion(date);
 
-        if (region.equals("all")) {
-            return availablePharmacyRepository.findByDateAndAndPulledVersion(date, lastPulledVersion);
-        }
-
-        var result = availablePharmacyRepository.findByDateAndAndPulledVersionAndPharmacyRegion(date,
-                lastPulledVersion, region);
+        var result = availablePharmacyRepository.findAllByLastPulledVersion(
+                lastPulledVersion, date, region, pageable);
 
         if (!result.isEmpty()) {
             return result;
         } else {
-            throw new RuntimeException("Did not find available pharmacies in region: " + region);
+            throw new RuntimeException("Did not find available pharmacies.");
         }
     }
 
@@ -80,12 +78,10 @@ public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
         return availablePharmacy;
     }
 
-    @Override
     public void save(AvailablePharmacy availablePharmacy) {
         availablePharmacyRepository.save(availablePharmacy);
     }
 
-    @Override
     public void deleteById(long theId) {
         availablePharmacyRepository.deleteById(theId);
     }

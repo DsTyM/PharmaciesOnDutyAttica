@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Arrays;
@@ -65,16 +66,18 @@ class AvailablePharmacyServiceTest {
                 new AvailablePharmacy(pulledVersion)
         ));
 
-        // when no region is given, the service only runs findByDateAndAndPulledVersion()
+        // when no region is given, the service only runs findAllByRegionAndDate()
         // that's why we only mock this
-        when(availablePharmacyRepository.findByDateAndAndPulledVersion(date, pulledVersion)).thenReturn(Arrays.asList(
-                availablePharmacy1, availablePharmacy2
-        ));
+        when(availablePharmacyRepository.findAllByLastPulledVersion(pulledVersion, date, null, null))
+                .thenReturn(
+                        new PageImpl<>(Arrays.asList(
+                                availablePharmacy1, availablePharmacy2
+                        )));
 
-        var availablePharmacies = availablePharmacyService.findAllByRegionAndDate("all", date);
+        var availablePharmacies = availablePharmacyService.findAllByRegionAndDate(null, date, null);
 
-        assertAvailablePharmaciesProperties(availablePharmacy1, availablePharmacies.get(0));
-        assertAvailablePharmaciesProperties(availablePharmacy2, availablePharmacies.get(1));
+        assertAvailablePharmaciesProperties(availablePharmacy1, availablePharmacies.getContent().get(0));
+        assertAvailablePharmaciesProperties(availablePharmacy2, availablePharmacies.getContent().get(1));
     }
 
     @Test
@@ -82,7 +85,7 @@ class AvailablePharmacyServiceTest {
         var date = "18/1/2020";
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            availablePharmacyService.findAllByRegionAndDate("all", date);
+            availablePharmacyService.findAllByRegionAndDate("all", date, null);
         });
 
         String expectedMessage = "Did not find available pharmacies for date";
@@ -103,18 +106,18 @@ class AvailablePharmacyServiceTest {
 
         // We give an available pharmacy without any information, and without region,
         // so it will returns no results for the given region,
-        // but it will not stop on findByDateAndAndPulledVersion(), because,
-        // it findByDateAndAndPulledVersion() will return an empty List, so
+        // but it will not stop on findAllByRegionAndDate(), because,
+        // findAllByRegionAndDate() will return an empty List, so
         // it will think that the date is correct
-        when(availablePharmacyRepository.findByDateAndAndPulledVersion(date, pulledVersion)).thenReturn(
-                Collections.emptyList()
-        );
+        when(availablePharmacyRepository.findAllByLastPulledVersion(pulledVersion, date, null, null))
+                .thenReturn(
+                        new PageImpl<>(Collections.emptyList()
+                        ));
 
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            availablePharmacyService.findAllByRegionAndDate(region, date);
-        });
+        Exception exception = assertThrows(RuntimeException.class, () ->
+                availablePharmacyService.findAllByRegionAndDate(region, date, null));
 
-        String expectedMessage = "Did not find available pharmacies in region";
+        String expectedMessage = "Cannot invoke \"org.springframework.data.domain.Page.isEmpty()\" because \"result\" is null";
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));

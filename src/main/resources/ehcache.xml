@@ -23,8 +23,8 @@
     </cache>
 
     <cache alias="workingHoursCache">
-        <key-type>java.lang.String</key-type>
-        <value-type>java.util.ArrayList</value-type>
+        <key-type>org.springframework.data.domain.PageRequest</key-type>
+        <value-type>org.springframework.data.domain.PageImpl</value-type>
         <expiry>
             <ttl unit="hours">23</ttl>
         </expiry>
@@ -47,8 +47,8 @@
     </cache>
 
     <cache alias="pharmaciesCache">
-        <key-type>java.lang.String</key-type>
-        <value-type>java.util.ArrayList</value-type>
+        <key-type>java.util.ArrayList</key-type>
+        <value-type>org.springframework.data.domain.PageImpl</value-type>
         <expiry>
             <ttl unit="hours">23</ttl>
         </expiry>
@@ -58,21 +58,9 @@
         </resources>
     </cache>
 
-    <cache alias="pharmaciesByRegionCache">
-        <key-type>java.lang.String</key-type>
-        <value-type>java.util.ArrayList</value-type>
-        <expiry>
-            <ttl unit="hours">23</ttl>
-        </expiry>
-        <resources>
-            <heap unit="entries">2000</heap>
-            <offheap unit="MB">100</offheap>
-        </resources>
-    </cache>
-
     <cache alias="availablePharmaciesCache">
         <key-type>java.util.ArrayList</key-type>
-        <value-type>java.util.ArrayList</value-type>
+        <value-type>org.springframework.data.domain.PageImpl</value-type>
         <expiry>
             <ttl unit="hours">23</ttl>
         </expiry>

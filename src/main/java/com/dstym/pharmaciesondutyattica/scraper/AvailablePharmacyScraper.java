@@ -138,7 +138,7 @@ public class AvailablePharmacyScraper {
         var lastPulledVersion = 0;
 
         if (!result.isEmpty()) {
-            var tempAvailablePharmacy = (AvailablePharmacy) result.toArray()[0];
+            var tempAvailablePharmacy = result.get(0);
             lastPulledVersion = tempAvailablePharmacy.getPulledVersion();
         }
 

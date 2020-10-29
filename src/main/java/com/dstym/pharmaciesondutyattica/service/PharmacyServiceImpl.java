@@ -4,11 +4,12 @@ import com.dstym.pharmaciesondutyattica.entity.Pharmacy;
 import com.dstym.pharmaciesondutyattica.repository.PharmacyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,12 +19,6 @@ public class PharmacyServiceImpl implements PharmacyService {
     @Autowired
     public PharmacyServiceImpl(PharmacyRepository pharmacyRepository) {
         this.pharmacyRepository = pharmacyRepository;
-    }
-
-    @Override
-    @Cacheable(value = "pharmaciesCache", key = "'ALL'")
-    public List<Pharmacy> findAll() {
-        return pharmacyRepository.findAll();
     }
 
     @Override
@@ -43,14 +38,16 @@ public class PharmacyServiceImpl implements PharmacyService {
     }
 
     @Override
-    @Cacheable(value = "pharmaciesByRegionCache", key = "#urlRegion")
-    public List<Pharmacy> findByRegion(String urlRegion) {
-        String region = URLDecoder.decode(urlRegion, StandardCharsets.UTF_8);
+    @Cacheable(value = "pharmaciesCache", key = "{#region, #pageable}")
+    public Page<Pharmacy> findAll(String region, Pageable pageable) {
+        region = Optional.ofNullable(region)
+                .map(r -> URLDecoder.decode(r.trim(), StandardCharsets.UTF_8))
+                .orElse(null);
 
-        List<Pharmacy> result = pharmacyRepository.findByRegion(region);
+        Page<Pharmacy> result = pharmacyRepository.findAll(region, pageable);
 
         if (result.isEmpty()) {
-            throw new RuntimeException("Did not find pharmacy in region: " + region);
+            throw new RuntimeException("Did not find pharmacies.");
         }
 
         return result;

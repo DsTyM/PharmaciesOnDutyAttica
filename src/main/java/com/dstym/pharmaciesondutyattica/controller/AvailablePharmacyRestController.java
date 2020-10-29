@@ -5,9 +5,11 @@ import com.dstym.pharmaciesondutyattica.service.AvailablePharmacyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -23,19 +25,16 @@ public class AvailablePharmacyRestController {
     @GetMapping("/available-pharmacies")
     @Operation(summary = "Get Pharmacies On Duty",
             description = "Get the List of the Pharmacies on Duty. Today is the default date.")
-    public List<AvailablePharmacy> GetAvailablePharmacies(
+    public ResponseEntity<Page<AvailablePharmacy>> GetAvailablePharmacies(
             @Parameter(description = "Specify the date (Date Format: D-M-YYYY).")
             @RequestParam(required = false) String date,
             @Parameter(description = "Specify a region.")
-            @RequestParam(required = false) String region) {
-        if (date == null || date.trim().equals("")) {
-            date = "today";
-        }
-
-        if (region == null || region.trim().equals("")) {
-            region = "all";
-        }
-
-        return availablePharmacyService.findAllByRegionAndDate(region, date);
+            @RequestParam(required = false) String region,
+            @Parameter(description = "Specify page.")
+            @RequestParam(required = false) String page,
+            @Parameter(description = "Specify size.")
+            @RequestParam(required = false) String size,
+            @Parameter(hidden = true) @PageableDefault(size = 30) Pageable pageable) {
+        return ResponseEntity.ok(availablePharmacyService.findAllByRegionAndDate(region, date, pageable));
     }
 }
