@@ -5,9 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.lang.Nullable;
 
 public interface PharmacyRepository extends JpaRepository<Pharmacy, Integer> {
     @Query(value = "select p from Pharmacy p " +
             "where (p.region=:region or :region is null)")
-    Page<Pharmacy> findAll(String region, Pageable pageable);
+    Page<Pharmacy> findAll(String region, @Nullable Pageable pageable);
 }
