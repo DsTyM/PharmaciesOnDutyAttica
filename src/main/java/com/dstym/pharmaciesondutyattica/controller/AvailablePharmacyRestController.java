@@ -4,6 +4,7 @@ import com.dstym.pharmaciesondutyattica.entity.AvailablePharmacy;
 import com.dstym.pharmaciesondutyattica.service.AvailablePharmacyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +35,12 @@ public class AvailablePharmacyRestController {
             @RequestParam(required = false) String page,
             @Parameter(description = "Specify size.")
             @RequestParam(required = false) String size,
+            @Parameter(description = "Select property name for sorting.", schema = @Schema(
+                    allowableValues = {"pharmacy.name", "pharmacy.name,DESC",
+                            "pharmacy.address", "pharmacy.address,DESC",
+                            "pharmacy.region", "pharmacy.region,DESC",
+                            "workingHour.workingHourText", "workingHour.workingHourText,DESC"}))
+            @RequestParam(required = false) String sort,
             @Parameter(hidden = true) @PageableDefault(size = 30) Pageable pageable) {
         return ResponseEntity.ok(availablePharmacyService.findAllByRegionAndDate(region, date, pageable));
     }
