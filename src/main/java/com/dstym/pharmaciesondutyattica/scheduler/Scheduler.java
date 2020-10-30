@@ -30,7 +30,7 @@ public class Scheduler {
         Objects.requireNonNull(cacheManager.getCache("availablePharmaciesCache")).clear();
     }
 
-    @Scheduled(cron = "0 0 0/7 * * *")
+    @Scheduled(cron = "5 1 0/7 * * *")
     public void getAvailablePharmaciesTwicePerDay() {
         var daysFromToday = 0;
         AvailablePharmacyScraper.saveAvailablePharmacies(daysFromToday);

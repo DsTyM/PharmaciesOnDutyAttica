@@ -12,20 +12,49 @@ The application has been tested using JUnit and Mockito.
 Here is an example of how it returns the pharmacies on duty:
 ```json
 {
-    "id": 866,
-    "pharmacy": {
+  "content": [
+    {
+      "id": 1055,
+      "pharmacy": {
         "id": 3251,
         "name": "ΓΙΩΡΓΟΣ ΠΑΠΑΔΟΠΟΥΛΟΣ",
         "address": "ΠΛΑΤ.ΑΕΡΟΠΟΡΙΑΣ 153",
         "region": "ΗΛΙΟΥΠΟΛΗ",
         "phoneNumber": "210-1234567"
+      },
+      "workingHour": {
+        "id": 1,
+        "workingHourText": "ΑΝΟΙΧΤΑ 8 ΠΡΩΙ ΕΩΣ 8 ΒΡΑΔΥ"
+      },
+      "date": "31/10/2020",
+      "pulledVersion": 2
+    }
+],
+  "pageable": {
+    "sort": {
+      "sorted": false,
+      "unsorted": true,
+      "empty": true
     },
-    "workingHour": {
-        "id": 7,
-        "workingHourText": "8 ΠΡΩΙ - 11 ΒΡΑΔΥ"
-    },
-    "date": "10/1/2020",
-    "pulledVersion": 2
+    "offset": 0,
+    "pageSize": 30,
+    "pageNumber": 0,
+    "unpaged": false,
+    "paged": true
+  },
+  "totalPages": 4,
+  "totalElements": 106,
+  "last": false,
+  "size": 30,
+  "number": 0,
+  "sort": {
+    "sorted": false,
+    "unsorted": true,
+    "empty": true
+  },
+  "numberOfElements": 30,
+  "first": true,
+  "empty": false
 }
 ```
 
