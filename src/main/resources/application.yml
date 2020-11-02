@@ -7,7 +7,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
   liquibase:
-    change-log: classpath:liquibase/liquibase-changeLog.yaml
+    change-log: classpath:liquibase/liquibase-changeLog.mysql.sql
   cache:
     jcache:
       config: classpath:ehcache.xml

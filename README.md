@@ -86,7 +86,7 @@ $ docker-compose down
 The application uses Liquibase for Database Versioning. 
 To generate a new Liquibase changelog from the entities, run:
 ```
-$ mvnw package -DskipTests
+$ mvnw clean package -DskipTests
 $ mvnw liquibase:diff
 ```
 
