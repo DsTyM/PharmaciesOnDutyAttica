@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.5.RELEASE</version>
+        <version>2.4.0</version>
         <relativePath/>
         <!-- lookup parent from repository -->
     </parent>
@@ -19,9 +19,8 @@
 
     <properties>
         <java.version>15</java.version>
-        <spring-boot.version>2.3.5.RELEASE</spring-boot.version>
+        <spring-boot.version>2.4.0</spring-boot.version>
         <liquibase.version>4.1.1</liquibase.version>
-        <liquibase-hibernate.version>4.1.1</liquibase-hibernate.version>
         <javax-validation-api.version>2.0.1.Final</javax-validation-api.version>
     </properties>
 
@@ -54,8 +53,8 @@
             <version>1.13.1</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/net.sourceforge.htmlunit/htmlunit -->
         <!-- Do not update this dependency. It will break the App. -->
+        <!-- https://mvnrepository.com/artifact/net.sourceforge.htmlunit/htmlunit -->
         <dependency>
             <groupId>net.sourceforge.htmlunit</groupId>
             <artifactId>htmlunit</artifactId>
@@ -92,7 +91,7 @@
         <dependency>
             <groupId>org.liquibase.ext</groupId>
             <artifactId>liquibase-hibernate5</artifactId>
-            <version>${liquibase-hibernate.version}</version>
+            <version>${liquibase.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/javax.validation/validation-api -->
@@ -150,7 +149,7 @@
                     <dependency>
                         <groupId>org.liquibase.ext</groupId>
                         <artifactId>liquibase-hibernate5</artifactId>
-                        <version>${liquibase-hibernate.version}</version>
+                        <version>${liquibase.version}</version>
                     </dependency>
 
                     <dependency>
