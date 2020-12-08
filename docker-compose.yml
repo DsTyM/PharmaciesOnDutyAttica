@@ -1,12 +1,12 @@
 # Docker Compose file Reference (https://docs.docker.com/compose/compose-file/)
 
-version: '3.7'
+version: '3.8'
 
 # Define services
 services:
   # Database Service (MySQL)
   db:
-    image: mysql:8.0.21
+    image: mysql:8.0.22
     ports:
       - "3308:3306"
     restart: always
