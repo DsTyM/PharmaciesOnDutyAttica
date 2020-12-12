@@ -5,7 +5,7 @@ version: '3.8'
 # Define services
 services:
   # Database Service (MySQL)
-  db:
+  pharmacies-on-duty-attica-db:
     image: mysql:8.0.22
     ports:
       - "3308:3306"
@@ -30,10 +30,10 @@ services:
       - "8080:8080" # Forward the exposed port 8080 on the container to port 8080 on the host machine.
     restart: always
     depends_on:
-      - db # This service depends on MySQL. Start that first.
+      - pharmacies-on-duty-attica-db # This service depends on MySQL. Start that first.
     environment: # Pass environment variables to the service.
       TZ: "Europe/Athens"
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/pharmacies?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_URL: jdbc:mysql://pharmacies-on-duty-attica-db:3306/pharmacies?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: developer
       SPRING_DATASOURCE_PASSWORD: developer
     networks: # Networks to join (Services on the same network can communicate with each other using their name)
