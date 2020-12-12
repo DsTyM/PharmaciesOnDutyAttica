@@ -64,10 +64,10 @@ list twice per day. This can also be customised.
 The application also uses Ehcache for In-Memory Caching.
 
 To start the project using docker, just run:
-```
-$ git clone https://github.com/DsTyM/PharmaciesOnDutyAttica.git
-$ cd PharmaciesOnDutyAttica
-$ docker-compose up --build
+```shell
+git clone https://github.com/DsTyM/PharmaciesOnDutyAttica.git
+cd PharmaciesOnDutyAttica
+docker-compose up --build
 ```
 
 The application can be accessed on:
@@ -79,32 +79,43 @@ It uses Swagger UI to generate the API Documentation.
 
 
 Of course, when you finish, don't forget to run:
-```
-$ docker-compose down
+```shell
+docker-compose down
 ```
 
 The application uses Liquibase for Database Versioning. 
 To generate a new Liquibase changelog from the entities, run:
-```
-$ mvnw clean package -DskipTests
-$ mvnw liquibase:diff
+```shell
+mvnw clean package -DskipTests
+mvnw liquibase:diff
 ```
 
 If you are using Docker and Git on Windows, then 
 an error like this (or similar) may occur:
-```
+```shell
 /bin/sh not found
 ```
 To fix this error, just run the following command on Git Bash:
-```
-$ git config --global core.autocrlf false
+```shell
+git config --global core.autocrlf false
 ```
 and clone the project again.
 
 In case you mess with the Liquibase changelog, and the application won't start with Docker,
 you've most probably messed with the database volume. To remove it, run:
+```shell
+docker volume rm pharmaciesondutyattica_db-data
 ```
-$ docker volume rm pharmaciesondutyattica_db-data
+
+To deploy this project to Kubernetes, run these commands:
+```shell
+docker build --tag pharmacies-on-duty-attica:1.0.0 .
+kubectl apply -f k8s/deployment.yaml
+```
+
+Of course, when you finish, don't forget to run:
+```shell
+kubectl delete -f k8s/deployment.yaml
 ```
 
 This project is just for learning purposes.
