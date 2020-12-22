@@ -63,7 +63,9 @@ Here is an example of how it returns the pharmacies on duty:
 It also contains a scheduler where it refreshes the available pharmacies for the given day when the application is
 started, and it also uses cron expressions to refresh the available pharmacies list twice per day. This can also be
 customised. The application also uses Ehcache for In-Memory Caching.
-
+  
+The project uses Lombok, so you need to have the Lombok plugin installed on your IDE.
+  
 To clone the project, just run:
 
 ```shell
