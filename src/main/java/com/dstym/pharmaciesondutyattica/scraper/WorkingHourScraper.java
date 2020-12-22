@@ -2,10 +2,9 @@ package com.dstym.pharmaciesondutyattica.scraper;
 
 import com.dstym.pharmaciesondutyattica.entity.WorkingHour;
 import com.dstym.pharmaciesondutyattica.repository.WorkingHourRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,8 +12,8 @@ import java.util.ArrayList;
 import java.util.stream.IntStream;
 
 @Component
+@Slf4j
 public class WorkingHourScraper {
-    private static final Logger logger = LoggerFactory.getLogger(AvailablePharmacyScraper.class);
     private static WorkingHourRepository workingHourRepository;
 
     @Autowired
@@ -29,7 +28,7 @@ public class WorkingHourScraper {
             workingHourRepository.save(workingHour);
         }
 
-        logger.info("All working hours have been updated.");
+        log.info("All working hours have been updated.");
     }
 
     private static ArrayList<WorkingHour> getWorkingHours() {

@@ -11,9 +11,8 @@ import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,8 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 
 @Component
+@Slf4j
 public class AvailablePharmacyScraper {
-    private static final Logger logger = LoggerFactory.getLogger(AvailablePharmacyScraper.class);
     private static AvailablePharmacyRepository availablePharmacyRepository;
     private static PharmacyRepository pharmacyRepository;
     private static WorkingHourRepository workingHourRepository;
@@ -66,7 +65,7 @@ public class AvailablePharmacyScraper {
                 saveAvailablePharmacy(availablePharmacy);
             }
 
-            logger.info("Available pharmacies have been updated for " + date + ".");
+            log.info("Available pharmacies have been updated for " + date + ".");
         }
     }
 

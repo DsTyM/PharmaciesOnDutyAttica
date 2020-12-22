@@ -1,6 +1,9 @@
 package com.dstym.pharmaciesondutyattica.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -8,6 +11,9 @@ import java.io.Serializable;
 @Entity
 @Table(name = "`available-pharmacies`")
 @Schema(description = "Available Pharmacy Information")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class AvailablePharmacy implements Serializable {
     @Id
     @Column(name = "`id`")
@@ -30,70 +36,7 @@ public class AvailablePharmacy implements Serializable {
     @Column(name = "`pulled-version`")
     private int pulledVersion;
 
-    public AvailablePharmacy() {
-
-    }
-
     public AvailablePharmacy(int pulledVersion) {
         this.pulledVersion = pulledVersion;
-    }
-
-    public AvailablePharmacy(int id, Pharmacy pharmacy, WorkingHour workingHour, String date, int pulledVersion) {
-        this.id = id;
-        this.pharmacy = pharmacy;
-        this.workingHour = workingHour;
-        this.date = date;
-        this.pulledVersion = pulledVersion;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public Pharmacy getPharmacy() {
-        return this.pharmacy;
-    }
-
-    public void setPharmacy(Pharmacy pharmacy) {
-        this.pharmacy = pharmacy;
-    }
-
-    public WorkingHour getWorkingHour() {
-        return workingHour;
-    }
-
-    public void setWorkingHour(WorkingHour workingHour) {
-        this.workingHour = workingHour;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public int getPulledVersion() {
-        return pulledVersion;
-    }
-
-    public void setPulledVersion(int pulledVersion) {
-        this.pulledVersion = pulledVersion;
-    }
-
-    @Override
-    public String toString() {
-        return "entity.AvailablePharmacy{" +
-                "id=" + id +
-                ", pharmacy=" + pharmacy +
-                ", workingHour=" + workingHour +
-                ", pulledVersion=" + pulledVersion +
-                ", date=" + date +
-                '}';
     }
 }

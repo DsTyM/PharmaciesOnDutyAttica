@@ -2,10 +2,9 @@ package com.dstym.pharmaciesondutyattica.scraper;
 
 import com.dstym.pharmaciesondutyattica.entity.Pharmacy;
 import com.dstym.pharmaciesondutyattica.repository.PharmacyRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,8 +12,8 @@ import java.util.ArrayList;
 import java.util.stream.IntStream;
 
 @Component
+@Slf4j
 public class PharmacyScraper {
-    private static final Logger logger = LoggerFactory.getLogger(AvailablePharmacyScraper.class);
     private static PharmacyRepository pharmacyRepository;
 
     @Autowired
@@ -29,7 +28,7 @@ public class PharmacyScraper {
             pharmacyRepository.save(pharmacy);
         }
 
-        logger.info("All pharmacies have been updated!");
+        log.info("All pharmacies have been updated!");
     }
 
     private static ArrayList<Pharmacy> getPharmacies() {
