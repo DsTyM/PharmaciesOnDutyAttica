@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -27,7 +29,7 @@ public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
         var result = availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date);
 
         if (result.isEmpty()) {
-            throw new RuntimeException("Did not find available pharmacies for date: " + date);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Did not find available pharmacies for date: " + date);
         }
 
         var tempAvailablePharmacy = result.get(0);
@@ -59,7 +61,7 @@ public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
         if (!result.isEmpty()) {
             return result;
         } else {
-            throw new RuntimeException("Did not find available pharmacies.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Did not find available pharmacies.");
         }
     }
 
@@ -72,7 +74,7 @@ public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
         if (result.isPresent()) {
             availablePharmacy = result.get();
         } else {
-            throw new RuntimeException("Did not find availablePharmacy with id: " + theId);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Did not find availablePharmacy with id: " + theId);
         }
 
         return availablePharmacy;

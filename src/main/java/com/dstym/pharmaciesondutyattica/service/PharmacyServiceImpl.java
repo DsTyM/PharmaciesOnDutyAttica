@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -31,7 +33,7 @@ public class PharmacyServiceImpl implements PharmacyService {
         if (result.isPresent()) {
             pharmacy = result.get();
         } else {
-            throw new RuntimeException("Did not find pharmacy with id: " + theId);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Did not find pharmacy with id: " + theId);
         }
 
         return pharmacy;
@@ -47,7 +49,7 @@ public class PharmacyServiceImpl implements PharmacyService {
         Page<Pharmacy> result = pharmacyRepository.findAll(region, pageable);
 
         if (result.isEmpty()) {
-            throw new RuntimeException("Did not find pharmacies.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Did not find pharmacies.");
         }
 
         return result;
