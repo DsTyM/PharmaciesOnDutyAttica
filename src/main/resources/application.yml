@@ -16,7 +16,9 @@ spring:
 
 server:
   error:
+    include-message: always
     include-stacktrace: never
+  port: 8080
 
 #logging:
 #  level:
