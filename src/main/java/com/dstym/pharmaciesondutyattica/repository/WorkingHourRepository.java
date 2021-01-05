@@ -6,6 +6,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.lang.Nullable;
 
+import java.util.List;
+
 public interface WorkingHourRepository extends JpaRepository<WorkingHour, Integer> {
     Page<WorkingHour> findAll(@Nullable Pageable pageable);
+
+    List<WorkingHour> findFirstByWorkingHourText(String workingHourText);
 }

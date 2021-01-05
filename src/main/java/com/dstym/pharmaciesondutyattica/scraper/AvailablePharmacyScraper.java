@@ -9,17 +9,16 @@ import com.dstym.pharmaciesondutyattica.repository.WorkingHourRepository;
 import com.dstym.pharmaciesondutyattica.util.DateUtils;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.logging.Logger;
 
 @Component
 @Slf4j
@@ -37,99 +36,59 @@ public class AvailablePharmacyScraper {
         AvailablePharmacyScraper.workingHourRepository = workingHourRepository;
     }
 
-    public static void saveAvailablePharmaciesForLastDays(int numOfDays) {
-        for (var i = 0; i < numOfDays; i++) {
-            saveAvailablePharmacies(i);
-        }
-    }
-
     public static void saveAvailablePharmacies(int daysFromToday) {
         var date = DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday));
-        var pharmacyIdWorkingHourIdPair = getAvailablePharmacies(daysFromToday);
-
         var lastPulledVersion = getLastPulledVersion(date);
 
-        if (pharmacyIdWorkingHourIdPair != null) {
-            for (var pharmacyId : pharmacyIdWorkingHourIdPair.keySet()) {
-                var workingHourId = pharmacyIdWorkingHourIdPair.get(pharmacyId);
-
-                var tempPharmacy = new Pharmacy();
-                tempPharmacy.setId(pharmacyId);
-
-                var tempWorkingHour = new WorkingHour();
-                tempWorkingHour.setId(workingHourId);
-
-                var availablePharmacy = new AvailablePharmacy(0, tempPharmacy, tempWorkingHour, date,
-                        lastPulledVersion + 1);
-
-                saveAvailablePharmacy(availablePharmacy);
-            }
-
-            log.info("Available pharmacies have been updated for " + date + ".");
-        }
-    }
-
-    private static void saveAvailablePharmacy(AvailablePharmacy availablePharmacy) {
         try {
-            availablePharmacyRepository.save(availablePharmacy);
-        } catch (Exception e) {
-            var tempPharmacy = PharmacyScraper.getSinglePharmacy(availablePharmacy.getPharmacy().getId());
-            if (tempPharmacy != null) {
-                pharmacyRepository.save(tempPharmacy);
-            }
-
-            var tempWorkingHour = WorkingHourScraper.getSingleWorkingHour(availablePharmacy.getWorkingHour().getId());
-            if (tempWorkingHour != null) {
-                workingHourRepository.save(tempWorkingHour);
-            }
-
-            availablePharmacyRepository.save(availablePharmacy);
-        }
-    }
-
-    private static HashMap<Integer, Integer> getAvailablePharmacies(int daysFromToday) {
-        java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
-        java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
-
-        if (daysFromToday < -1) {
-            return null;
-        }
-
-        try {
-            var date = DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday));
-
             var page = getHTMLPageFromWebClient();
+            var jsoupdoc = Jsoup.parse(page.asXml());
+            var elements = jsoupdoc.select("html body div main div table tbody tr");
+            for (var element : elements) {
+                AvailablePharmacy availablePharmacy = new AvailablePharmacy();
+                availablePharmacy.setDate(date);
+                availablePharmacy.setPulledVersion(lastPulledVersion + 1);
 
-            selectDateFromHTMLPage(page, date);
+                var region = element.select("td").get(2).text().trim();
+                var name = element.select("td").get(3).text().trim();
+                var address = element.select("td").get(4).text().trim();
+                var phoneNumber = element.select("td").get(5).text().trim();
+                var workingHourText = element.select("td").get(6).text().trim();
 
-            page = clickToSearchForAvailablePharmacies(page, daysFromToday);
+                var pharmacies = pharmacyRepository.findAllByName(name);
 
-            var pages = getAllPages(page);
+                for (var pharmacy : pharmacies) {
+                    if (pharmacy.getRegion().equals(region) && pharmacy.getAddress().equals(address)
+                            && pharmacy.getPhoneNumber().equals(phoneNumber)) {
+                        availablePharmacy.setPharmacy(pharmacy);
+                    }
+                }
 
-            return getPharmacyIdWorkingHourIdPairFromHTMLDOM(pages);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+                if (availablePharmacy.getPharmacy() == null) {
+                    Pharmacy newPharmacy = new Pharmacy();
+                    newPharmacy.setName(name);
+                    newPharmacy.setRegion(region);
+                    newPharmacy.setAddress(address);
+                    newPharmacy.setPhoneNumber(phoneNumber);
+                    availablePharmacy.setPharmacy(pharmacyRepository.save(newPharmacy));
+                }
+
+                var workingHours = workingHourRepository.findFirstByWorkingHourText(workingHourText);
+                if (!workingHours.isEmpty()) {
+                    availablePharmacy.setWorkingHour(workingHours.get(0));
+                } else {
+                    WorkingHour newWorkingHour = new WorkingHour();
+                    newWorkingHour.setWorkingHourText(workingHourText);
+                    availablePharmacy.setWorkingHour(workingHourRepository.save(newWorkingHour));
+                }
+
+                availablePharmacyRepository.save(availablePharmacy);
+            }
+
+            log.info("Available pharmacies have been saved.");
+        } catch (Exception exception) {
+            log.error(ExceptionUtils.getStackTrace(exception));
         }
-    }
-
-    private static ArrayList<HtmlPage> getAllPages(HtmlPage page) throws IOException {
-        var pages = new ArrayList<HtmlPage>();
-
-        // saves the first page before it'll navigate to the next pages
-        pages.add(page);
-
-        var numOfPages = getNumOfPagesWithPharmacies(page);
-
-        var clickForNextPageURL = page.getAnchors().get(10);
-
-        // Click next until the last page.
-        for (var i = 0; i < numOfPages - 1; i++) {
-            page = clickForNextPageURL.click();
-            pages.add(page);
-        }
-
-        return pages;
     }
 
     private static int getLastPulledVersion(String date) {
@@ -144,49 +103,8 @@ public class AvailablePharmacyScraper {
         return lastPulledVersion;
     }
 
-    private static int getNumOfPagesWithPharmacies(HtmlPage page) {
-        int numOfPages;
-
-        var jsoupdoc = Jsoup.parse(page.asXml());
-        var numOfPagesAsText = jsoupdoc
-                .select("html body table tbody tr td:eq(1) table tbody tr:eq(4) td table tbody tr td nobr")
-                .text().trim();
-        // this equals this XPath: /html/body/table/tbody/tr/td[2]/table/tbody/tr[5]/td/table/tbody/tr[1]/td/nobr
-
-        // If there are more than one pages.
-        if (!numOfPagesAsText.equals("")) {
-            numOfPages = Integer.parseInt(numOfPagesAsText.substring(numOfPagesAsText.lastIndexOf(" ") + 1));
-        } else {
-            numOfPages = 1;
-        }
-
-        return numOfPages;
-    }
-
-    private static HtmlPage clickToSearchForAvailablePharmacies(HtmlPage page, int daysFromToday) throws IOException {
-        HtmlInput input;
-
-        if (daysFromToday == 0) {
-            try {
-                input = page.getForms().get(0).getInputsByValue("").get(2);
-            } catch (Exception e) {
-                input = page.getForms().get(0).getInputsByValue("").get(1);
-            }
-        } else {
-            input = page.getForms().get(0).getInputsByValue("").get(1);
-        }
-
-        return input.click();
-    }
-
-    private static void selectDateFromHTMLPage(HtmlPage page, String date) {
-        var select = page.getForms().get(0).getSelectByName("dateduty");
-        var option = select.getOptionByValue(date);
-        select.setSelectedAttribute(option, true);
-    }
-
     private static HtmlPage getHTMLPageFromWebClient() throws IOException {
-        final var url = "http://www.fsa.gr/duties.asp";
+        final var url = "http://fsa-efimeries.gr";
 
         var webClient = new WebClient(BrowserVersion.CHROME);
         webClient.getOptions().setJavaScriptEnabled(true);
@@ -195,40 +113,9 @@ public class AvailablePharmacyScraper {
         return webClient.getPage(url);
     }
 
-    private static HashMap<Integer, Integer> getPharmacyIdWorkingHourIdPairFromHTMLDOM(List<HtmlPage> pages) {
-        // HashMap<PharmacyId, WorkingHoursId>
-        var workingHoursIdByPharmacyId = new HashMap<Integer, Integer>();
-
-        for (var singlePage : pages) {
-            var jsoupdoc = Jsoup.parse(singlePage.asXml());
-            var pharmacyLinksJs = jsoupdoc
-                    .select("html body table tbody tr td:eq(1) table tbody tr:eq(3) td table tbody tr a")
-                    .eachAttr("onclick");
-
-            for (String linkJs : pharmacyLinksJs) {
-                var pharmacyId = getSinglePharmacyIdFromURL(linkJs);
-                var workingHourId = getSingleWorkingHourIdFromURL(linkJs);
-
-                workingHoursIdByPharmacyId.put(pharmacyId, workingHourId);
-            }
-        }
-        return workingHoursIdByPharmacyId;
-    }
-
-    private static int getSinglePharmacyIdFromURL(String linkJs) {
-        linkJs = linkJs.trim();
-        var getPositionOfSecondEqualsChar = linkJs.indexOf("=", linkJs.indexOf("=") + 1);
-        var getPositionOfAndSymbolChar = linkJs.indexOf("&", getPositionOfSecondEqualsChar);
-        var stringPharmacyId = linkJs.substring(getPositionOfSecondEqualsChar + 1, getPositionOfAndSymbolChar);
-
-        return Integer.parseInt(stringPharmacyId);
-    }
-
-    private static int getSingleWorkingHourIdFromURL(String linkJs) {
-        var getPositionOfLastEqualsChar = linkJs.lastIndexOf("=");
-        var getPositionOfLastApostropheChar = linkJs.lastIndexOf("'");
-        var stringWorkingHourId = linkJs.substring(getPositionOfLastEqualsChar + 1, getPositionOfLastApostropheChar);
-
-        return Integer.parseInt(stringWorkingHourId);
+    @PostConstruct
+    private void init() {
+        Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
+        Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
     }
 }

@@ -13,9 +13,6 @@ import java.util.Objects;
 @EnableScheduling
 @Component
 public class Scheduler {
-    // cron properties
-    // <second> <minute> <hour> <day-of-month> <month> <day of week>
-
     private final CacheManager cacheManager;
 
     public Scheduler(CacheManager cacheManager) {
@@ -37,25 +34,11 @@ public class Scheduler {
         clearCache();
     }
 
-    // run only once after startup
+    // Run only once after startup.
     @EventListener(ApplicationReadyEvent.class)
     public void getAvailablePharmaciesAfterStartup() {
         var daysFromToday = 0;
         AvailablePharmacyScraper.saveAvailablePharmacies(daysFromToday);
         clearCache();
     }
-
-//    @EventListener(ApplicationReadyEvent.class)
-//    public void getAvailablePharmaciesForLastDaysAfterStartup() {
-//        var numOfDays = 10;
-//        AvailablePharmacyScraper.saveAvailablePharmaciesForLastDays(numOfDays);
-//        clearCache();
-//    }
-
-//    @EventListener(ApplicationReadyEvent.class)
-//    public void getPharmaciesAndWorkingHoursAfterStartup() {
-//        PharmacyScraper.savePharmacies();
-//        WorkingHourScraper.saveWorkingHours();
-//        clearCache();
-//    }
 }

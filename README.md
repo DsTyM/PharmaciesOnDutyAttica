@@ -1,7 +1,7 @@
 # Pharmacies on Duty Attica
 
 Pharmacies on duty attica is a web application where it gets the pharmacies on duty from the official Pharmacists
-Association of Attica Website: [http://www.fsa.gr/duties.asp](http://www.fsa.gr/duties.asp)
+Association of Attica Website: [https://fsa-efimeries.gr/](https://fsa-efimeries.gr/)
 and provide them as a REST API in JSON format.
 
 It uses HtmlUnit to interact and crawl the fsa.gr website and jsoup to scrape the data
