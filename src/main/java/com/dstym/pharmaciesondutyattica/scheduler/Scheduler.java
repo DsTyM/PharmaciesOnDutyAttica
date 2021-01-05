@@ -13,10 +13,13 @@ import java.util.Objects;
 @EnableScheduling
 @Component
 public class Scheduler {
+    private final AvailablePharmacyScraper availablePharmacyScraper;
     private final CacheManager cacheManager;
 
-    public Scheduler(CacheManager cacheManager) {
+    public Scheduler(AvailablePharmacyScraper availablePharmacyScraper,
+                     CacheManager cacheManager) {
         this.cacheManager = cacheManager;
+        this.availablePharmacyScraper = availablePharmacyScraper;
     }
 
     public void clearCache() {
@@ -30,7 +33,7 @@ public class Scheduler {
     @Scheduled(cron = "5 1 0/7 * * *")
     public void getAvailablePharmaciesTwicePerDay() {
         var daysFromToday = 0;
-        AvailablePharmacyScraper.saveAvailablePharmacies(daysFromToday);
+        availablePharmacyScraper.saveAvailablePharmacies(daysFromToday);
         clearCache();
     }
 
@@ -38,7 +41,7 @@ public class Scheduler {
     @EventListener(ApplicationReadyEvent.class)
     public void getAvailablePharmaciesAfterStartup() {
         var daysFromToday = 0;
-        AvailablePharmacyScraper.saveAvailablePharmacies(daysFromToday);
+        availablePharmacyScraper.saveAvailablePharmacies(daysFromToday);
         clearCache();
     }
 }

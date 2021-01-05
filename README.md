@@ -1,7 +1,7 @@
 # Pharmacies on Duty Attica
 
 Pharmacies on duty attica is a web application where it gets the pharmacies on duty from the official Pharmacists
-Association of Attica Website: [https://fsa-efimeries.gr/](https://fsa-efimeries.gr/)
+Association of Attica Website: [https://fsa-efimeries.gr](https://fsa-efimeries.gr)
 and provide them as a REST API in JSON format.
 
 It uses HtmlUnit to interact and crawl the fsa.gr website and jsoup to scrape the data
@@ -16,9 +16,9 @@ Here is an example of how it returns the pharmacies on duty:
 {
   "content": [
     {
-      "id": 1055,
+      "id": 251,
       "pharmacy": {
-        "id": 3251,
+        "id": 564,
         "name": "ΓΙΩΡΓΟΣ ΠΑΠΑΔΟΠΟΥΛΟΣ",
         "address": "ΠΛΑΤ.ΑΕΡΟΠΟΡΙΑΣ 153",
         "region": "ΗΛΙΟΥΠΟΛΗ",
@@ -28,7 +28,7 @@ Here is an example of how it returns the pharmacies on duty:
         "id": 1,
         "workingHourText": "ΑΝΟΙΧΤΑ 8 ΠΡΩΙ ΕΩΣ 8 ΒΡΑΔΥ"
       },
-      "date": "31/10/2020",
+      "date": "2021/01/16",
       "pulledVersion": 2
     }
   ],

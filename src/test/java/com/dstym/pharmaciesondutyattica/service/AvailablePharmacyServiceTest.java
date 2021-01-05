@@ -49,7 +49,7 @@ class AvailablePharmacyServiceTest {
 
     @Test
     public void testFindAllByRegionAndDate_validDate_noRegionSpecified() {
-        var date = "18/1/2020";
+        var date = "2020/01/18";
         var pulledVersion = 1;
 
         var pharmacy1 = new Pharmacy(4050, "ΣΠΥΡΟΣ ΝΙΚΟΛΑΚΟΠΟΥΛΟΣ", "ΠΕΤΡΟΥ ΚΑΡΑΓΙΩΡΓΟΥ 147",
@@ -96,7 +96,7 @@ class AvailablePharmacyServiceTest {
 
     @Test
     public void testFindAllByRegionAndDate_validDate_nonValidRegionSpecified() {
-        var date = "18/1/2020";
+        var date = "2020/01/18";
         var pulledVersion = 1;
         var region = "ΠΑΓΚΡΑΤΙ";
 

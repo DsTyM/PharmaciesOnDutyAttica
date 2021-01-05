@@ -13,6 +13,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -36,7 +37,13 @@ public class AvailablePharmacyScraper {
         AvailablePharmacyScraper.workingHourRepository = workingHourRepository;
     }
 
-    public static void saveAvailablePharmacies(int daysFromToday) {
+    @PostConstruct
+    private void init() {
+        Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
+        Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
+    }
+
+    public void saveAvailablePharmacies(int daysFromToday) {
         var date = DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday));
         var lastPulledVersion = getLastPulledVersion(date);
 
@@ -45,53 +52,80 @@ public class AvailablePharmacyScraper {
             var jsoupdoc = Jsoup.parse(page.asXml());
             var elements = jsoupdoc.select("html body div main div table tbody tr");
             for (var element : elements) {
-                AvailablePharmacy availablePharmacy = new AvailablePharmacy();
-                availablePharmacy.setDate(date);
-                availablePharmacy.setPulledVersion(lastPulledVersion + 1);
-
-                var region = element.select("td").get(2).text().trim();
-                var name = element.select("td").get(3).text().trim();
-                var address = element.select("td").get(4).text().trim();
-                var phoneNumber = element.select("td").get(5).text().trim();
-                var workingHourText = element.select("td").get(6).text().trim();
-
-                var pharmacies = pharmacyRepository.findAllByName(name);
-
-                for (var pharmacy : pharmacies) {
-                    if (pharmacy.getRegion().equals(region) && pharmacy.getAddress().equals(address)
-                            && pharmacy.getPhoneNumber().equals(phoneNumber)) {
-                        availablePharmacy.setPharmacy(pharmacy);
-                    }
-                }
-
-                if (availablePharmacy.getPharmacy() == null) {
-                    Pharmacy newPharmacy = new Pharmacy();
-                    newPharmacy.setName(name);
-                    newPharmacy.setRegion(region);
-                    newPharmacy.setAddress(address);
-                    newPharmacy.setPhoneNumber(phoneNumber);
-                    availablePharmacy.setPharmacy(pharmacyRepository.save(newPharmacy));
-                }
-
-                var workingHours = workingHourRepository.findFirstByWorkingHourText(workingHourText);
-                if (!workingHours.isEmpty()) {
-                    availablePharmacy.setWorkingHour(workingHours.get(0));
-                } else {
-                    WorkingHour newWorkingHour = new WorkingHour();
-                    newWorkingHour.setWorkingHourText(workingHourText);
-                    availablePharmacy.setWorkingHour(workingHourRepository.save(newWorkingHour));
-                }
-
-                availablePharmacyRepository.save(availablePharmacy);
+                saveAvailablePharmacy(date, lastPulledVersion, element);
             }
 
-            log.info("Available pharmacies have been saved.");
+            log.info("Available pharmacies have been updated for " + date + ".");
         } catch (Exception exception) {
             log.error(ExceptionUtils.getStackTrace(exception));
+            log.info("Could not update available pharmacies for " + date + ".");
         }
     }
 
-    private static int getLastPulledVersion(String date) {
+    private void saveAvailablePharmacy(String date, int lastPulledVersion, Element element) {
+        var availablePharmacy = new AvailablePharmacy();
+        availablePharmacy.setDate(date);
+        availablePharmacy.setPulledVersion(lastPulledVersion + 1);
+
+        var scrapedAvailablePharmacy = getScrapedAvailablePharmacy(element);
+
+        var pharmacies = pharmacyRepository.findAllByName(scrapedAvailablePharmacy.getPharmacy().getName());
+
+        for (var pharmacy : pharmacies) {
+            if (pharmacy.getRegion().equals(scrapedAvailablePharmacy.getPharmacy().getRegion())
+                    && pharmacy.getAddress().equals(scrapedAvailablePharmacy.getPharmacy().getAddress())
+                    && pharmacy.getPhoneNumber().equals(scrapedAvailablePharmacy.getPharmacy().getPhoneNumber())) {
+                availablePharmacy.setPharmacy(pharmacy);
+            }
+        }
+
+        if (availablePharmacy.getPharmacy() == null) {
+            savePharmacy(availablePharmacy, scrapedAvailablePharmacy.getPharmacy());
+        }
+
+        var workingHours = workingHourRepository.findFirstByWorkingHourText(scrapedAvailablePharmacy.getWorkingHour().getWorkingHourText());
+        if (!workingHours.isEmpty()) {
+            availablePharmacy.setWorkingHour(workingHours.get(0));
+        } else {
+            saveWorkingHour(availablePharmacy, scrapedAvailablePharmacy.getWorkingHour());
+        }
+
+        availablePharmacyRepository.save(availablePharmacy);
+    }
+
+    private AvailablePharmacy getScrapedAvailablePharmacy(Element element) {
+        var availablePharmacy = new AvailablePharmacy();
+
+        var pharmacy = new Pharmacy();
+        pharmacy.setRegion(element.select("td").get(2).text().trim());
+        pharmacy.setName(element.select("td").get(3).text().trim());
+        pharmacy.setAddress(element.select("td").get(4).text().trim());
+        pharmacy.setPhoneNumber(element.select("td").get(5).text().trim());
+        availablePharmacy.setPharmacy(pharmacy);
+
+        var workingHour = new WorkingHour();
+        workingHour.setWorkingHourText(element.select("td").get(6).text().trim());
+        availablePharmacy.setWorkingHour(workingHour);
+
+        return availablePharmacy;
+    }
+
+    private void saveWorkingHour(AvailablePharmacy availablePharmacy, WorkingHour scrapedWorkingHour) {
+        var newWorkingHour = new WorkingHour();
+        newWorkingHour.setWorkingHourText(scrapedWorkingHour.getWorkingHourText());
+        availablePharmacy.setWorkingHour(workingHourRepository.save(newWorkingHour));
+    }
+
+    private void savePharmacy(AvailablePharmacy availablePharmacy, Pharmacy scrappedPharmacy) {
+        var newPharmacy = new Pharmacy();
+        newPharmacy.setName(scrappedPharmacy.getName());
+        newPharmacy.setRegion(scrappedPharmacy.getRegion());
+        newPharmacy.setAddress(scrappedPharmacy.getAddress());
+        newPharmacy.setPhoneNumber(scrappedPharmacy.getPhoneNumber());
+        availablePharmacy.setPharmacy(pharmacyRepository.save(newPharmacy));
+    }
+
+    private int getLastPulledVersion(String date) {
         var result = availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date);
         var lastPulledVersion = 0;
 
@@ -103,19 +137,14 @@ public class AvailablePharmacyScraper {
         return lastPulledVersion;
     }
 
-    private static HtmlPage getHTMLPageFromWebClient() throws IOException {
+    private HtmlPage getHTMLPageFromWebClient() throws IOException {
         final var url = "http://fsa-efimeries.gr";
 
         var webClient = new WebClient(BrowserVersion.CHROME);
         webClient.getOptions().setJavaScriptEnabled(true);
         webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+        webClient.close();
 
         return webClient.getPage(url);
-    }
-
-    @PostConstruct
-    private void init() {
-        Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
-        Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
     }
 }
