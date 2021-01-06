@@ -14,7 +14,7 @@ public class DateUtils {
 
     public static Date stringToDate(String stringDate) {
         try {
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             return formatter.parse(stringDate);
         } catch (ParseException e) {
             e.printStackTrace();
@@ -24,7 +24,7 @@ public class DateUtils {
     }
 
     public static String dateToString(Date date) {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         return formatter.format(date);
     }
 }

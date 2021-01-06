@@ -50,7 +50,6 @@ public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
 
         var daysFromToday = 0;
         date = Optional.ofNullable(date)
-                .map(d -> d.replaceAll("-", "/"))
                 .orElse(DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday)));
 
         var lastPulledVersion = getLastPulledVersion(date);

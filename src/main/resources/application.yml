@@ -8,6 +8,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
+    open-in-view: true
   liquibase:
     change-log: classpath:liquibase/liquibase-changeLog.mysql.sql
   cache:

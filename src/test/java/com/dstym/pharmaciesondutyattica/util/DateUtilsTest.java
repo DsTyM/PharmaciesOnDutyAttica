@@ -12,14 +12,14 @@ class DateUtilsTest {
     void testDateToString_nonValidDate() {
         var testStringDate = "some not valid string";
         assertThrows(ParseException.class, () -> DateUtils.dateToString(
-                new SimpleDateFormat("yyyy/MM/dd").parse(testStringDate))
+                new SimpleDateFormat("yyyy-MM-dd").parse(testStringDate))
         );
     }
 
     @Test
     void testDateToString_validDate() throws ParseException {
-        var expectedDate = "2020/01/03";
-        var actualDate = DateUtils.dateToString(new SimpleDateFormat("yyyy/MM/dd").parse(expectedDate));
+        var expectedDate = "2020-01-03";
+        var actualDate = DateUtils.dateToString(new SimpleDateFormat("yyyy-MM-dd").parse(expectedDate));
         assertEquals(expectedDate, actualDate);
     }
 
@@ -36,10 +36,10 @@ class DateUtilsTest {
 
     @Test
     void testStringToDate_validDate() throws ParseException {
-        var testStringDate = "2020/08/01";
+        var testStringDate = "2020-08-01";
 
-        var expectedDate = new SimpleDateFormat("yyyy/MM/dd").parse(testStringDate);
-        var actualDate = new SimpleDateFormat("yyyy/MM/dd").parse("2020/08/01");
+        var expectedDate = new SimpleDateFormat("yyyy-MM-dd").parse(testStringDate);
+        var actualDate = new SimpleDateFormat("yyyy-MM-dd").parse("2020-08-01");
         assertEquals(expectedDate, actualDate);
     }
 }

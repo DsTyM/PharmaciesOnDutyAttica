@@ -28,7 +28,7 @@ Here is an example of how it returns the pharmacies on duty:
         "id": 1,
         "workingHourText": "ΑΝΟΙΧΤΑ 8 ΠΡΩΙ ΕΩΣ 8 ΒΡΑΔΥ"
       },
-      "date": "2021/01/16",
+      "date": "2021-01-16",
       "pulledVersion": 2
     }
   ],

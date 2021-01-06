@@ -8,7 +8,9 @@ import com.dstym.pharmaciesondutyattica.repository.PharmacyRepository;
 import com.dstym.pharmaciesondutyattica.repository.WorkingHourRepository;
 import com.dstym.pharmaciesondutyattica.util.DateUtils;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -18,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.io.IOException;
+import java.net.URL;
 import java.util.logging.Logger;
 
 @Component
@@ -44,17 +46,23 @@ public class AvailablePharmacyScraper {
     }
 
     public void saveAvailablePharmacies(int daysFromToday) {
+        final var url = "http://fsa-efimeries.gr";
         var date = DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday));
         var lastPulledVersion = getLastPulledVersion(date);
 
         try {
-            var page = getHTMLPageFromWebClient();
+            var webClient = getWebClient();
+            var requestSettings = new WebRequest(new URL(url), HttpMethod.POST);
+            requestSettings.setRequestBody("Date=" + date);
+            var page = (HtmlPage) webClient.getPage(requestSettings);
+
             var jsoupdoc = Jsoup.parse(page.asXml());
             var elements = jsoupdoc.select("html body div main div table tbody tr");
             for (var element : elements) {
                 saveAvailablePharmacy(date, lastPulledVersion, element);
             }
 
+            webClient.close();
             log.info("Available pharmacies have been updated for " + date + ".");
         } catch (Exception exception) {
             log.error(ExceptionUtils.getStackTrace(exception));
@@ -137,14 +145,12 @@ public class AvailablePharmacyScraper {
         return lastPulledVersion;
     }
 
-    private HtmlPage getHTMLPageFromWebClient() throws IOException {
-        final var url = "http://fsa-efimeries.gr";
-
+    private WebClient getWebClient() {
         var webClient = new WebClient(BrowserVersion.CHROME);
+        webClient.getOptions().setRedirectEnabled(true);
         webClient.getOptions().setJavaScriptEnabled(true);
         webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
-        webClient.close();
 
-        return webClient.getPage(url);
+        return webClient;
     }
 }
