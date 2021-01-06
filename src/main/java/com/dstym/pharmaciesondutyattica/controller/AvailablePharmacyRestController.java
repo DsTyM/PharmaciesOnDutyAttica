@@ -2,6 +2,7 @@ package com.dstym.pharmaciesondutyattica.controller;
 
 import com.dstym.pharmaciesondutyattica.entity.AvailablePharmacy;
 import com.dstym.pharmaciesondutyattica.service.AvailablePharmacyService;
+import com.dstym.pharmaciesondutyattica.util.DateUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -42,6 +43,6 @@ public class AvailablePharmacyRestController {
                             "workingHour.workingHourText", "workingHour.workingHourText,DESC"}))
             @RequestParam(required = false) String sort,
             @Parameter(hidden = true) @PageableDefault(size = 30) Pageable pageable) {
-        return ResponseEntity.ok(availablePharmacyService.findAllByRegionAndDate(region, date, pageable));
+        return ResponseEntity.ok(availablePharmacyService.findAllByRegionAndDate(region, DateUtils.stringDateToInstant(date), pageable));
     }
 }

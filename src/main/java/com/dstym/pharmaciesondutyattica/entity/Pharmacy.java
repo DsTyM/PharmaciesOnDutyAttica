@@ -20,13 +20,13 @@ public class Pharmacy implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "`name`")
+    @Column(name = "`name`", nullable = false)
     private String name;
 
-    @Column(name = "`address`")
+    @Column(name = "`address`", nullable = false)
     private String address;
 
-    @Column(name = "`region`")
+    @Column(name = "`region`", nullable = false)
     private String region;
 
     @Column(name = "`phone-number`")

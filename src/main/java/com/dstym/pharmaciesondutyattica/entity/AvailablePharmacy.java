@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.Instant;
 
 @Entity
 @Table(name = "`available-pharmacies`")
@@ -20,20 +21,18 @@ public class AvailablePharmacy implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne(optional = false,
-            cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinColumn(name = "`pharmacy-id`")
+    @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name = "`pharmacy-id`", nullable = false)
     private Pharmacy pharmacy;
 
-    @ManyToOne(optional = false,
-            cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinColumn(name = "`working-hour-id`")
+    @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name = "`working-hour-id`", nullable = false)
     private WorkingHour workingHour;
 
-    @Column(name = "`date`")
-    private String date;
+    @Column(name = "`date`", nullable = false)
+    private Instant date;
 
-    @Column(name = "`pulled-version`")
+    @Column(name = "`pulled-version`", nullable = false)
     private int pulledVersion;
 
     public AvailablePharmacy(int pulledVersion) {

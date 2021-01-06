@@ -20,6 +20,6 @@ public class WorkingHour implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "`working-hour-text`")
+    @Column(name = "`working-hour-text`", nullable = false)
     private String workingHourText;
 }

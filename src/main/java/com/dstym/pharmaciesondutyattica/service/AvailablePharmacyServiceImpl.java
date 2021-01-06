@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,11 +26,11 @@ public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
         AvailablePharmacyServiceImpl.availablePharmacyRepository = availablePharmacyRepository;
     }
 
-    private static int getLastPulledVersion(String date) {
+    private static int getLastPulledVersion(Instant date) {
         var result = availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date);
 
         if (result.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Did not find available pharmacies for date: " + date);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Did not find available pharmacies for date: " + DateUtils.instantToString(date));
         }
 
         var tempAvailablePharmacy = result.get(0);
@@ -43,14 +44,14 @@ public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
 
     @Override
     @Cacheable(value = "availablePharmaciesCache", key = "{#region, #date, #pageable}")
-    public Page<AvailablePharmacy> findAllByRegionAndDate(String region, String date, Pageable pageable) {
+    public Page<AvailablePharmacy> findAllByRegionAndDate(String region, Instant date, Pageable pageable) {
         region = Optional.ofNullable(region)
                 .map(r -> URLDecoder.decode(r.trim(), StandardCharsets.UTF_8))
                 .orElse(null);
 
         var daysFromToday = 0;
         date = Optional.ofNullable(date)
-                .orElse(DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday)));
+                .orElse(DateUtils.stringDateToInstant(DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday))));
 
         var lastPulledVersion = getLastPulledVersion(date);
 
@@ -60,7 +61,7 @@ public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
         if (!result.isEmpty()) {
             return result;
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Did not find available pharmacies.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Did not find available pharmacies for date: " + DateUtils.instantToString(date));
         }
     }
 
@@ -73,7 +74,7 @@ public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
         if (result.isPresent()) {
             availablePharmacy = result.get();
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Did not find availablePharmacy with id: " + theId);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Did not find available pharmacy with id: " + theId);
         }
 
         return availablePharmacy;

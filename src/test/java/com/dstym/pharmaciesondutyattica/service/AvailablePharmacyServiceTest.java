@@ -4,6 +4,7 @@ import com.dstym.pharmaciesondutyattica.entity.AvailablePharmacy;
 import com.dstym.pharmaciesondutyattica.entity.Pharmacy;
 import com.dstym.pharmaciesondutyattica.entity.WorkingHour;
 import com.dstym.pharmaciesondutyattica.repository.AvailablePharmacyRepository;
+import com.dstym.pharmaciesondutyattica.util.DateUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -55,26 +56,26 @@ class AvailablePharmacyServiceTest {
         var pharmacy1 = new Pharmacy(4050, "ΣΠΥΡΟΣ ΝΙΚΟΛΑΚΟΠΟΥΛΟΣ", "ΠΕΤΡΟΥ ΚΑΡΑΓΙΩΡΓΟΥ 147",
                 "ΠΑΓΚΡΑΤΙ", "22123 12345");
         var workingHour1 = new WorkingHour(3, "8 ΤΟ ΠΡΩΙ ΜΕ 9 ΤΟ ΒΡΑΔΥ");
-        var availablePharmacy1 = new AvailablePharmacy(100, pharmacy1, workingHour1, date, pulledVersion);
+        var availablePharmacy1 = new AvailablePharmacy(100, pharmacy1, workingHour1, DateUtils.stringDateToInstant(date), pulledVersion);
 
         var pharmacy2 = new Pharmacy(6017, "ΠΕΤΡΟΣ ΠΑΠΑΝΙΚΟΛΑΣ", "ΧΡΗΣΤΟΥ ΜΟΝΤΕΧΡΗΣΤΟΥ 1",
                 "ΘΗΣΕΙΟ", "223430 9876");
         var workingHour2 = new WorkingHour(19, "8 ΤΟ ΠΡΩΙ ΜΕ 2 ΤΟ ΜΕΣΗΜΕΡΙ ΚΑΙ 5 ΤΟ ΑΠΟΓΕΥΜΑ ΜΕ 9 ΤΟ ΒΡΑΔΥ");
-        var availablePharmacy2 = new AvailablePharmacy(101, pharmacy2, workingHour2, date, pulledVersion);
+        var availablePharmacy2 = new AvailablePharmacy(101, pharmacy2, workingHour2, DateUtils.stringDateToInstant(date), pulledVersion);
 
-        when(availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date)).thenReturn(Collections.singletonList(
+        when(availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(DateUtils.stringDateToInstant(date))).thenReturn(Collections.singletonList(
                 new AvailablePharmacy(pulledVersion)
         ));
 
         // when no region is given, the service only runs findAllByRegionAndDate()
         // that's why we only mock this
-        when(availablePharmacyRepository.findAllByLastPulledVersion(pulledVersion, date, null, null))
+        when(availablePharmacyRepository.findAllByLastPulledVersion(pulledVersion, DateUtils.stringDateToInstant(date), null, null))
                 .thenReturn(
                         new PageImpl<>(Arrays.asList(
                                 availablePharmacy1, availablePharmacy2
                         )));
 
-        var availablePharmacies = availablePharmacyService.findAllByRegionAndDate(null, date, null);
+        var availablePharmacies = availablePharmacyService.findAllByRegionAndDate(null, DateUtils.stringDateToInstant(date), null);
 
         assertAvailablePharmaciesProperties(availablePharmacy1, availablePharmacies.getContent().get(0));
         assertAvailablePharmaciesProperties(availablePharmacy2, availablePharmacies.getContent().get(1));
@@ -82,13 +83,12 @@ class AvailablePharmacyServiceTest {
 
     @Test
     public void testFindAllByRegionAndDate_nonValidDate_noRegionSpecified() {
-        var date = "2020/01/18";
+        var date = "2020-01-18";
 
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            availablePharmacyService.findAllByRegionAndDate("all", date, null);
-        });
+        Exception exception = assertThrows(RuntimeException.class, () -> availablePharmacyService
+                .findAllByRegionAndDate("all", DateUtils.stringDateToInstant(date), null));
 
-        String expectedMessage = "Did not find available pharmacies for date";
+        String expectedMessage = "Did not find available pharmacies";
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));
@@ -96,11 +96,11 @@ class AvailablePharmacyServiceTest {
 
     @Test
     public void testFindAllByRegionAndDate_validDate_nonValidRegionSpecified() {
-        var date = "2020/01/18";
+        var date = "2020-01-18";
         var pulledVersion = 1;
         var region = "ΠΑΓΚΡΑΤΙ";
 
-        when(availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date)).thenReturn(Collections.singletonList(
+        when(availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(DateUtils.stringDateToInstant(date))).thenReturn(Collections.singletonList(
                 new AvailablePharmacy(pulledVersion)
         ));
 
@@ -109,13 +109,13 @@ class AvailablePharmacyServiceTest {
         // but it will not stop on findAllByRegionAndDate(), because,
         // findAllByRegionAndDate() will return an empty List, so
         // it will think that the date is correct
-        when(availablePharmacyRepository.findAllByLastPulledVersion(pulledVersion, date, null, null))
+        when(availablePharmacyRepository.findAllByLastPulledVersion(pulledVersion, DateUtils.stringDateToInstant(date), null, null))
                 .thenReturn(
                         new PageImpl<>(Collections.emptyList()
                         ));
 
         Exception exception = assertThrows(RuntimeException.class, () ->
-                availablePharmacyService.findAllByRegionAndDate(region, date, null));
+                availablePharmacyService.findAllByRegionAndDate(region, DateUtils.stringDateToInstant(date), null));
 
         String expectedMessage = "Cannot invoke \"org.springframework.data.domain.Page.isEmpty()\" because \"result\" is null";
         String actualMessage = exception.getMessage();

@@ -145,8 +145,7 @@
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>${liquibase.version}</version>
                 <configuration>
-                    <propertyFile>src/main/resources/liquibase/config/liquibase.yml
-                    </propertyFile>
+                    <propertyFile>src/main/resources/liquibase/config/liquibase.yml</propertyFile>
                     <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
                     <clearCheckSums>true</clearCheckSums>
                 </configuration>

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.net.URL;
+import java.time.Instant;
 import java.util.logging.Logger;
 
 @Component
@@ -48,7 +49,7 @@ public class AvailablePharmacyScraper {
     public void saveAvailablePharmacies(int daysFromToday) {
         final var url = "http://fsa-efimeries.gr";
         var date = DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday));
-        var lastPulledVersion = getLastPulledVersion(date);
+        var lastPulledVersion = getLastPulledVersion(DateUtils.stringDateToInstant(date));
 
         try {
             var webClient = getWebClient();
@@ -72,7 +73,7 @@ public class AvailablePharmacyScraper {
 
     private void saveAvailablePharmacy(String date, int lastPulledVersion, Element element) {
         var availablePharmacy = new AvailablePharmacy();
-        availablePharmacy.setDate(date);
+        availablePharmacy.setDate(DateUtils.stringDateToInstant(date));
         availablePharmacy.setPulledVersion(lastPulledVersion + 1);
 
         var scrapedAvailablePharmacy = getScrapedAvailablePharmacy(element);
@@ -133,7 +134,7 @@ public class AvailablePharmacyScraper {
         availablePharmacy.setPharmacy(pharmacyRepository.save(newPharmacy));
     }
 
-    private int getLastPulledVersion(String date) {
+    private int getLastPulledVersion(Instant date) {
         var result = availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date);
         var lastPulledVersion = 0;
 
