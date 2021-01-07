@@ -32,18 +32,25 @@ public class Scheduler {
         Objects.requireNonNull(cacheManager.getCache("availablePharmaciesCache")).clear();
     }
 
-    @Scheduled(cron = "5 1 0/7 * * *")
-    public void getAvailablePharmaciesTwicePerDay() {
+    @Scheduled(cron = "0 0 0/6 * * *")
+    public void getAvailablePharmaciesToday() {
         var daysFromToday = 0;
         availablePharmacyScraper.saveAvailablePharmacies(daysFromToday);
         clearCache();
     }
 
-    // Run only once after startup.
+    @Scheduled(cron = "0 0 22 * * *")
+    public void getAvailablePharmaciesForAllWeek() {
+        var numOfDays = 7;
+        availablePharmacyScraper.saveAvailablePharmaciesForLastDays(numOfDays);
+        clearCache();
+    }
+
+    // Run only once after startup and get the pharmacies on duty for the today and the next 6 days.
     @EventListener(ApplicationReadyEvent.class)
     public void getAvailablePharmaciesAfterStartup() {
-        var daysFromToday = 0;
-        availablePharmacyScraper.saveAvailablePharmacies(daysFromToday);
+        var numOfDays = 7;
+        availablePharmacyScraper.saveAvailablePharmaciesForLastDays(numOfDays);
         clearCache();
     }
 }

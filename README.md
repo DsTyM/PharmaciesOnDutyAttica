@@ -2,7 +2,8 @@
 
 Pharmacies on duty attica is a web application where it gets the pharmacies on duty from the official Pharmacists
 Association of Attica Website: [https://fsa-efimeries.gr](https://fsa-efimeries.gr)
-and provide them as a REST API in JSON format.
+and provide them as a REST API in JSON format. You can get the pharmacies on duty for any number of days you want, e.g.
+for the whole next week, as long as Pharmacists Association of Attica provides them.
 
 It uses HtmlUnit to interact and crawl the fsa.gr website and jsoup to scrape the data
 (the available pharmacies per day, pharmacies' information and the different working hours available). It also uses
@@ -63,9 +64,9 @@ Here is an example of how it returns the pharmacies on duty:
 It also contains a scheduler where it refreshes the available pharmacies for the given day when the application is
 started, and it also uses cron expressions to refresh the available pharmacies list twice per day. This can also be
 customised. The application also uses Ehcache for In-Memory Caching.
-  
+
 The project uses Lombok, so you need to have the Lombok plugin installed on your IDE.
-  
+
 To clone the project, just run:
 
 ```shell

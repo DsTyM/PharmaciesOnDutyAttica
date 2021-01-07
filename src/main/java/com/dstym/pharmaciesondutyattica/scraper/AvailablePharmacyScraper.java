@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.net.URL;
 import java.time.Instant;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 @Component
@@ -46,13 +47,20 @@ public class AvailablePharmacyScraper {
         Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
     }
 
+    public void saveAvailablePharmaciesForLastDays(int numOfDays) {
+        for (var i = 0; i < numOfDays; i++) {
+            saveAvailablePharmacies(i);
+        }
+    }
+
     public void saveAvailablePharmacies(int daysFromToday) {
+        WebClient webClient = null;
         final var url = "http://fsa-efimeries.gr";
         var date = DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday));
         var lastPulledVersion = getLastPulledVersion(DateUtils.stringDateToInstant(date));
 
         try {
-            var webClient = getWebClient();
+            webClient = getWebClient();
             var requestSettings = new WebRequest(new URL(url), HttpMethod.POST);
             requestSettings.setRequestBody("Date=" + date);
             var page = (HtmlPage) webClient.getPage(requestSettings);
@@ -63,11 +71,12 @@ public class AvailablePharmacyScraper {
                 saveAvailablePharmacy(date, lastPulledVersion, element);
             }
 
-            webClient.close();
             log.info("Available pharmacies have been updated for " + date + ".");
         } catch (Exception exception) {
             log.error(ExceptionUtils.getStackTrace(exception));
             log.info("Could not update available pharmacies for " + date + ".");
+        } finally {
+            Optional.ofNullable(webClient).ifPresent(WebClient::close);
         }
     }
 
