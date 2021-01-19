@@ -26,14 +26,14 @@ public class PharmacyServiceImpl implements PharmacyService {
     @Override
     @Cacheable(value = "pharmacyCache", key = "#theId")
     public Pharmacy findById(int theId) {
-        Optional<Pharmacy> result = pharmacyRepository.findById(theId);
+        var result = pharmacyRepository.findById(theId);
 
         Pharmacy pharmacy;
 
         if (result.isPresent()) {
             pharmacy = result.get();
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Did not find pharmacy with id: " + theId);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Did not find pharmacy with id: " + theId);
         }
 
         return pharmacy;
@@ -46,10 +46,10 @@ public class PharmacyServiceImpl implements PharmacyService {
                 .map(r -> URLDecoder.decode(r.trim(), StandardCharsets.UTF_8))
                 .orElse(null);
 
-        Page<Pharmacy> result = pharmacyRepository.findAll(region, pageable);
+        var result = pharmacyRepository.findAll(region, pageable);
 
         if (result.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Did not find pharmacies.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Did not find pharmacies.");
         }
 
         return result;

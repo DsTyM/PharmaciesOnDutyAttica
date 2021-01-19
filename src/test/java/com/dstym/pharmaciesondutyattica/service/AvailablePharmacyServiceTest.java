@@ -1,55 +1,49 @@
 package com.dstym.pharmaciesondutyattica.service;
 
+import com.dstym.pharmaciesondutyattica.PharmaciesOnDutyAtticaApplication;
 import com.dstym.pharmaciesondutyattica.entity.AvailablePharmacy;
 import com.dstym.pharmaciesondutyattica.entity.Pharmacy;
 import com.dstym.pharmaciesondutyattica.entity.WorkingHour;
 import com.dstym.pharmaciesondutyattica.repository.AvailablePharmacyRepository;
 import com.dstym.pharmaciesondutyattica.util.DateUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.data.domain.PageImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@ActiveProfiles({"testing"})
+@WebAppConfiguration
+@SpringBootTest(classes = {PharmaciesOnDutyAtticaApplication.class})
+@AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
+@Slf4j
 class AvailablePharmacyServiceTest {
-    @InjectMocks
+    @Autowired
     private AvailablePharmacyServiceImpl availablePharmacyService;
 
-    @Mock
+    @Autowired
     private AvailablePharmacyRepository availablePharmacyRepository;
 
-    private static void assertAvailablePharmaciesProperties(AvailablePharmacy expectedAvailablePharmacy,
-                                                            AvailablePharmacy actualAvailablePharmacy) {
-        assertEquals(expectedAvailablePharmacy.getId(), actualAvailablePharmacy.getId());
-        assertPharmaciesProperties(expectedAvailablePharmacy.getPharmacy(), actualAvailablePharmacy.getPharmacy());
-        assertWorkingHoursProperties(expectedAvailablePharmacy.getWorkingHour(), actualAvailablePharmacy.getWorkingHour());
-        assertEquals(expectedAvailablePharmacy.getDate(), actualAvailablePharmacy.getDate());
-        assertEquals(expectedAvailablePharmacy.getPulledVersion(), actualAvailablePharmacy.getPulledVersion());
+    @BeforeEach
+    void beforeEach() {
+        availablePharmacyRepository.deleteAll();
+        createAvailablePharmacies();
     }
 
-    private static void assertPharmaciesProperties(Pharmacy expectedPharmacy, Pharmacy actualPharmacy) {
-        assertEquals(expectedPharmacy.getId(), actualPharmacy.getId());
-        assertEquals(expectedPharmacy.getName(), actualPharmacy.getName());
-        assertEquals(expectedPharmacy.getAddress(), actualPharmacy.getAddress());
-        assertEquals(expectedPharmacy.getRegion(), actualPharmacy.getRegion());
-        assertEquals(expectedPharmacy.getPhoneNumber(), actualPharmacy.getPhoneNumber());
-    }
-
-    private static void assertWorkingHoursProperties(WorkingHour expectedWorkingHour, WorkingHour actualWorkingHour) {
-        assertEquals(expectedWorkingHour.getId(), actualWorkingHour.getId());
-        assertEquals(expectedWorkingHour.getWorkingHourText(), actualWorkingHour.getWorkingHourText());
-    }
-
-    @Test
-    public void testFindAllByRegionAndDate_validDate_noRegionSpecified() {
+    private void createAvailablePharmacies() {
         var date = "2020-01-18";
         var pulledVersion = 1;
 
@@ -63,63 +57,58 @@ class AvailablePharmacyServiceTest {
         var workingHour2 = new WorkingHour(19, "8 ΤΟ ΠΡΩΙ ΜΕ 2 ΤΟ ΜΕΣΗΜΕΡΙ ΚΑΙ 5 ΤΟ ΑΠΟΓΕΥΜΑ ΜΕ 9 ΤΟ ΒΡΑΔΥ");
         var availablePharmacy2 = new AvailablePharmacy(101, pharmacy2, workingHour2, DateUtils.stringDateToInstant(date), pulledVersion);
 
-        when(availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(DateUtils.stringDateToInstant(date))).thenReturn(Collections.singletonList(
-                new AvailablePharmacy(pulledVersion)
-        ));
+        availablePharmacyRepository.saveAll(List.of(availablePharmacy1, availablePharmacy2));
+    }
 
-        // when no region is given, the service only runs findAllByRegionAndDate()
-        // that's why we only mock this
-        when(availablePharmacyRepository.findAllByLastPulledVersion(pulledVersion, DateUtils.stringDateToInstant(date), null, null))
-                .thenReturn(
-                        new PageImpl<>(Arrays.asList(
-                                availablePharmacy1, availablePharmacy2
-                        )));
+    private void assertAvailablePharmaciesProperties(AvailablePharmacy expectedAvailablePharmacy,
+                                                     AvailablePharmacy actualAvailablePharmacy) {
+        assertEquals(expectedAvailablePharmacy.getId(), actualAvailablePharmacy.getId());
+        assertPharmaciesProperties(expectedAvailablePharmacy.getPharmacy(), actualAvailablePharmacy.getPharmacy());
+        assertWorkingHoursProperties(expectedAvailablePharmacy.getWorkingHour(), actualAvailablePharmacy.getWorkingHour());
+        assertEquals(expectedAvailablePharmacy.getDate(), actualAvailablePharmacy.getDate());
+        assertEquals(expectedAvailablePharmacy.getPulledVersion(), actualAvailablePharmacy.getPulledVersion());
+    }
 
-        var availablePharmacies = availablePharmacyService.findAllByRegionAndDate(null, DateUtils.stringDateToInstant(date), null);
+    private void assertPharmaciesProperties(Pharmacy expectedPharmacy, Pharmacy actualPharmacy) {
+        assertEquals(expectedPharmacy.getId(), actualPharmacy.getId());
+        assertEquals(expectedPharmacy.getName(), actualPharmacy.getName());
+        assertEquals(expectedPharmacy.getAddress(), actualPharmacy.getAddress());
+        assertEquals(expectedPharmacy.getRegion(), actualPharmacy.getRegion());
+        assertEquals(expectedPharmacy.getPhoneNumber(), actualPharmacy.getPhoneNumber());
+    }
 
-        assertAvailablePharmaciesProperties(availablePharmacy1, availablePharmacies.getContent().get(0));
-        assertAvailablePharmaciesProperties(availablePharmacy2, availablePharmacies.getContent().get(1));
+    private void assertWorkingHoursProperties(WorkingHour expectedWorkingHour, WorkingHour actualWorkingHour) {
+        assertEquals(expectedWorkingHour.getId(), actualWorkingHour.getId());
+        assertEquals(expectedWorkingHour.getWorkingHourText(), actualWorkingHour.getWorkingHourText());
+    }
+
+    @Test
+    public void testFindAllByRegionAndDate_validDate_noRegionSpecified() {
+        var date = availablePharmacyRepository.findAll().get(0).getDate();
+        var availablePharmacies = availablePharmacyService.findAllByRegionAndDate(null, date, null);
+
+        assertAvailablePharmaciesProperties(availablePharmacyService.findAll().get(0), availablePharmacies.getContent().get(0));
+        assertAvailablePharmaciesProperties(availablePharmacyService.findAll().get(1), availablePharmacies.getContent().get(1));
     }
 
     @Test
     public void testFindAllByRegionAndDate_nonValidDate_noRegionSpecified() {
-        var date = "2020-01-18";
+        var date = availablePharmacyRepository.findAll().get(0).getDate();
 
-        Exception exception = assertThrows(RuntimeException.class, () -> availablePharmacyService
-                .findAllByRegionAndDate("all", DateUtils.stringDateToInstant(date), null));
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> availablePharmacyService
+                .findAllByRegionAndDate("all", date, null));
 
-        String expectedMessage = "Did not find available pharmacies";
-        String actualMessage = exception.getMessage();
-
-        assertTrue(actualMessage.contains(expectedMessage));
+        assertEquals(HttpStatus.NOT_FOUND.value(), exception.getStatus().value());
     }
 
     @Test
     public void testFindAllByRegionAndDate_validDate_nonValidRegionSpecified() {
-        var date = "2020-01-18";
-        var pulledVersion = 1;
-        var region = "ΠΑΓΚΡΑΤΙ";
+        var date = availablePharmacyRepository.findAll().get(0).getDate();
+        var region = "ΚΑΤΙ";
 
-        when(availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(DateUtils.stringDateToInstant(date))).thenReturn(Collections.singletonList(
-                new AvailablePharmacy(pulledVersion)
-        ));
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () ->
+                availablePharmacyService.findAllByRegionAndDate(region, date, null));
 
-        // We give an available pharmacy without any information, and without region,
-        // so it will returns no results for the given region,
-        // but it will not stop on findAllByRegionAndDate(), because,
-        // findAllByRegionAndDate() will return an empty List, so
-        // it will think that the date is correct
-        when(availablePharmacyRepository.findAllByLastPulledVersion(pulledVersion, DateUtils.stringDateToInstant(date), null, null))
-                .thenReturn(
-                        new PageImpl<>(Collections.emptyList()
-                        ));
-
-        Exception exception = assertThrows(RuntimeException.class, () ->
-                availablePharmacyService.findAllByRegionAndDate(region, DateUtils.stringDateToInstant(date), null));
-
-        String expectedMessage = "Cannot invoke \"org.springframework.data.domain.Page.isEmpty()\" because \"result\" is null";
-        String actualMessage = exception.getMessage();
-
-        assertTrue(actualMessage.contains(expectedMessage));
+        assertEquals(HttpStatus.NOT_FOUND.value(), exception.getStatus().value());
     }
 }

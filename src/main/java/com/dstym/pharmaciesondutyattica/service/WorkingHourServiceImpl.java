@@ -10,8 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Optional;
-
 @Service
 public class WorkingHourServiceImpl implements WorkingHourService {
     private final WorkingHourRepository workingHourRepository;
@@ -23,22 +21,28 @@ public class WorkingHourServiceImpl implements WorkingHourService {
 
     @Override
 //    @Cacheable(value = "workingHoursCache", key = "'ALL'")
-    @Cacheable(value = "workingHoursCache", key = "#pageable")
+    @Cacheable(value = "workingHoursCache", key = "#pageable", condition = "#pageable != null")
     public Page<WorkingHour> findAll(Pageable pageable) {
-        return workingHourRepository.findAll(pageable);
+        Page<WorkingHour> result = workingHourRepository.findAll(pageable);
+
+        if (result.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Did not find working hours.");
+        } else {
+            return result;
+        }
     }
 
     @Override
     @Cacheable(value = "workingHourCache", key = "#theId")
     public WorkingHour findById(int theId) {
-        Optional<WorkingHour> result = workingHourRepository.findById(theId);
+        var result = workingHourRepository.findById(theId);
 
         WorkingHour workingHour;
 
         if (result.isPresent()) {
             workingHour = result.get();
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Did not find workingHour with id: " + theId);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Did not find working hour with id: " + theId);
         }
 
         return workingHour;

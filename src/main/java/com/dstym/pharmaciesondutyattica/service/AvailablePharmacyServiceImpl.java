@@ -30,7 +30,7 @@ public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
         var result = availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date);
 
         if (result.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Did not find available pharmacies for date: " + DateUtils.instantToString(date));
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Did not find available pharmacies for date: " + DateUtils.instantToString(date));
         }
 
         var tempAvailablePharmacy = result.get(0);
@@ -61,20 +61,20 @@ public class AvailablePharmacyServiceImpl implements AvailablePharmacyService {
         if (!result.isEmpty()) {
             return result;
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Did not find available pharmacies for date: " + DateUtils.instantToString(date));
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Did not find available pharmacies for date: " + DateUtils.instantToString(date));
         }
     }
 
     @Override
     public AvailablePharmacy findById(long theId) {
-        Optional<AvailablePharmacy> result = availablePharmacyRepository.findById(theId);
+        var result = availablePharmacyRepository.findById(theId);
 
         AvailablePharmacy availablePharmacy;
 
         if (result.isPresent()) {
             availablePharmacy = result.get();
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Did not find available pharmacy with id: " + theId);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Did not find available pharmacy with id: " + theId);
         }
 
         return availablePharmacy;

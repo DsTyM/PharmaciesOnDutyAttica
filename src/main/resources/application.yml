@@ -30,3 +30,33 @@ server:
 #          descriptor:
 #            sql:
 #              BasicBinder: TRACE
+
+
+---
+
+spring:
+  h2:
+    console:
+      enabled: true
+  jpa:
+    show-sql: true
+    open-in-view: false
+    database: h2
+    generate-ddl: false
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  liquibase:
+    enabled: false
+  datasource:
+    url: jdbc:h2:mem:test
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  cache:
+    type: NONE
+  config:
+    activate:
+      on-profile: testing
