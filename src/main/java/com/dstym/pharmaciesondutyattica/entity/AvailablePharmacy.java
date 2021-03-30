@@ -32,10 +32,6 @@ public class AvailablePharmacy implements Serializable {
     public AvailablePharmacy() {
     }
 
-    public AvailablePharmacy(int pulledVersion) {
-        setPulledVersion(pulledVersion);
-    }
-
     public AvailablePharmacy(long id, Pharmacy pharmacy, WorkingHour workingHour, Instant date, int pulledVersion) {
         this.id = id;
         this.pharmacy = pharmacy;
