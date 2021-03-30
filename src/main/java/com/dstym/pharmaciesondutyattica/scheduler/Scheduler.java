@@ -1,7 +1,6 @@
 package com.dstym.pharmaciesondutyattica.scheduler;
 
 import com.dstym.pharmaciesondutyattica.scraper.AvailablePharmacyScraper;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.event.EventListener;
@@ -13,7 +12,6 @@ import java.util.Objects;
 
 @EnableScheduling
 @Component
-@Slf4j
 public class Scheduler {
     private final AvailablePharmacyScraper availablePharmacyScraper;
     private final CacheManager cacheManager;

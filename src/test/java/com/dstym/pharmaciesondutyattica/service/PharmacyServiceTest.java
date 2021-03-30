@@ -4,7 +4,6 @@ import com.dstym.pharmaciesondutyattica.PharmaciesOnDutyAtticaApplication;
 import com.dstym.pharmaciesondutyattica.entity.Pharmacy;
 import com.dstym.pharmaciesondutyattica.repository.AvailablePharmacyRepository;
 import com.dstym.pharmaciesondutyattica.repository.PharmacyRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest(classes = {PharmaciesOnDutyAtticaApplication.class})
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
-@Slf4j
 class PharmacyServiceTest {
     @Autowired
     private PharmacyServiceImpl pharmacyService;

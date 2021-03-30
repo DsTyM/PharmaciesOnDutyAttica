@@ -12,22 +12,22 @@ import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.net.URL;
 import java.time.Instant;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 @Component
-@Slf4j
 public class AvailablePharmacyScraper {
+    private static final Logger log = LoggerFactory.getLogger(AvailablePharmacyScraper.class);
+
     private static AvailablePharmacyRepository availablePharmacyRepository;
     private static PharmacyRepository pharmacyRepository;
     private static WorkingHourRepository workingHourRepository;
@@ -39,12 +39,6 @@ public class AvailablePharmacyScraper {
         AvailablePharmacyScraper.availablePharmacyRepository = availablePharmacyRepository;
         AvailablePharmacyScraper.pharmacyRepository = pharmacyRepository;
         AvailablePharmacyScraper.workingHourRepository = workingHourRepository;
-    }
-
-    @PostConstruct
-    private void init() {
-        Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
-        Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
     }
 
     public void saveAvailablePharmaciesForLastDays(int numOfDays) {

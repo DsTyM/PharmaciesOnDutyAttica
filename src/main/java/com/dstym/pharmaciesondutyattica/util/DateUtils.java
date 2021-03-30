@@ -1,7 +1,8 @@
 package com.dstym.pharmaciesondutyattica.util;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -9,10 +10,11 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
-@Slf4j
 public class DateUtils {
+    private static final Logger log = LoggerFactory.getLogger(DateUtils.class);
+
     public static Date getDateFromTodayPlusDays(int days) {
-        LocalDateTime now = LocalDateTime.now().plusDays(days);
+        var now = LocalDateTime.now().plusDays(days);
         return Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
     }
 
@@ -32,7 +34,7 @@ public class DateUtils {
 
     public static Instant stringDateToInstant(String date) {
         try {
-            if(date != null) {
+            if (date != null) {
                 return Instant.parse(date + "T00:00:00Z");
             }
 
