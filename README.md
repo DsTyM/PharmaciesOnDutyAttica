@@ -62,10 +62,8 @@ Here is an example of how it returns the pharmacies on duty:
 ```
 
 It also contains a scheduler where it refreshes the available pharmacies for the given day when the application is
-started, and it also uses cron expressions to refresh the available pharmacies list twice per day. This can also be
+started, and it also uses cron expressions to refresh the available pharmacies list many times per day. This can also be
 customised. The application also uses Ehcache for In-Memory Caching.
-
-The project uses Lombok, so you need to have the Lombok plugin installed on your IDE.
 
 To clone the project, just run:
 
@@ -122,18 +120,3 @@ with the database volume. To remove it, run:
 ```shell
 docker volume rm pharmaciesondutyattica_db-data
 ```
-
-To deploy this project to Kubernetes, run these commands:
-
-```shell
-docker build --tag pharmacies-on-duty-attica:1.0.0 .
-kubectl apply -f k8s/deployment.yaml
-```
-
-Of course, when you finish, don't forget to run:
-
-```shell
-kubectl delete -f k8s/deployment.yaml
-```
-
-This project is just for learning purposes.

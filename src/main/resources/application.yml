@@ -15,6 +15,17 @@ spring:
     jcache:
       config: classpath:ehcache.xml
 
+management:
+  endpoints:
+    web:
+      base-path: '/api/actuator'
+
+springdoc:
+  cache:
+    disabled: true
+  show-actuator: true
+  writer-with-default-pretty-printer: true
+
 server:
   error:
     include-message: always
