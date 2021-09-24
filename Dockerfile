@@ -1,5 +1,6 @@
 # Stage 1: Build the application
-FROM openjdk:16.0.1 as build
+FROM eclipse-temurin:17 as build
+# https://hub.docker.com/_/eclipse-temurin
 
 # Set the current working directory inside the image
 WORKDIR /app

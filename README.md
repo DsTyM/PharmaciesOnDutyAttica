@@ -1,7 +1,7 @@
 # Pharmacies on Duty Attica
 
-Pharmacies on duty attica is a web application where it gets the pharmacies on duty from the official Pharmacists
-Association of Attica Website: [https://fsa-efimeries.gr](https://fsa-efimeries.gr)
+Pharmacies on duty attica is a Java / Spring Boot web application where it gets the pharmacies on duty from the official
+Pharmacists Association of Attica Website: [https://fsa-efimeries.gr](https://fsa-efimeries.gr)
 and provide them as a REST API in JSON format. You can get the pharmacies on duty for any number of days you want, e.g.
 for the whole next week, as long as Pharmacists Association of Attica provides them.
 
