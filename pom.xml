@@ -20,7 +20,7 @@
     <properties>
         <java.version>17</java.version>
         <spring-boot.version>2.6.3</spring-boot.version>
-        <liquibase.version>4.7.1</liquibase.version>
+        <liquibase.version>4.8.0</liquibase.version>
         <javax-validation-api.version>2.0.1.Final</javax-validation-api.version>
     </properties>
 
