@@ -107,8 +107,8 @@ java.lang.UnsupportedOperationException: The application must supply JDBC connec
 ```
 
 Most probably the changelog file has been created successfully and Liquibase mistakenly threw an error so try to check
-if the liquibase file is empty or populated. If it is populated with SQL queries / statements then it means that was
-created successfully. The liquibase file is located in:
+if the liquibase file is empty or populated. If it is populated with SQL queries / statements then it means that it was
+created successfully. The liquibase file is located at:
 
 ```
 src/main/resources/liquibase/liquibase-changeLog.mysql.sql
