@@ -114,7 +114,7 @@ created successfully. The liquibase file is located at:
 src/main/resources/liquibase/liquibase-changeLog.mysql.sql
 ```
 
-If you are using Docker and Git on Windows, then the following may occur:
+If you are using Docker and Git on Windows, then the following error may occur:
 
 ```
 /bin/sh not found
