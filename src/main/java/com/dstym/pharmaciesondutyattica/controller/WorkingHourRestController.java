@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -15,15 +15,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
+@RequiredArgsConstructor
 @RequestMapping("/api")
 @Tag(name = "Working Hour")
 public class WorkingHourRestController {
     private final WorkingHourService workingHourService;
-
-    @Autowired
-    public WorkingHourRestController(WorkingHourService workingHourService) {
-        this.workingHourService = workingHourService;
-    }
 
     @GetMapping("/working-hours")
     @Operation(summary = "Get Working Hours",

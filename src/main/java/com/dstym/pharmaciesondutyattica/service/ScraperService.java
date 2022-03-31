@@ -1,4 +1,4 @@
-package com.dstym.pharmaciesondutyattica.scraper;
+package com.dstym.pharmaciesondutyattica.service;
 
 import com.dstym.pharmaciesondutyattica.entity.AvailablePharmacy;
 import com.dstym.pharmaciesondutyattica.entity.Pharmacy;
@@ -12,34 +12,24 @@ import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.net.URL;
 import java.time.Instant;
 import java.util.Optional;
 
-@Component
-public class AvailablePharmacyScraper {
-    private static final Logger log = LoggerFactory.getLogger(AvailablePharmacyScraper.class);
-
-    private static AvailablePharmacyRepository availablePharmacyRepository;
-    private static PharmacyRepository pharmacyRepository;
-    private static WorkingHourRepository workingHourRepository;
-
-    @Autowired
-    public AvailablePharmacyScraper(AvailablePharmacyRepository availablePharmacyRepository,
-                                    PharmacyRepository pharmacyRepository,
-                                    WorkingHourRepository workingHourRepository) {
-        AvailablePharmacyScraper.availablePharmacyRepository = availablePharmacyRepository;
-        AvailablePharmacyScraper.pharmacyRepository = pharmacyRepository;
-        AvailablePharmacyScraper.workingHourRepository = workingHourRepository;
-    }
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class ScraperService {
+    private final AvailablePharmacyRepository availablePharmacyRepository;
+    private final PharmacyRepository pharmacyRepository;
+    private final WorkingHourRepository workingHourRepository;
 
     public void saveAvailablePharmaciesForLastDays(int numOfDays) {
         for (var i = 0; i < numOfDays; i++) {

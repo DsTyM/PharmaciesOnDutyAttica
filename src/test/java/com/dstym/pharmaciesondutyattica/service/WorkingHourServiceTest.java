@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @ExtendWith(SpringExtension.class)
 class WorkingHourServiceTest {
     @Autowired
-    private WorkingHourServiceImpl workingHourService;
+    private WorkingHourService workingHourService;
 
     @Autowired
     private WorkingHourRepository workingHourRepository;

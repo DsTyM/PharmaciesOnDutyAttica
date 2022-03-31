@@ -1,6 +1,7 @@
 package com.dstym.pharmaciesondutyattica.scheduler;
 
-import com.dstym.pharmaciesondutyattica.scraper.AvailablePharmacyScraper;
+import com.dstym.pharmaciesondutyattica.service.ScraperService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.event.EventListener;
@@ -10,17 +11,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
-@EnableScheduling
 @Component
+@EnableScheduling
+@RequiredArgsConstructor
 public class Scheduler {
-    private final AvailablePharmacyScraper availablePharmacyScraper;
+    private final ScraperService scraperService;
     private final CacheManager cacheManager;
-
-    public Scheduler(AvailablePharmacyScraper availablePharmacyScraper,
-                     CacheManager cacheManager) {
-        this.cacheManager = cacheManager;
-        this.availablePharmacyScraper = availablePharmacyScraper;
-    }
 
     public void clearCache() {
         Objects.requireNonNull(cacheManager.getCache("workingHourCache")).clear();
@@ -33,14 +29,14 @@ public class Scheduler {
     @Scheduled(cron = "0 0 0/6 * * *")
     public void getAvailablePharmaciesToday() {
         var daysFromToday = 0;
-        availablePharmacyScraper.saveAvailablePharmacies(daysFromToday);
+        scraperService.saveAvailablePharmacies(daysFromToday);
         clearCache();
     }
 
     @Scheduled(cron = "0 0 22 * * *")
     public void getAvailablePharmaciesForAllWeek() {
         var numOfDays = 7;
-        availablePharmacyScraper.saveAvailablePharmaciesForLastDays(numOfDays);
+        scraperService.saveAvailablePharmaciesForLastDays(numOfDays);
         clearCache();
     }
 
@@ -48,7 +44,7 @@ public class Scheduler {
     @EventListener(ApplicationReadyEvent.class)
     public void getAvailablePharmaciesAfterStartup() {
         var numOfDays = 7;
-        availablePharmacyScraper.saveAvailablePharmaciesForLastDays(numOfDays);
+        scraperService.saveAvailablePharmaciesForLastDays(numOfDays);
         clearCache();
     }
 }

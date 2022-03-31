@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @ExtendWith(SpringExtension.class)
 class AvailablePharmacyServiceTest {
     @Autowired
-    private AvailablePharmacyServiceImpl availablePharmacyService;
+    private AvailablePharmacyService availablePharmacyService;
 
     @Autowired
     private AvailablePharmacyRepository availablePharmacyRepository;
@@ -48,12 +48,12 @@ class AvailablePharmacyServiceTest {
         var pharmacy1 = new Pharmacy(4050, "ΣΠΥΡΟΣ ΝΙΚΟΛΑΚΟΠΟΥΛΟΣ", "ΠΕΤΡΟΥ ΚΑΡΑΓΙΩΡΓΟΥ 147",
                 "ΠΑΓΚΡΑΤΙ", "22123 12345");
         var workingHour1 = new WorkingHour(3, "8 ΤΟ ΠΡΩΙ ΜΕ 9 ΤΟ ΒΡΑΔΥ");
-        var availablePharmacy1 = new AvailablePharmacy(100, pharmacy1, workingHour1, DateUtils.stringDateToInstant(date), pulledVersion);
+        var availablePharmacy1 = new AvailablePharmacy(100L, pharmacy1, workingHour1, DateUtils.stringDateToInstant(date), pulledVersion);
 
         var pharmacy2 = new Pharmacy(6017, "ΠΕΤΡΟΣ ΠΑΠΑΝΙΚΟΛΑΣ", "ΧΡΗΣΤΟΥ ΜΟΝΤΕΧΡΗΣΤΟΥ 1",
                 "ΘΗΣΕΙΟ", "223430 9876");
         var workingHour2 = new WorkingHour(19, "8 ΤΟ ΠΡΩΙ ΜΕ 2 ΤΟ ΜΕΣΗΜΕΡΙ ΚΑΙ 5 ΤΟ ΑΠΟΓΕΥΜΑ ΜΕ 9 ΤΟ ΒΡΑΔΥ");
-        var availablePharmacy2 = new AvailablePharmacy(101, pharmacy2, workingHour2, DateUtils.stringDateToInstant(date), pulledVersion);
+        var availablePharmacy2 = new AvailablePharmacy(101L, pharmacy2, workingHour2, DateUtils.stringDateToInstant(date), pulledVersion);
 
         availablePharmacyRepository.saveAll(List.of(availablePharmacy1, availablePharmacy2));
     }

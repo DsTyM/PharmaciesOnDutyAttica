@@ -6,7 +6,7 @@ version: '3.8'
 services:
   # Database Service (MySQL)
   pharmacies-on-duty-attica-db:
-    image: mysql:8.0.26
+    image: mysql:8.0.28
     ports:
       - "3308:3306"
     restart: always

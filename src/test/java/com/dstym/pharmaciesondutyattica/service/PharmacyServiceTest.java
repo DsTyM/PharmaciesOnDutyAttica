@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @ExtendWith(SpringExtension.class)
 class PharmacyServiceTest {
     @Autowired
-    private PharmacyServiceImpl pharmacyService;
+    private PharmacyService pharmacyService;
 
     @Autowired
     private PharmacyRepository pharmacyRepository;
