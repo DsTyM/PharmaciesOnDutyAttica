@@ -22,6 +22,9 @@ springdoc:
     disabled: true
   show-actuator: true
   writer-with-default-pretty-printer: true
+  group-configs[0]:
+    group: "api"
+    paths-to-match: "/api/**"
 
 server:
   error:
