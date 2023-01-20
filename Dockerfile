@@ -1,5 +1,6 @@
 # Stage 1: Build the application
-FROM ghcr.io/graalvm/native-image:muslib-ol9-java17-22.3.0 as build
+FROM eclipse-temurin:17.0.5_8-jdk-focal as build
+# https://hub.docker.com/_/eclipse-temurin
 
 # Set the current working directory inside the image
 WORKDIR /app
@@ -19,4 +20,4 @@ COPY src src
 
 # Package the application
 RUN ./mvnw clean package -DskipTests
-ENTRYPOINT ["sh", "-c" ,"java -jar target/pharmacies-on-duty-attica.jar --spring.datasource.url='jdbc:mysql://pharmacies-on-duty-attica-db:3306/pharmacies?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true'"]
+ENTRYPOINT ["sh", "-c" ,"java -jar target/pharmacies-on-duty-attica-1.0.0.jar --spring.datasource.url='jdbc:mysql://pharmacies-on-duty-attica-db:3306/pharmacies?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true'"]
