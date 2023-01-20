@@ -11,9 +11,6 @@ spring:
     open-in-view: true
   liquibase:
     change-log: classpath:liquibase/liquibase-changeLog.mysql.sql
-  cache:
-    jcache:
-      config: classpath:ehcache.xml
 
 management:
   endpoints:

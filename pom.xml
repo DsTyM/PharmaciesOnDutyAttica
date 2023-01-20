@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.8</version>
+        <version>3.0.1</version>
         <relativePath/>
         <!-- lookup parent from repository -->
     </parent>
@@ -19,9 +19,9 @@
 
     <properties>
         <java.version>17</java.version>
-        <spring-boot.version>2.7.8</spring-boot.version>
+        <spring-boot.version>3.0.1</spring-boot.version>
         <liquibase.version>4.19.0</liquibase.version>
-        <javax-validation-api.version>2.0.1.Final</javax-validation-api.version>
+        <jakarta-validation-api.version>3.0.2</jakarta-validation-api.version>
     </properties>
 
     <dependencies>
@@ -106,15 +106,22 @@
         <!-- https://mvnrepository.com/artifact/org.liquibase.ext/liquibase-hibernate5 -->
         <dependency>
             <groupId>org.liquibase.ext</groupId>
-            <artifactId>liquibase-hibernate5</artifactId>
+            <artifactId>liquibase-hibernate6</artifactId>
             <version>${liquibase.version}</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/javax.validation/validation-api -->
+        <!-- https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api -->
         <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-            <version>${javax-validation-api.version}</version>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>${jakarta-validation-api.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator -->
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>8.0.0.Final</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.ehcache/ehcache -->
@@ -122,13 +129,6 @@
             <groupId>org.ehcache</groupId>
             <artifactId>ehcache</artifactId>
             <version>3.10.8</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/javax.cache/cache-api -->
-        <dependency>
-            <groupId>javax.cache</groupId>
-            <artifactId>cache-api</artifactId>
-            <version>1.1.1</version>
         </dependency>
     </dependencies>
 
@@ -170,7 +170,7 @@
                 <dependencies>
                     <dependency>
                         <groupId>org.liquibase.ext</groupId>
-                        <artifactId>liquibase-hibernate5</artifactId>
+                        <artifactId>liquibase-hibernate6</artifactId>
                         <version>${liquibase.version}</version>
                     </dependency>
 
@@ -187,9 +187,9 @@
                     </dependency>
 
                     <dependency>
-                        <groupId>javax.validation</groupId>
-                        <artifactId>validation-api</artifactId>
-                        <version>${javax-validation-api.version}</version>
+                        <groupId>jakarta.validation</groupId>
+                        <artifactId>jakarta.validation-api</artifactId>
+                        <version>${jakarta-validation-api.version}</version>
                     </dependency>
                 </dependencies>
             </plugin>
