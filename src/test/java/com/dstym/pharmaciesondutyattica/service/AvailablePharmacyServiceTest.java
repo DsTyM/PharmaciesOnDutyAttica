@@ -96,7 +96,7 @@ class AvailablePharmacyServiceTest {
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> availablePharmacyService
                 .findAllByRegionAndDate("all", date, null));
 
-        assertEquals(HttpStatus.NOT_FOUND.value(), exception.getStatus().value());
+        assertEquals(HttpStatus.NOT_FOUND.toString(), exception.getStatusCode().toString());
     }
 
     @Test
@@ -107,6 +107,6 @@ class AvailablePharmacyServiceTest {
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () ->
                 availablePharmacyService.findAllByRegionAndDate(region, date, null));
 
-        assertEquals(HttpStatus.NOT_FOUND.value(), exception.getStatus().value());
+        assertEquals(HttpStatus.NOT_FOUND.toString(), exception.getStatusCode().toString());
     }
 }

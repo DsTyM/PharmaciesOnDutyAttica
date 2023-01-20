@@ -79,6 +79,6 @@ class PharmacyServiceTest {
 
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> pharmacyService.findById(id));
 
-        assertEquals(HttpStatus.NOT_FOUND.value(), exception.getStatus().value());
+        assertEquals(HttpStatus.NOT_FOUND.toString(), exception.getStatusCode().toString());
     }
 }

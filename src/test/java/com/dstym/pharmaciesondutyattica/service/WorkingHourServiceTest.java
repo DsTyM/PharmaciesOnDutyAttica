@@ -74,6 +74,6 @@ class WorkingHourServiceTest {
 
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> workingHourService.findById(id));
 
-        assertEquals(HttpStatus.NOT_FOUND.value(), exception.getStatus().value());
+        assertEquals(HttpStatus.NOT_FOUND.toString(), exception.getStatusCode().toString());
     }
 }
