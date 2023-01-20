@@ -1,6 +1,5 @@
 # Stage 1: Build the application
-FROM eclipse-temurin:17.0.4_8-jdk-focal as build
-# https://hub.docker.com/_/eclipse-temurin
+FROM ghcr.io/graalvm/native-image:muslib-ol9-java17-22.3.0 as build
 
 # Set the current working directory inside the image
 WORKDIR /app
