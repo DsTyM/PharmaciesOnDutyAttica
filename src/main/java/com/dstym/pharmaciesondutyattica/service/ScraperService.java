@@ -31,13 +31,13 @@ public class ScraperService {
     private final PharmacyRepository pharmacyRepository;
     private final WorkingHourRepository workingHourRepository;
 
-    public void saveAvailablePharmaciesForLastDays(int numOfDays) {
+    public void saveAvailablePharmaciesForLastDays(Integer numOfDays) {
         for (var i = 0; i < numOfDays; i++) {
             saveAvailablePharmacies(i);
         }
     }
 
-    public void saveAvailablePharmacies(int daysFromToday) {
+    public void saveAvailablePharmacies(Integer daysFromToday) {
         WebClient webClient = null;
         final var url = "http://fsa-efimeries.gr";
         var date = DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday));
@@ -64,7 +64,7 @@ public class ScraperService {
         }
     }
 
-    private void saveAvailablePharmacy(String date, int lastPulledVersion, Element element) {
+    private void saveAvailablePharmacy(String date, Integer lastPulledVersion, Element element) {
         var availablePharmacy = new AvailablePharmacy();
         availablePharmacy.setDate(DateUtils.stringDateToInstant(date));
         availablePharmacy.setPulledVersion(lastPulledVersion + 1);

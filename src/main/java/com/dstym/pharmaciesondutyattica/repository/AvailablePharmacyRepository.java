@@ -18,7 +18,7 @@ public interface AvailablePharmacyRepository extends JpaRepository<AvailablePhar
             "where ap.pulledVersion=:pulledVersion " +
             "and (ap.date=:date or :date is null) " +
             "and (ap.pharmacy.region=:region or :region is null)")
-    Page<AvailablePharmacy> findAllByLastPulledVersion(@Param("pulledVersion") int pulledVersion,
+    Page<AvailablePharmacy> findAllByLastPulledVersion(@Param("pulledVersion") Integer pulledVersion,
                                                        @Param("date") Instant date,
                                                        @Param("region") String region,
                                                        @Nullable Pageable pageable);

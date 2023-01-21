@@ -41,7 +41,7 @@ public class WorkingHourRestController {
             description = "Returns a specific Working Hour info by the given Id.")
     public ResponseEntity<WorkingHour> getWorkingHour(
             @Parameter(description = "Specify the Working Hour ID.")
-            @PathVariable int workingHourId) {
+            @PathVariable Integer workingHourId) {
         return ResponseEntity.ok(workingHourService.findById(workingHourId));
     }
 }

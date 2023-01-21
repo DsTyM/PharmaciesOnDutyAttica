@@ -20,7 +20,7 @@ public class PharmacyService {
     private final PharmacyRepository pharmacyRepository;
 
     @Cacheable(value = "pharmacyCache", key = "#theId")
-    public Pharmacy findById(int theId) {
+    public Pharmacy findById(Integer theId) {
         var result = pharmacyRepository.findById(theId);
 
         Pharmacy pharmacy;
@@ -53,7 +53,7 @@ public class PharmacyService {
         pharmacyRepository.save(pharmacy);
     }
 
-    public void deleteById(int theId) {
+    public void deleteById(Integer theId) {
         pharmacyRepository.deleteById(theId);
     }
 }

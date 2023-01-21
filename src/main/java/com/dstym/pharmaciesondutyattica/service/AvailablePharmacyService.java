@@ -59,7 +59,7 @@ public class AvailablePharmacyService {
         }
     }
 
-    public AvailablePharmacy findById(long theId) {
+    public AvailablePharmacy findById(Long theId) {
         var result = availablePharmacyRepository.findById(theId);
 
         AvailablePharmacy availablePharmacy;
@@ -77,7 +77,7 @@ public class AvailablePharmacyService {
         availablePharmacyRepository.save(availablePharmacy);
     }
 
-    public void deleteById(long theId) {
+    public void deleteById(Long theId) {
         availablePharmacyRepository.deleteById(theId);
     }
 }

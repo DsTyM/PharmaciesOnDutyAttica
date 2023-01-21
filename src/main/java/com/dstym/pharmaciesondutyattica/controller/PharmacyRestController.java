@@ -46,7 +46,7 @@ public class PharmacyRestController {
             description = "Returns a specific Pharmacy info by the given Id.")
     public ResponseEntity<Pharmacy> getPharmacy(
             @Parameter(description = "Specify the Pharmacy ID.")
-            @PathVariable int pharmacyId) {
+            @PathVariable Integer pharmacyId) {
         return ResponseEntity.ok(pharmacyService.findById(pharmacyId));
     }
 }

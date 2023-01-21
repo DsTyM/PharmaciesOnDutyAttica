@@ -28,7 +28,7 @@ public class WorkingHourService {
     }
 
     @Cacheable(value = "workingHourCache", key = "#theId")
-    public WorkingHour findById(int theId) {
+    public WorkingHour findById(Integer theId) {
         var result = workingHourRepository.findById(theId);
 
         WorkingHour workingHour;
@@ -46,7 +46,7 @@ public class WorkingHourService {
         workingHourRepository.save(workingHour);
     }
 
-    public void deleteById(int theId) {
+    public void deleteById(Integer theId) {
         workingHourRepository.deleteById(theId);
     }
 }
