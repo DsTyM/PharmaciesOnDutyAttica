@@ -5,7 +5,7 @@ Pharmacists Association of Attica Website: [https://fsa-efimeries.gr](https://fs
 and provide them as a REST API in JSON format. You can get the pharmacies on duty for any number of days you want, e.g.
 for the whole next week, as long as Pharmacists Association of Attica provides them.
 
-It uses HtmlUnit to interact and crawl the fsa.gr website and jsoup to scrape the data
+It uses HtmlUnit to interact and crawl the "fsa.gr" website and jsoup to scrape the data
 (the available pharmacies per day, pharmacies' information and the different working hours available). It also uses
 MySQL to save the data on the server and Spring Boot to provide the Rest API.
 
@@ -100,15 +100,10 @@ mvnw clean package -U -DskipTests
 mvnw liquibase:diff
 ```
 
-If you try to generate a new Liquibase changelog there is a chance that the following error may appear:
-
-```
-java.lang.UnsupportedOperationException: The application must supply JDBC connections
-```
-
-Most probably the changelog file has been created successfully and Liquibase mistakenly threw an error so try to check
-if the liquibase file is empty or populated. If it is populated with SQL queries / statements then it means that it was
-created successfully. The liquibase file is located at:
+If you try to generate a new Liquibase changelog there is a chance that some warning / errors to appear
+but the file to have been created successfully so try to check if the liquibase file is empty or populated. 
+If it is populated with SQL queries / statements then it means that it was created successfully. 
+The liquibase file is located at:
 
 ```
 src/main/resources/liquibase/liquibase-changeLog.mysql.sql
