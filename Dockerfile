@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM eclipse-temurin:17.0.5_8-jdk-focal as build
+FROM eclipse-temurin:21.0.2_13-jdk as build
 # https://hub.docker.com/_/eclipse-temurin
 
 # Set the current working directory inside the image
