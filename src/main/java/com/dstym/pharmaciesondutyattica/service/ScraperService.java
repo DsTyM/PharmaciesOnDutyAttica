@@ -7,19 +7,19 @@ import com.dstym.pharmaciesondutyattica.repository.AvailablePharmacyRepository;
 import com.dstym.pharmaciesondutyattica.repository.PharmacyRepository;
 import com.dstym.pharmaciesondutyattica.repository.WorkingHourRepository;
 import com.dstym.pharmaciesondutyattica.util.DateUtils;
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.HttpMethod;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.WebRequest;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.htmlunit.BrowserVersion;
+import org.htmlunit.HttpMethod;
+import org.htmlunit.WebClient;
+import org.htmlunit.WebRequest;
+import org.htmlunit.html.HtmlPage;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Service;
 
-import java.net.URL;
+import java.net.URI;
 import java.time.Instant;
 import java.util.Optional;
 
@@ -45,7 +45,7 @@ public class ScraperService {
 
         try {
             webClient = getWebClient();
-            var requestSettings = new WebRequest(new URL(url), HttpMethod.POST);
+            var requestSettings = new WebRequest(URI.create(url).toURL(), HttpMethod.POST);
             requestSettings.setRequestBody("Date=" + date);
             var page = (HtmlPage) webClient.getPage(requestSettings);
 
@@ -87,7 +87,7 @@ public class ScraperService {
 
         var workingHours = workingHourRepository.findFirstByWorkingHourText(scrapedAvailablePharmacy.getWorkingHour().getWorkingHourText());
         if (!workingHours.isEmpty()) {
-            availablePharmacy.setWorkingHour(workingHours.get(0));
+            availablePharmacy.setWorkingHour(workingHours.getFirst());
         } else {
             saveWorkingHour(availablePharmacy, scrapedAvailablePharmacy.getWorkingHour());
         }
@@ -132,7 +132,7 @@ public class ScraperService {
         var lastPulledVersion = 0;
 
         if (!result.isEmpty()) {
-            var tempAvailablePharmacy = result.get(0);
+            var tempAvailablePharmacy = result.getFirst();
             lastPulledVersion = tempAvailablePharmacy.getPulledVersion();
         }
 
@@ -141,9 +141,10 @@ public class ScraperService {
 
     private WebClient getWebClient() {
         var webClient = new WebClient(BrowserVersion.CHROME);
+        webClient.getOptions().setJavaScriptEnabled(false);
         webClient.getOptions().setRedirectEnabled(true);
-        webClient.getOptions().setJavaScriptEnabled(true);
         webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnScriptError(false);
 
         return webClient;
     }

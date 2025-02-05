@@ -1,7 +1,7 @@
 changeLogFile: src/main/resources/liquibase/liquibase-changeLog.mysql.sql
 diffChangeLogFile: src/main/resources/liquibase/liquibase-changeLog.mysql.sql
 outputChangeLogFile: src/main/resources/liquibase/liquibase-new-changeLog.mysql.sql
-url: jdbc:mysql://localhost:3306/pharmacies
+url: jdbc:mysql://localhost:3306/pharmacies?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
 defaultSchemaName: pharmacies
 username: developer
 password: developer

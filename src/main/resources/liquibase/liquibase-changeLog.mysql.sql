@@ -1,6 +1,6 @@
 -- liquibase formatted sql
 
--- changeset stavr:1674487788236-1
+-- changeset stavr:1738775484607-1
 CREATE TABLE `available-pharmacies`
 (
     id                BIGINT AUTO_INCREMENT NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE `available-pharmacies`
     CONSTRAINT `available-pharmaciesPK` PRIMARY KEY (id)
 );
 
--- changeset stavr:1674487788236-2
+-- changeset stavr:1738775484607-2
 CREATE TABLE pharmacies
 (
     id             INT AUTO_INCREMENT NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE pharmacies
     CONSTRAINT pharmaciesPK PRIMARY KEY (id)
 );
 
--- changeset stavr:1674487788236-3
+-- changeset stavr:1738775484607-3
 CREATE TABLE `working-hours`
 (
     id                  INT AUTO_INCREMENT NOT NULL,
@@ -30,11 +30,11 @@ CREATE TABLE `working-hours`
     CONSTRAINT `working-hoursPK` PRIMARY KEY (id)
 );
 
--- changeset stavr:1674487788236-4
+-- changeset stavr:1738775484607-4
 ALTER TABLE `available-pharmacies`
     ADD CONSTRAINT FK7wtid4pxs9fx8t1rhxwq32s6g FOREIGN KEY (`working-hour-id`) REFERENCES `working-hours` (id);
 
--- changeset stavr:1674487788236-5
+-- changeset stavr:1738775484607-5
 ALTER TABLE `available-pharmacies`
     ADD CONSTRAINT FKfk39uiju5awbrgcwmf65oqdr8 FOREIGN KEY (`pharmacy-id`) REFERENCES pharmacies (id);
 

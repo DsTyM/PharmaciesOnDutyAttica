@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.3</version>
+        <version>3.4.2</version>
         <relativePath/>
         <!-- lookup parent from repository -->
     </parent>
@@ -19,10 +19,10 @@
 
     <properties>
         <java.version>21</java.version>
-        <spring-boot.version>3.2.3</spring-boot.version>
-        <liquibase.version>4.25.1</liquibase.version>
-        <springdoc-openapi.version>2.3.0</springdoc-openapi.version>
-        <jakarta-validation-api.version>3.0.2</jakarta-validation-api.version>
+        <spring-boot.version>3.4.2</spring-boot.version>
+        <liquibase.version>4.27.0</liquibase.version>
+        <springdoc-openapi.version>2.8.4</springdoc-openapi.version>
+        <jakarta-validation-api.version>3.1.1</jakarta-validation-api.version>
     </properties>
 
     <dependencies>
@@ -68,14 +68,14 @@
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>1.17.2</version>
+            <version>1.18.3</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/net.sourceforge.htmlunit/htmlunit -->
+        <!-- https://mvnrepository.com/artifact/org.htmlunit/htmlunit -->
         <dependency>
-            <groupId>net.sourceforge.htmlunit</groupId>
+            <groupId>org.htmlunit</groupId>
             <artifactId>htmlunit</artifactId>
-            <version>2.70.0</version>
+            <version>4.9.0</version>
         </dependency>
 
         <dependency>
@@ -130,7 +130,7 @@
         <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>8.0.1.Final</version>
+            <version>8.0.2.Final</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.ehcache/ehcache -->

@@ -1,0 +1,3 @@
+GRANT ALL PRIVILEGES ON * . * TO 'developer'@'%';
+
+FLUSH PRIVILEGES;
