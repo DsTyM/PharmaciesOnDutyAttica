@@ -14,5 +14,5 @@ public interface PharmacyRepository extends JpaRepository<Pharmacy, Integer> {
             "where (p.region=:region or :region is null)")
     Page<Pharmacy> findAll(String region, @Nullable Pageable pageable);
 
-    List<Pharmacy> findAllByName(String name);
+    List<Pharmacy> findAllByNameIn(List<String> names);
 }

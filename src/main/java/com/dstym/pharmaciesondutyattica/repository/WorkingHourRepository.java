@@ -13,5 +13,5 @@ public interface WorkingHourRepository extends JpaRepository<WorkingHour, Intege
     @Query(value = "select wh from WorkingHour wh")
     Page<WorkingHour> findAll(@Nullable Pageable pageable);
 
-    List<WorkingHour> findFirstByWorkingHourText(String workingHourText);
+    List<WorkingHour> findAllByWorkingHourTextIn(List<String> workingHourTexts);
 }

@@ -21,7 +21,10 @@ import org.springframework.stereotype.Service;
 
 import java.net.URI;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.springframework.util.CollectionUtils.isEmpty;
 
@@ -56,9 +59,8 @@ public class ScraperService {
             var jsoupdoc = Jsoup.parse(xmlPage);
             var elements = jsoupdoc.select("html > body > div:nth-of-type(2) > div > div");
             if (!isEmpty(elements)) {
-                for (var element : elements) {
-                    saveAvailablePharmacy(date, lastPulledVersion, element);
-                }
+                var scrapedAvailablePharmacies = elements.stream().map(this::getScrapedAvailablePharmacy).toList();
+                saveAvailablePharmacies(date, lastPulledVersion, scrapedAvailablePharmacies);
 
                 log.info("Available pharmacies have been updated for {}.", date);
             } else {
@@ -72,35 +74,44 @@ public class ScraperService {
         }
     }
 
-    private void saveAvailablePharmacy(String date, Integer lastPulledVersion, Element element) {
-        var availablePharmacy = new AvailablePharmacy();
-        availablePharmacy.setDate(DateUtils.stringDateToInstant(date));
-        availablePharmacy.setPulledVersion(lastPulledVersion + 1);
+    private void saveAvailablePharmacies(String date, Integer lastPulledVersion, List<AvailablePharmacy> availablePharmacies) {
+        var pharmacyNames = availablePharmacies.stream().map(AvailablePharmacy::getPharmacy).map(Pharmacy::getName).toList();
+        var pharmacies = pharmacyRepository.findAllByNameIn(pharmacyNames);
+        var pharmaciesMap = pharmacies.stream()
+                .collect(Collectors.toMap(this::getPharmacyText, pharmacy -> pharmacy, (existing, replacement) -> existing));
 
-        var scrapedAvailablePharmacy = getScrapedAvailablePharmacy(element);
+        var workingHoursTexts = availablePharmacies.stream().map(AvailablePharmacy::getWorkingHour).map(WorkingHour::getWorkingHourText).toList();
+        var workingHours = workingHourRepository.findAllByWorkingHourTextIn(workingHoursTexts);
+        var workingHoursMap = workingHours.stream().collect(Collectors.toMap(WorkingHour::getWorkingHourText, workingHour -> workingHour));
 
-        var pharmacies = pharmacyRepository.findAllByName(scrapedAvailablePharmacy.getPharmacy().getName());
+        List<Pharmacy> newPharmacies = new ArrayList<>();
+        List<WorkingHour> newWorkingHours = new ArrayList<>();
 
-        for (var pharmacy : pharmacies) {
-            if (pharmacy.getRegion().equals(scrapedAvailablePharmacy.getPharmacy().getRegion())
-                    && pharmacy.getAddress().equals(scrapedAvailablePharmacy.getPharmacy().getAddress())
-                    && pharmacy.getPhoneNumber().equals(scrapedAvailablePharmacy.getPharmacy().getPhoneNumber())) {
-                availablePharmacy.setPharmacy(pharmacy);
+        for (var availablePharmacy : availablePharmacies) {
+            availablePharmacy.setDate(DateUtils.stringDateToInstant(date));
+            availablePharmacy.setPulledVersion(lastPulledVersion + 1);
+
+            if (pharmaciesMap.containsKey(getPharmacyText(availablePharmacy.getPharmacy()))) {
+                var candidatePharmacy = pharmaciesMap.get(getPharmacyText(availablePharmacy.getPharmacy()));
+                availablePharmacy.setPharmacy(candidatePharmacy);
+            } else {
+                newPharmacies.add(availablePharmacy.getPharmacy());
+                pharmaciesMap.put(getPharmacyText(availablePharmacy.getPharmacy()), availablePharmacy.getPharmacy());
+            }
+
+            if (workingHoursMap.containsKey(availablePharmacy.getWorkingHour().getWorkingHourText())) {
+                var candidateWorkingHour = workingHoursMap.get(availablePharmacy.getWorkingHour().getWorkingHourText());
+                availablePharmacy.setWorkingHour(candidateWorkingHour);
+            } else {
+                newWorkingHours.add(availablePharmacy.getWorkingHour());
+                workingHoursMap.put(availablePharmacy.getWorkingHour().getWorkingHourText(), availablePharmacy.getWorkingHour());
             }
         }
 
-        if (availablePharmacy.getPharmacy() == null) {
-            savePharmacy(availablePharmacy, scrapedAvailablePharmacy.getPharmacy());
-        }
+        pharmacyRepository.saveAll(newPharmacies);
+        workingHourRepository.saveAll(newWorkingHours);
 
-        var workingHours = workingHourRepository.findFirstByWorkingHourText(scrapedAvailablePharmacy.getWorkingHour().getWorkingHourText());
-        if (!workingHours.isEmpty()) {
-            availablePharmacy.setWorkingHour(workingHours.getFirst());
-        } else {
-            saveWorkingHour(availablePharmacy, scrapedAvailablePharmacy.getWorkingHour());
-        }
-
-        availablePharmacyRepository.save(availablePharmacy);
+        availablePharmacyRepository.saveAll(availablePharmacies);
     }
 
     private AvailablePharmacy getScrapedAvailablePharmacy(Element element) {
@@ -120,19 +131,8 @@ public class ScraperService {
         return availablePharmacy;
     }
 
-    private void saveWorkingHour(AvailablePharmacy availablePharmacy, WorkingHour scrapedWorkingHour) {
-        var newWorkingHour = new WorkingHour();
-        newWorkingHour.setWorkingHourText(scrapedWorkingHour.getWorkingHourText());
-        availablePharmacy.setWorkingHour(workingHourRepository.save(newWorkingHour));
-    }
-
-    private void savePharmacy(AvailablePharmacy availablePharmacy, Pharmacy scrappedPharmacy) {
-        var newPharmacy = new Pharmacy();
-        newPharmacy.setName(scrappedPharmacy.getName());
-        newPharmacy.setRegion(scrappedPharmacy.getRegion());
-        newPharmacy.setAddress(scrappedPharmacy.getAddress());
-        newPharmacy.setPhoneNumber(scrappedPharmacy.getPhoneNumber());
-        availablePharmacy.setPharmacy(pharmacyRepository.save(newPharmacy));
+    private String getPharmacyText(Pharmacy pharmacy) {
+        return pharmacy.getName() + " " + pharmacy.getRegion() + " " + pharmacy.getAddress() + " " + pharmacy.getPhoneNumber();
     }
 
     private int getLastPulledVersion(Instant date) {
@@ -149,8 +149,8 @@ public class ScraperService {
 
     private WebClient getWebClient() {
         var webClient = new WebClient(BrowserVersion.CHROME);
-        webClient.getOptions().setJavaScriptEnabled(true);
-        webClient.getOptions().setRedirectEnabled(true);
+        webClient.getOptions().setJavaScriptEnabled(false);
+        webClient.getOptions().setRedirectEnabled(false);
         webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         webClient.getOptions().setThrowExceptionOnScriptError(false);
 
