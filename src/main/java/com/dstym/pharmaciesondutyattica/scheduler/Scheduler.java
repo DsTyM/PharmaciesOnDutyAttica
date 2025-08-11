@@ -40,7 +40,7 @@ public class Scheduler {
         clearCache();
     }
 
-    // Run only once after startup and get the pharmacies on duty for the today and the next 6 days.
+    // Run only once after startup and get the pharmacies on duty for today and the next 6 days.
     @EventListener(ApplicationReadyEvent.class)
     public void getAvailablePharmaciesAfterStartup() {
         var numOfDays = 7;

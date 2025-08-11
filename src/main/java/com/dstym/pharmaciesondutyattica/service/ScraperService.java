@@ -23,6 +23,8 @@ import java.net.URI;
 import java.time.Instant;
 import java.util.Optional;
 
+import static org.springframework.util.CollectionUtils.isEmpty;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -39,26 +41,32 @@ public class ScraperService {
 
     public void saveAvailablePharmacies(Integer daysFromToday) {
         WebClient webClient = null;
-        final var url = "http://fsa-efimeries.gr";
+        final var url = "https://fsa-efimeries.gr/Home/FilteredHomeResults";
         var date = DateUtils.dateToString(DateUtils.getDateFromTodayPlusDays(daysFromToday));
         var lastPulledVersion = getLastPulledVersion(DateUtils.stringDateToInstant(date));
 
         try {
             webClient = getWebClient();
             var requestSettings = new WebRequest(URI.create(url).toURL(), HttpMethod.POST);
-            requestSettings.setRequestBody("Date=" + date);
+            requestSettings.setRequestBody("IsOpen=false&Date=" + date);
+
             var page = (HtmlPage) webClient.getPage(requestSettings);
 
-            var jsoupdoc = Jsoup.parse(page.asXml());
-            var elements = jsoupdoc.select("html body div main div table tbody tr");
-            for (var element : elements) {
-                saveAvailablePharmacy(date, lastPulledVersion, element);
-            }
+            var xmlPage = page.asXml();
+            var jsoupdoc = Jsoup.parse(xmlPage);
+            var elements = jsoupdoc.select("html > body > div:nth-of-type(2) > div > div");
+            if (!isEmpty(elements)) {
+                for (var element : elements) {
+                    saveAvailablePharmacy(date, lastPulledVersion, element);
+                }
 
-            log.info("Available pharmacies have been updated for " + date + ".");
+                log.info("Available pharmacies have been updated for {}.", date);
+            } else {
+                log.error("Could not find available pharmacies for {}.", date);
+            }
         } catch (Exception exception) {
             log.error(ExceptionUtils.getStackTrace(exception));
-            log.info("Could not update available pharmacies for " + date + ".");
+            log.error("Could not update available pharmacies for {}.", date);
         } finally {
             Optional.ofNullable(webClient).ifPresent(WebClient::close);
         }
@@ -99,14 +107,14 @@ public class ScraperService {
         var availablePharmacy = new AvailablePharmacy();
 
         var pharmacy = new Pharmacy();
-        pharmacy.setRegion(element.select("td").get(2).text().trim());
-        pharmacy.setName(element.select("td").get(3).text().trim());
-        pharmacy.setAddress(element.select("td").get(4).text().trim());
-        pharmacy.setPhoneNumber(element.select("td").get(5).text().trim());
+        pharmacy.setRegion(element.select("div > div:nth-of-type(1) > div:nth-of-type(2)").getFirst().text().trim());
+        pharmacy.setName(element.select("div > div:nth-of-type(1) > div:nth-of-type(3) > div > span:nth-of-type(1)").getFirst().text().trim());
+        pharmacy.setAddress(element.select("div > div:nth-of-type(1) > div:nth-of-type(1) > h6").getFirst().text().trim());
+        pharmacy.setPhoneNumber(element.select("div > div:nth-of-type(1) > div:nth-of-type(3) > div > h6").getFirst().text().trim());
         availablePharmacy.setPharmacy(pharmacy);
 
         var workingHour = new WorkingHour();
-        workingHour.setWorkingHourText(element.select("td").get(6).text().trim());
+        workingHour.setWorkingHourText(element.select("div > div:nth-of-type(1) > div:nth-of-type(3) > div > span:nth-of-type(2)").getFirst().text().trim());
         availablePharmacy.setWorkingHour(workingHour);
 
         return availablePharmacy;
@@ -141,7 +149,7 @@ public class ScraperService {
 
     private WebClient getWebClient() {
         var webClient = new WebClient(BrowserVersion.CHROME);
-        webClient.getOptions().setJavaScriptEnabled(false);
+        webClient.getOptions().setJavaScriptEnabled(true);
         webClient.getOptions().setRedirectEnabled(true);
         webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         webClient.getOptions().setThrowExceptionOnScriptError(false);
