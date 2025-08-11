@@ -5,6 +5,8 @@ import com.dstym.pharmaciesondutyattica.entity.AvailablePharmacy;
 import com.dstym.pharmaciesondutyattica.entity.Pharmacy;
 import com.dstym.pharmaciesondutyattica.entity.WorkingHour;
 import com.dstym.pharmaciesondutyattica.repository.AvailablePharmacyRepository;
+import com.dstym.pharmaciesondutyattica.repository.PharmacyRepository;
+import com.dstym.pharmaciesondutyattica.repository.WorkingHourRepository;
 import com.dstym.pharmaciesondutyattica.util.DateUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,6 +37,12 @@ class AvailablePharmacyServiceTest {
     @Autowired
     private AvailablePharmacyRepository availablePharmacyRepository;
 
+    @Autowired
+    private WorkingHourRepository workingHourRepository;
+
+    @Autowired
+    private PharmacyRepository pharmacyRepository;
+
     @BeforeEach
     void beforeEach() {
         availablePharmacyRepository.deleteAll();
@@ -45,15 +53,16 @@ class AvailablePharmacyServiceTest {
         var date = "2020-01-18";
         var pulledVersion = 1;
 
-        var pharmacy1 = new Pharmacy(4050, "ΣΠΥΡΟΣ ΝΙΚΟΛΑΚΟΠΟΥΛΟΣ", "ΠΕΤΡΟΥ ΚΑΡΑΓΙΩΡΓΟΥ 147",
-                "ΠΑΓΚΡΑΤΙ", "22123 12345");
-        var workingHour1 = new WorkingHour(3, "8 ΤΟ ΠΡΩΙ ΜΕ 9 ΤΟ ΒΡΑΔΥ");
-        var availablePharmacy1 = new AvailablePharmacy(100L, pharmacy1, workingHour1, DateUtils.stringDateToInstant(date), pulledVersion);
+        var pharmacy1 = new Pharmacy(null, "ΣΠΥΡΟΣ ΝΙΚΟΛΑΚΟΠΟΥΛΟΣ", "ΠΕΤΡΟΥ ΚΑΡΑΓΙΩΡΓΟΥ 147", "ΠΑΓΚΡΑΤΙ", "22123 12345");
+        var workingHour1 = new WorkingHour(null, "8 ΤΟ ΠΡΩΙ ΜΕ 9 ΤΟ ΒΡΑΔΥ");
+        var availablePharmacy1 = new AvailablePharmacy(null, pharmacy1, workingHour1, DateUtils.stringDateToInstant(date), pulledVersion);
 
-        var pharmacy2 = new Pharmacy(6017, "ΠΕΤΡΟΣ ΠΑΠΑΝΙΚΟΛΑΣ", "ΧΡΗΣΤΟΥ ΜΟΝΤΕΧΡΗΣΤΟΥ 1",
-                "ΘΗΣΕΙΟ", "223430 9876");
-        var workingHour2 = new WorkingHour(19, "8 ΤΟ ΠΡΩΙ ΜΕ 2 ΤΟ ΜΕΣΗΜΕΡΙ ΚΑΙ 5 ΤΟ ΑΠΟΓΕΥΜΑ ΜΕ 9 ΤΟ ΒΡΑΔΥ");
-        var availablePharmacy2 = new AvailablePharmacy(101L, pharmacy2, workingHour2, DateUtils.stringDateToInstant(date), pulledVersion);
+        var pharmacy2 = new Pharmacy(null, "ΠΕΤΡΟΣ ΠΑΠΑΝΙΚΟΛΑΣ", "ΧΡΗΣΤΟΥ ΜΟΝΤΕΧΡΗΣΤΟΥ 1", "ΘΗΣΕΙΟ", "223430 9876");
+        var workingHour2 = new WorkingHour(null, "8 ΤΟ ΠΡΩΙ ΜΕ 2 ΤΟ ΜΕΣΗΜΕΡΙ ΚΑΙ 5 ΤΟ ΑΠΟΓΕΥΜΑ ΜΕ 9 ΤΟ ΒΡΑΔΥ");
+        var availablePharmacy2 = new AvailablePharmacy(null, pharmacy2, workingHour2, DateUtils.stringDateToInstant(date), pulledVersion);
+
+        workingHourRepository.saveAll(List.of(workingHour1, workingHour2));
+        pharmacyRepository.saveAll(List.of(pharmacy1, pharmacy2));
 
         availablePharmacyRepository.saveAll(List.of(availablePharmacy1, availablePharmacy2));
     }
@@ -82,7 +91,7 @@ class AvailablePharmacyServiceTest {
 
     @Test
     public void testFindAllByRegionAndDate_validDate_noRegionSpecified() {
-        var date = availablePharmacyRepository.findAll().get(0).getDate();
+        var date = availablePharmacyRepository.findAll().getFirst().getDate();
         var availablePharmacies = availablePharmacyService.findAllByRegionAndDate(null, date, null);
 
         assertAvailablePharmaciesProperties(availablePharmacyService.findAll().get(0), availablePharmacies.getContent().get(0));
@@ -91,7 +100,7 @@ class AvailablePharmacyServiceTest {
 
     @Test
     public void testFindAllByRegionAndDate_nonValidDate_noRegionSpecified() {
-        var date = availablePharmacyRepository.findAll().get(0).getDate();
+        var date = availablePharmacyRepository.findAll().getFirst().getDate();
 
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> availablePharmacyService
                 .findAllByRegionAndDate("all", date, null));
@@ -101,7 +110,7 @@ class AvailablePharmacyServiceTest {
 
     @Test
     public void testFindAllByRegionAndDate_validDate_nonValidRegionSpecified() {
-        var date = availablePharmacyRepository.findAll().get(0).getDate();
+        var date = availablePharmacyRepository.findAll().getFirst().getDate();
         var region = "ΚΑΤΙ";
 
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () ->

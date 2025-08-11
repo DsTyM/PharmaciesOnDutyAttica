@@ -16,6 +16,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -43,8 +45,9 @@ class WorkingHourServiceTest {
     }
 
     private void createWorkingHours() {
-        workingHourRepository.save(new WorkingHour(0, "8 ΤΟ ΠΡΩΙ ΜΕ 9 ΤΟ ΒΡΑΔΥ"));
-        workingHourRepository.save(new WorkingHour(0, "8 ΤΟ ΠΡΩΙ ΜΕ 2 ΤΟ ΜΕΣΗΜΕΡΙ ΚΑΙ 5 ΤΟ ΑΠΟΓΕΥΜΑ ΜΕ 9 ΤΟ ΒΡΑΔΥ"));
+        var workingHour1 = new WorkingHour(null, "8 ΤΟ ΠΡΩΙ ΜΕ 9 ΤΟ ΒΡΑΔΥ");
+        var workingHour2 = new WorkingHour(null, "8 ΤΟ ΠΡΩΙ ΜΕ 2 ΤΟ ΜΕΣΗΜΕΡΙ ΚΑΙ 5 ΤΟ ΑΠΟΓΕΥΜΑ ΜΕ 9 ΤΟ ΒΡΑΔΥ");
+        workingHourRepository.saveAll(List.of(workingHour1, workingHour2));
     }
 
     private void assertWorkingHoursProperties(WorkingHour expectedWorkingHour, WorkingHour actualWorkingHour) {
@@ -63,7 +66,7 @@ class WorkingHourServiceTest {
 
     @Test
     public void testFindById_validId() {
-        var id = workingHourRepository.findAll().get(0).getId();
+        var id = workingHourRepository.findAll().getFirst().getId();
 
         assertWorkingHoursProperties(workingHourRepository.findById(id).get(), workingHourService.findById(id));
     }

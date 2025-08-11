@@ -16,6 +16,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -51,10 +53,11 @@ class PharmacyServiceTest {
     }
 
     private void createPharmacies() {
-        pharmacyRepository.save(new Pharmacy(4050, "ΣΠΥΡΟΣ ΝΙΚΟΛΑΚΟΠΟΥΛΟΣ", "ΠΕΤΡΟΥ ΚΑΡΑΓΙΩΡΓΟΥ 147",
-                "ΠΑΓΚΡΑΤΙ", "22123 12345"));
-        pharmacyRepository.save(new Pharmacy(6017, "ΠΕΤΡΟΣ ΠΑΠΑΝΙΚΟΛΑΣ", "ΧΡΗΣΤΟΥ ΜΟΝΤΕΧΡΗΣΤΟΥ 1",
-                "ΘΗΣΕΙΟ", "223430 9876"));
+        var pharmacy1 = new Pharmacy(null, "ΣΠΥΡΟΣ ΝΙΚΟΛΑΚΟΠΟΥΛΟΣ", "ΠΕΤΡΟΥ ΚΑΡΑΓΙΩΡΓΟΥ 147",
+                "ΠΑΓΚΡΑΤΙ", "22123 12345");
+        var pharmacy2 = new Pharmacy(null, "ΠΕΤΡΟΣ ΠΑΠΑΝΙΚΟΛΑΣ", "ΧΡΗΣΤΟΥ ΜΟΝΤΕΧΡΗΣΤΟΥ 1",
+                "ΘΗΣΕΙΟ", "223430 9876");
+        pharmacyRepository.saveAll(List.of(pharmacy1, pharmacy2));
     }
 
     @Test
@@ -68,7 +71,7 @@ class PharmacyServiceTest {
 
     @Test
     public void testFindById_validId() {
-        var id = pharmacyRepository.findAll().get(0).getId();
+        var id = pharmacyRepository.findAll().getFirst().getId();
 
         assertPharmaciesProperties(pharmacyRepository.findById(id).get(), pharmacyService.findById(id));
     }
