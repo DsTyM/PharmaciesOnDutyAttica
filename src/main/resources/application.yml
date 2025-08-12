@@ -8,8 +8,9 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     open-in-view: true
-  liquibase:
-    change-log: classpath:liquibase/liquibase-changeLog.mysql.sql
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
 
 management:
   endpoints:
@@ -34,12 +35,6 @@ server:
 logging:
   level:
     org:
-      #      hibernate:
-      #        SQL: DEBUG
-      #        type:
-      #          descriptor:
-      #            sql:
-      #              BasicBinder: TRACE
       apache:
         http: off
       htmlunit: off
@@ -47,6 +42,9 @@ logging:
 ---
 
 spring:
+  config:
+    activate:
+      on-profile: testing
   h2:
     console:
       enabled: true
@@ -60,8 +58,6 @@ spring:
       ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-  liquibase:
-    enabled: false
   datasource:
     url: jdbc:h2:mem:test
     username: sa
@@ -69,6 +65,5 @@ spring:
     driver-class-name: org.h2.Driver
   cache:
     type: NONE
-  config:
-    activate:
-      on-profile: testing
+  flyway:
+    enabled: false
