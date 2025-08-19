@@ -22,6 +22,13 @@ import java.util.Optional;
 public class AvailablePharmacyService {
     private final AvailablePharmacyRepository availablePharmacyRepository;
 
+    /**
+     * Retrieves the latest pulled version for a given date.
+     *
+     * @param date the date for which to retrieve the latest pulled version.
+     * @return the latest pulled version as an integer.
+     * @throws ResponseStatusException if no available pharmacies are found for the given date.
+     */
     private int getLastPulledVersion(Instant date) {
         var result = availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date);
 

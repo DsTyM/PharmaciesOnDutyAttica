@@ -18,6 +18,11 @@ public class Scheduler {
     private final ScraperService scraperService;
     private final CacheManager cacheManager;
 
+    /**
+     * Clears specific caches managed by the `CacheManager`.
+     * <p>
+     * If any of the caches are not found, a `NullPointerException` is thrown.
+     */
     public void clearCache() {
         Objects.requireNonNull(cacheManager.getCache("workingHourCache")).clear();
         Objects.requireNonNull(cacheManager.getCache("workingHoursCache")).clear();

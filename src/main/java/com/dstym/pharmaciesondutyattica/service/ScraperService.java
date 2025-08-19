@@ -36,12 +36,31 @@ public class ScraperService {
     private final PharmacyRepository pharmacyRepository;
     private final WorkingHourRepository workingHourRepository;
 
+    /**
+     * Saves available pharmacies for the last specified number of days.
+     * <p>
+     * This method iterates through the given number of days, starting from today,
+     * and calls the `saveAvailablePharmacies` method for each day.
+     *
+     * @param numOfDays the number of days for which to save available pharmacies, starting from today.
+     */
     public void saveAvailablePharmaciesForLastDays(Integer numOfDays) {
         for (var i = 0; i < numOfDays; i++) {
             saveAvailablePharmacies(i);
         }
     }
 
+    /**
+     * Saves available pharmacies for a specific day starting from today.
+     * <p>
+     * This method performs the following steps:
+     * - Constructs the request URL and date based on the given number of days from today.
+     * - Configures and sends an HTTP POST request to fetch pharmacy data.
+     * - Parses the HTML response to extract pharmacy details.
+     * - Saves the extracted pharmacy data to the database.
+     *
+     * @param daysFromToday the number of days from today for which to fetch and save available pharmacies.
+     */
     public void saveAvailablePharmacies(Integer daysFromToday) {
         WebClient webClient = null;
         final var url = "https://fsa-efimeries.gr/Home/FilteredHomeResults";
@@ -74,6 +93,19 @@ public class ScraperService {
         }
     }
 
+    /**
+     * Saves a list of available pharmacies to the database.
+     * <p>
+     * This method processes a list of `AvailablePharmacy` objects by:
+     * - Extracting pharmacy names and working hour texts.
+     * - Fetching existing pharmacies and working hours from the database.
+     * - Identifying new pharmacies and working hours to be added.
+     * - Saving new pharmacies, working hours, and the updated `AvailablePharmacy` objects to the database.
+     *
+     * @param date                the date associated with the available pharmacies.
+     * @param lastPulledVersion   the last pulled version to be incremented for the new records.
+     * @param availablePharmacies the list of `AvailablePharmacy` objects to be saved.
+     */
     private void saveAvailablePharmacies(String date, Integer lastPulledVersion, List<AvailablePharmacy> availablePharmacies) {
         var pharmacyNames = availablePharmacies.stream().map(AvailablePharmacy::getPharmacy).map(Pharmacy::getName).toList();
         var pharmacies = pharmacyRepository.findAllByNameIn(pharmacyNames);
@@ -114,6 +146,16 @@ public class ScraperService {
         availablePharmacyRepository.saveAll(availablePharmacies);
     }
 
+    /**
+     * Extracts and constructs an `AvailablePharmacy` object from an HTML element.
+     * <p>
+     * This method parses the provided HTML element to extract pharmacy details such as
+     * region, name, address, phone number, and working hours. These details are then
+     * used to populate an `AvailablePharmacy` object, which is returned.
+     *
+     * @param element the HTML element containing the pharmacy details.
+     * @return an `AvailablePharmacy` object populated with the extracted details.
+     */
     private AvailablePharmacy getScrapedAvailablePharmacy(Element element) {
         var availablePharmacy = new AvailablePharmacy();
 
@@ -131,10 +173,30 @@ public class ScraperService {
         return availablePharmacy;
     }
 
+    /**
+     * Constructs a unique text representation of a pharmacy.
+     * <p>
+     * This method concatenates the pharmacy's name, region, address, and phone number
+     * into a single string, separated by spaces. It is used to uniquely identify a pharmacy
+     * as a HashMap key.
+     *
+     * @param pharmacy the Pharmacy object whose details are to be concatenated.
+     * @return a string containing the pharmacy's name, region, address, and phone number.
+     */
     private String getPharmacyText(Pharmacy pharmacy) {
         return pharmacy.getName() + " " + pharmacy.getRegion() + " " + pharmacy.getAddress() + " " + pharmacy.getPhoneNumber();
     }
 
+    /**
+     * Retrieves the last pulled version for a given date.
+     * <p>
+     * This method queries the `AvailablePharmacyRepository` to find the most recent
+     * pulled version of available pharmacies for the specified date. If no records
+     * are found, it defaults to 0.
+     *
+     * @param date the date for which the last pulled version is to be retrieved.
+     * @return the last pulled version for the given date, or 0 if no records exist.
+     */
     private int getLastPulledVersion(Instant date) {
         var result = availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date);
         var lastPulledVersion = 0;
@@ -147,6 +209,11 @@ public class ScraperService {
         return lastPulledVersion;
     }
 
+    /**
+     * Creates and configures a WebClient instance for making HTTP requests.
+     *
+     * @return a configured WebClient instance.
+     */
     private WebClient getWebClient() {
         var webClient = new WebClient(BrowserVersion.CHROME);
         webClient.getOptions().setJavaScriptEnabled(false);
