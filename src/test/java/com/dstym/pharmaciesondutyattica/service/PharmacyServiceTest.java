@@ -73,7 +73,7 @@ class PharmacyServiceTest {
     public void testFindById_validId() {
         var id = pharmacyRepository.findAll().getFirst().getId();
 
-        assertPharmaciesProperties(pharmacyRepository.findById(id).get(), pharmacyService.findById(id));
+        assertPharmaciesProperties(pharmacyRepository.findById(id).orElseThrow(), pharmacyService.findById(id));
     }
 
     @Test

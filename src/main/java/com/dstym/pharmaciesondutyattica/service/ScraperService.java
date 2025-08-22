@@ -110,7 +110,7 @@ public class ScraperService {
         var pharmacyNames = availablePharmacies.stream().map(AvailablePharmacy::getPharmacy).map(Pharmacy::getName).toList();
         var pharmacies = pharmacyRepository.findAllByNameIn(pharmacyNames);
         var pharmaciesMap = pharmacies.stream()
-                .collect(Collectors.toMap(this::getPharmacyText, pharmacy -> pharmacy, (existing, replacement) -> existing));
+                .collect(Collectors.toMap(this::getPharmacyText, pharmacy -> pharmacy, (existing, _) -> existing));
 
         var workingHoursTexts = availablePharmacies.stream().map(AvailablePharmacy::getWorkingHour).map(WorkingHour::getWorkingHourText).toList();
         var workingHours = workingHourRepository.findAllByWorkingHourTextIn(workingHoursTexts);

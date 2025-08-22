@@ -68,7 +68,7 @@ class WorkingHourServiceTest {
     public void testFindById_validId() {
         var id = workingHourRepository.findAll().getFirst().getId();
 
-        assertWorkingHoursProperties(workingHourRepository.findById(id).get(), workingHourService.findById(id));
+        assertWorkingHoursProperties(workingHourRepository.findById(id).orElseThrow(), workingHourService.findById(id));
     }
 
     @Test

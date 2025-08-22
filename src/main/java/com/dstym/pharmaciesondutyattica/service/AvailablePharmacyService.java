@@ -36,7 +36,7 @@ public class AvailablePharmacyService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Did not find available pharmacies for date: " + DateUtils.instantToString(date));
         }
 
-        var tempAvailablePharmacy = result.get(0);
+        var tempAvailablePharmacy = result.getFirst();
         return tempAvailablePharmacy.getPulledVersion();
     }
 
