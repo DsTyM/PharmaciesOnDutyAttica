@@ -37,7 +37,7 @@ public class PharmacyRestController {
                             "region", "region,DESC"}))
             @RequestParam(required = false) String sort,
             @Parameter(hidden = true) @PageableDefault(size = 30) Pageable pageable) {
-        return ResponseEntity.ok(pharmacyService.findAll(region, pageable));
+        return ResponseEntity.ok(pharmacyService.getPharmacies(region, pageable));
     }
 
     @GetMapping("/pharmacies/{pharmacyId}")
@@ -46,6 +46,6 @@ public class PharmacyRestController {
     public ResponseEntity<PharmacyDto> getPharmacy(
             @Parameter(description = "Specify the Pharmacy ID.")
             @PathVariable Integer pharmacyId) {
-        return ResponseEntity.ok(pharmacyService.findById(pharmacyId));
+        return ResponseEntity.ok(pharmacyService.getPharmacy(pharmacyId));
     }
 }

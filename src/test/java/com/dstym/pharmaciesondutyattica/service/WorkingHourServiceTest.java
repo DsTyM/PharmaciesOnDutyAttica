@@ -1,6 +1,7 @@
 package com.dstym.pharmaciesondutyattica.service;
 
 import com.dstym.pharmaciesondutyattica.PharmaciesOnDutyAtticaApplication;
+import com.dstym.pharmaciesondutyattica.mapper.WorkingHourMapper;
 import com.dstym.pharmaciesondutyattica.model.WorkingHour;
 import com.dstym.pharmaciesondutyattica.repository.AvailablePharmacyRepository;
 import com.dstym.pharmaciesondutyattica.repository.WorkingHourRepository;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -36,6 +38,9 @@ class WorkingHourServiceTest {
     @Autowired
     private AvailablePharmacyRepository availablePharmacyRepository;
 
+    @Autowired
+    private WorkingHourMapper workingHourMapper;
+
     @BeforeEach
     void beforeEach() {
         availablePharmacyRepository.deleteAll();
@@ -56,26 +61,28 @@ class WorkingHourServiceTest {
     }
 
     @Test
-    public void testFindAll() {
-        var workingHours = workingHourService.findAll(null);
+    public void testGetWorkingHours() {
+        var workingHoursDtoPage = workingHourService.getWorkingHours(Pageable.unpaged());
+        var workingHours = workingHoursDtoPage.map(workingHourMapper::getworkingHour).toList();
 
-        assertEquals(workingHourRepository.findAll().size(), workingHours.getContent().size());
-        assertWorkingHoursProperties(workingHourRepository.findAll().get(0), workingHours.getContent().get(0));
-        assertWorkingHoursProperties(workingHourRepository.findAll().get(1), workingHours.getContent().get(1));
+        assertEquals(workingHourRepository.findAll().size(), workingHoursDtoPage.getContent().size());
+        assertWorkingHoursProperties(workingHourRepository.findAll().get(0), workingHours.get(0));
+        assertWorkingHoursProperties(workingHourRepository.findAll().get(1), workingHours.get(1));
     }
 
     @Test
-    public void testFindById_validId() {
+    public void testGetWorkingHour_validId() {
         var id = workingHourRepository.findAll().getFirst().getId();
+        var workingHour = workingHourMapper.getworkingHour(workingHourService.getWorkingHour(id));
 
-        assertWorkingHoursProperties(workingHourRepository.findById(id).orElseThrow(), workingHourService.findById(id));
+        assertWorkingHoursProperties(workingHourRepository.findById(id).orElseThrow(), workingHour);
     }
 
     @Test
-    public void testFindById_nonValidId() {
+    public void testGetWorkingHour_nonValidId() {
         var id = workingHourRepository.findAll().get(this.workingHourRepository.findAll().size() - 1).getId() + 1;
 
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> workingHourService.findById(id));
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> workingHourService.getWorkingHour(id));
 
         assertEquals(HttpStatus.NOT_FOUND.toString(), exception.getStatusCode().toString());
     }

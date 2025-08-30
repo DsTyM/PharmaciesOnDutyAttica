@@ -33,31 +33,12 @@ Here is an example of how it returns the pharmacies on duty:
       "pulledVersion": 2
     }
   ],
-  "pageable": {
-    "sort": {
-      "sorted": false,
-      "unsorted": true,
-      "empty": true
-    },
-    "offset": 0,
-    "pageSize": 30,
-    "pageNumber": 0,
-    "unpaged": false,
-    "paged": true
-  },
-  "totalPages": 4,
-  "totalElements": 106,
-  "last": false,
-  "size": 30,
-  "number": 0,
-  "sort": {
-    "sorted": false,
-    "unsorted": true,
-    "empty": true
-  },
-  "numberOfElements": 30,
-  "first": true,
-  "empty": false
+  "page": {
+    "size": 30,
+    "number": 0,
+    "totalElements": 78,
+    "totalPages": 3
+  }
 }
 ```
 

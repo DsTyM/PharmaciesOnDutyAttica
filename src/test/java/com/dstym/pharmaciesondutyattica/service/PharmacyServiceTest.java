@@ -1,6 +1,7 @@
 package com.dstym.pharmaciesondutyattica.service;
 
 import com.dstym.pharmaciesondutyattica.PharmaciesOnDutyAtticaApplication;
+import com.dstym.pharmaciesondutyattica.mapper.PharmacyMapper;
 import com.dstym.pharmaciesondutyattica.model.Pharmacy;
 import com.dstym.pharmaciesondutyattica.repository.AvailablePharmacyRepository;
 import com.dstym.pharmaciesondutyattica.repository.PharmacyRepository;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -36,6 +38,9 @@ class PharmacyServiceTest {
     @Autowired
     private AvailablePharmacyRepository availablePharmacyRepository;
 
+    @Autowired
+    private PharmacyMapper pharmacyMapper;
+
     private static void assertPharmaciesProperties(Pharmacy expectedPharmacy, Pharmacy actualPharmacy) {
         assertEquals(expectedPharmacy.getId(), actualPharmacy.getId());
         assertEquals(expectedPharmacy.getName(), actualPharmacy.getName());
@@ -61,26 +66,28 @@ class PharmacyServiceTest {
     }
 
     @Test
-    public void testFindAll() {
-        var pharmacies = pharmacyService.findAll(null, null);
+    public void testGetPharmacies() {
+        var pharmaciesDtoPage = pharmacyService.getPharmacies(null, Pageable.unpaged());
+        var pharmacies = pharmaciesDtoPage.map(pharmacyMapper::getPharmacy).toList();
 
-        assertEquals(pharmacyRepository.findAll().size(), pharmacies.getContent().size());
-        assertPharmaciesProperties(pharmacyRepository.findAll().get(0), pharmacies.getContent().get(0));
-        assertPharmaciesProperties(pharmacyRepository.findAll().get(1), pharmacies.getContent().get(1));
+        assertEquals(pharmacyRepository.findAll().size(), pharmacies.size());
+        assertPharmaciesProperties(pharmacyRepository.findAll().get(0), pharmacies.get(0));
+        assertPharmaciesProperties(pharmacyRepository.findAll().get(1), pharmacies.get(1));
     }
 
     @Test
-    public void testFindById_validId() {
+    public void testGetPharmacy_validId() {
         var id = pharmacyRepository.findAll().getFirst().getId();
+        var pharmacy = pharmacyMapper.getPharmacy(pharmacyService.getPharmacy(id));
 
-        assertPharmaciesProperties(pharmacyRepository.findById(id).orElseThrow(), pharmacyService.findById(id));
+        assertPharmaciesProperties(pharmacyRepository.findById(id).orElseThrow(), pharmacy);
     }
 
     @Test
-    public void testFindById_nonValidId() {
+    public void testGetPharmacy_nonValidId() {
         int id = pharmacyRepository.findAll().get(this.pharmacyRepository.findAll().size() - 1).getId() + 1;
 
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> pharmacyService.findById(id));
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> pharmacyService.getPharmacy(id));
 
         assertEquals(HttpStatus.NOT_FOUND.toString(), exception.getStatusCode().toString());
     }

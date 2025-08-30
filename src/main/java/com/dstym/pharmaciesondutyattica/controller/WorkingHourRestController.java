@@ -32,7 +32,7 @@ public class WorkingHourRestController {
                     allowableValues = {"workingHourText", "workingHourText,DESC"}))
             @RequestParam(required = false) String sort,
             @Parameter(hidden = true) @PageableDefault(size = 30) Pageable pageable) {
-        return ResponseEntity.ok(workingHourService.findAll(pageable));
+        return ResponseEntity.ok(workingHourService.getWorkingHours(pageable));
     }
 
     @GetMapping("/working-hours/{workingHourId}")
@@ -41,6 +41,6 @@ public class WorkingHourRestController {
     public ResponseEntity<WorkingHourDto> getWorkingHour(
             @Parameter(description = "Specify the Working Hour ID.")
             @PathVariable Integer workingHourId) {
-        return ResponseEntity.ok(workingHourService.findById(workingHourId));
+        return ResponseEntity.ok(workingHourService.getWorkingHour(workingHourId));
     }
 }

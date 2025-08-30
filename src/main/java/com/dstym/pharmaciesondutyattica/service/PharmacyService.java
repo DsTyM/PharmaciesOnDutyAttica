@@ -23,14 +23,14 @@ public class PharmacyService {
     private final PharmacyMapper pharmacyMapper;
 
     @Cacheable(value = "pharmacyCache", key = "#pharmacyId")
-    public PharmacyDto findById(Integer pharmacyId) {
+    public PharmacyDto getPharmacy(Integer pharmacyId) {
         return pharmacyRepository.findById(pharmacyId).map(pharmacyMapper::getPharmacyDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Did not find pharmacy with id: " + pharmacyId));
     }
 
     @Cacheable(value = "pharmaciesCache", key = "{#region, #pageable}")
-    public Page<PharmacyDto> findAll(String region, Pageable pageable) {
+    public Page<PharmacyDto> getPharmacies(String region, Pageable pageable) {
         region = Optional.ofNullable(region)
                 .map(r -> URLDecoder.decode(r.trim(), StandardCharsets.UTF_8))
                 .orElse(null);
@@ -40,11 +40,11 @@ public class PharmacyService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Did not find pharmacies."));
     }
 
-    public Pharmacy save(Pharmacy pharmacy) {
+    public Pharmacy createPharmacy(Pharmacy pharmacy) {
         return pharmacyRepository.save(pharmacy);
     }
 
-    public void deleteById(Integer pharmacyId) {
+    public void deletePharmacy(Integer pharmacyId) {
         pharmacyRepository.deleteById(pharmacyId);
     }
 }

@@ -27,7 +27,7 @@ public class AvailablePharmacyRestController {
     @GetMapping("/available-pharmacies")
     @Operation(summary = "Get Pharmacies On Duty",
             description = "Get the List of the Pharmacies on Duty. Today is the default date.")
-    public ResponseEntity<Page<AvailablePharmacyDto>> GetAvailablePharmacies(
+    public ResponseEntity<Page<AvailablePharmacyDto>> getAvailablePharmacies(
             @Parameter(description = "Specify the date (Date Format: YYYY-MM-DD).")
             @RequestParam(required = false) String date,
             @Parameter(description = "Specify a region.")
@@ -43,6 +43,6 @@ public class AvailablePharmacyRestController {
                             "workingHour.workingHourText", "workingHour.workingHourText,DESC"}))
             @RequestParam(required = false) String sort,
             @Parameter(hidden = true) @PageableDefault(size = 30) Pageable pageable) {
-        return ResponseEntity.ok(availablePharmacyService.findAllByRegionAndDate(region, DateUtils.stringDateToInstant(date), pageable));
+        return ResponseEntity.ok(availablePharmacyService.getAvailablePharmacies(region, DateUtils.stringDateToInstant(date), pageable));
     }
 }

@@ -1,6 +1,7 @@
 package com.dstym.pharmaciesondutyattica.service;
 
 import com.dstym.pharmaciesondutyattica.PharmaciesOnDutyAtticaApplication;
+import com.dstym.pharmaciesondutyattica.mapper.AvailablePharmacyMapper;
 import com.dstym.pharmaciesondutyattica.model.AvailablePharmacy;
 import com.dstym.pharmaciesondutyattica.model.Pharmacy;
 import com.dstym.pharmaciesondutyattica.model.WorkingHour;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -42,6 +44,9 @@ class AvailablePharmacyServiceTest {
 
     @Autowired
     private PharmacyRepository pharmacyRepository;
+
+    @Autowired
+    private AvailablePharmacyMapper availablePharmacyMapper;
 
     @BeforeEach
     void beforeEach() {
@@ -90,31 +95,33 @@ class AvailablePharmacyServiceTest {
     }
 
     @Test
-    public void testFindAllByRegionAndDate_validDate_noRegionSpecified() {
+    public void testGetPharmacies_validDate_noRegionSpecified() {
         var date = availablePharmacyRepository.findAll().getFirst().getDate();
-        var availablePharmacies = availablePharmacyService.findAllByRegionAndDate(null, date, null);
+        var availablePharmaciesDtoPage = availablePharmacyService.getAvailablePharmacies(null, date, Pageable.unpaged());
+        var availablePharmacies = availablePharmaciesDtoPage.map(availablePharmacyMapper::getAvailablePharmacy).toList();
 
-        assertAvailablePharmaciesProperties(availablePharmacyService.findAll().get(0), availablePharmacies.getContent().get(0));
-        assertAvailablePharmaciesProperties(availablePharmacyService.findAll().get(1), availablePharmacies.getContent().get(1));
+
+        assertAvailablePharmaciesProperties(availablePharmacyRepository.findAll().get(0), availablePharmacies.get(0));
+        assertAvailablePharmaciesProperties(availablePharmacyRepository.findAll().get(1), availablePharmacies.get(1));
     }
 
     @Test
-    public void testFindAllByRegionAndDate_nonValidDate_noRegionSpecified() {
+    public void testGetPharmacies_nonValidDate_noRegionSpecified() {
         var date = availablePharmacyRepository.findAll().getFirst().getDate();
 
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> availablePharmacyService
-                .findAllByRegionAndDate("all", date, null));
+                .getAvailablePharmacies("all", date, Pageable.unpaged()));
 
         assertEquals(HttpStatus.NOT_FOUND.toString(), exception.getStatusCode().toString());
     }
 
     @Test
-    public void testFindAllByRegionAndDate_validDate_nonValidRegionSpecified() {
+    public void testGetPharmacies_validDate_nonValidRegionSpecified() {
         var date = availablePharmacyRepository.findAll().getFirst().getDate();
         var region = "ΚΑΤΙ";
 
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () ->
-                availablePharmacyService.findAllByRegionAndDate(region, date, null));
+                availablePharmacyService.getAvailablePharmacies(region, date, Pageable.unpaged()));
 
         assertEquals(HttpStatus.NOT_FOUND.toString(), exception.getStatusCode().toString());
     }

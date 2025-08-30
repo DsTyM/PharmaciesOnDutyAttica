@@ -48,7 +48,7 @@ public class AvailablePharmacyService {
      * @throws ResponseStatusException if no pharmacies are found for the specified region and date.
      */
     @Cacheable(value = "availablePharmaciesCache", key = "{#region, #date, #pageable}")
-    public Page<AvailablePharmacyDto> findAllByRegionAndDate(String region, Instant date, Pageable pageable) {
+    public Page<AvailablePharmacyDto> getAvailablePharmacies(String region, Instant date, Pageable pageable) {
         region = Optional.ofNullable(region)
                 .map(r -> URLDecoder.decode(r.trim(), StandardCharsets.UTF_8))
                 .orElse(null);
@@ -66,18 +66,18 @@ public class AvailablePharmacyService {
                         "Did not find available pharmacies for date: " + DateUtils.instantToString(finalDate)));
     }
 
-    public AvailablePharmacyDto findById(Long availablePharmacyId) {
+    public AvailablePharmacyDto getAvailablePharmacy(Long availablePharmacyId) {
         return availablePharmacyRepository.findById(availablePharmacyId)
                 .map(availablePharmacyMapper::getAvailablePharmacyDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Did not find pharmacy with id: " + availablePharmacyId));
     }
 
-    public AvailablePharmacy save(AvailablePharmacy availablePharmacy) {
+    public AvailablePharmacy createAvailablePharmacy(AvailablePharmacy availablePharmacy) {
         return availablePharmacyRepository.save(availablePharmacy);
     }
 
-    public void deleteById(Long availablePharmacyId) {
+    public void deleteAvailablePharmacy(Long availablePharmacyId) {
         availablePharmacyRepository.deleteById(availablePharmacyId);
     }
 }

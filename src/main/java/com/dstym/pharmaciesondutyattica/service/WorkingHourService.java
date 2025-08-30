@@ -22,24 +22,24 @@ public class WorkingHourService {
 
     //    @Cacheable(value = "workingHoursCache", key = "'ALL'")
     @Cacheable(value = "workingHoursCache", key = "#pageable", condition = "#pageable != null")
-    public Page<WorkingHourDto> findAll(Pageable pageable) {
+    public Page<WorkingHourDto> getWorkingHours(Pageable pageable) {
         return Optional.of(workingHourRepository.findAll(pageable).map(workingHourMapper::getworkingHourDto))
                 .filter(Page::hasContent)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Did not find working hours."));
     }
 
     @Cacheable(value = "workingHourCache", key = "#workingHourId")
-    public WorkingHourDto findById(Integer workingHourId) {
+    public WorkingHourDto getWorkingHour(Integer workingHourId) {
         return workingHourRepository.findById(workingHourId).map(workingHourMapper::getworkingHourDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Did not find working hour with id: " + workingHourId));
     }
 
-    public WorkingHour save(WorkingHour workingHour) {
+    public WorkingHour createWorkingHour(WorkingHour workingHour) {
         return workingHourRepository.save(workingHour);
     }
 
-    public void deleteById(Integer workingHourId) {
+    public void deleteWorkingHour(Integer workingHourId) {
         workingHourRepository.deleteById(workingHourId);
     }
 }
