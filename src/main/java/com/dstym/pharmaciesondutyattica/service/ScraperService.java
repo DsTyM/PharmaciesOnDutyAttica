@@ -1,8 +1,8 @@
 package com.dstym.pharmaciesondutyattica.service;
 
-import com.dstym.pharmaciesondutyattica.entity.AvailablePharmacy;
-import com.dstym.pharmaciesondutyattica.entity.Pharmacy;
-import com.dstym.pharmaciesondutyattica.entity.WorkingHour;
+import com.dstym.pharmaciesondutyattica.model.AvailablePharmacy;
+import com.dstym.pharmaciesondutyattica.model.Pharmacy;
+import com.dstym.pharmaciesondutyattica.model.WorkingHour;
 import com.dstym.pharmaciesondutyattica.repository.AvailablePharmacyRepository;
 import com.dstym.pharmaciesondutyattica.repository.PharmacyRepository;
 import com.dstym.pharmaciesondutyattica.repository.WorkingHourRepository;
@@ -75,8 +75,8 @@ public class ScraperService {
             var page = (HtmlPage) webClient.getPage(requestSettings);
 
             var xmlPage = page.asXml();
-            var jsoupdoc = Jsoup.parse(xmlPage);
-            var elements = jsoupdoc.select("html > body > div:nth-of-type(2) > div > div");
+            var jsoupDoc = Jsoup.parse(xmlPage);
+            var elements = jsoupDoc.select("html > body > div:nth-of-type(2) > div > div");
             if (!isEmpty(elements)) {
                 var scrapedAvailablePharmacies = elements.stream().map(this::getScrapedAvailablePharmacy).toList();
                 saveAvailablePharmacies(date, lastPulledVersion, scrapedAvailablePharmacies);
@@ -198,15 +198,9 @@ public class ScraperService {
      * @return the last pulled version for the given date, or 0 if no records exist.
      */
     private int getLastPulledVersion(Instant date) {
-        var result = availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date);
-        var lastPulledVersion = 0;
-
-        if (!result.isEmpty()) {
-            var tempAvailablePharmacy = result.getFirst();
-            lastPulledVersion = tempAvailablePharmacy.getPulledVersion();
-        }
-
-        return lastPulledVersion;
+        return availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date)
+                .map(AvailablePharmacy::getPulledVersion)
+                .orElse(0);
     }
 
     /**

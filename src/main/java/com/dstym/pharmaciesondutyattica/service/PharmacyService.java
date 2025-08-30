@@ -1,6 +1,8 @@
 package com.dstym.pharmaciesondutyattica.service;
 
-import com.dstym.pharmaciesondutyattica.entity.Pharmacy;
+import com.dstym.pharmaciesondutyattica.dto.PharmacyDto;
+import com.dstym.pharmaciesondutyattica.mapper.PharmacyMapper;
+import com.dstym.pharmaciesondutyattica.model.Pharmacy;
 import com.dstym.pharmaciesondutyattica.repository.PharmacyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
@@ -18,42 +20,31 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PharmacyService {
     private final PharmacyRepository pharmacyRepository;
+    private final PharmacyMapper pharmacyMapper;
 
-    @Cacheable(value = "pharmacyCache", key = "#theId")
-    public Pharmacy findById(Integer theId) {
-        var result = pharmacyRepository.findById(theId);
-
-        Pharmacy pharmacy;
-
-        if (result.isPresent()) {
-            pharmacy = result.get();
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Did not find pharmacy with id: " + theId);
-        }
-
-        return pharmacy;
+    @Cacheable(value = "pharmacyCache", key = "#pharmacyId")
+    public PharmacyDto findById(Integer pharmacyId) {
+        return pharmacyRepository.findById(pharmacyId).map(pharmacyMapper::getPharmacyDto)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Did not find pharmacy with id: " + pharmacyId));
     }
 
     @Cacheable(value = "pharmaciesCache", key = "{#region, #pageable}")
-    public Page<Pharmacy> findAll(String region, Pageable pageable) {
+    public Page<PharmacyDto> findAll(String region, Pageable pageable) {
         region = Optional.ofNullable(region)
                 .map(r -> URLDecoder.decode(r.trim(), StandardCharsets.UTF_8))
                 .orElse(null);
 
-        var result = pharmacyRepository.findAll(region, pageable);
-
-        if (result.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Did not find pharmacies.");
-        }
-
-        return result;
+        return Optional.of(pharmacyRepository.findAll(region, pageable).map(pharmacyMapper::getPharmacyDto))
+                .filter(Page::hasContent)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Did not find pharmacies."));
     }
 
-    public void save(Pharmacy pharmacy) {
-        pharmacyRepository.save(pharmacy);
+    public Pharmacy save(Pharmacy pharmacy) {
+        return pharmacyRepository.save(pharmacy);
     }
 
-    public void deleteById(Integer theId) {
-        pharmacyRepository.deleteById(theId);
+    public void deleteById(Integer pharmacyId) {
+        pharmacyRepository.deleteById(pharmacyId);
     }
 }

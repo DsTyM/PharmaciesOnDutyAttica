@@ -1,6 +1,6 @@
 package com.dstym.pharmaciesondutyattica.controller;
 
-import com.dstym.pharmaciesondutyattica.entity.WorkingHour;
+import com.dstym.pharmaciesondutyattica.dto.WorkingHourDto;
 import com.dstym.pharmaciesondutyattica.service.WorkingHourService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -23,7 +23,7 @@ public class WorkingHourRestController {
     @GetMapping("/working-hours")
     @Operation(summary = "Get Working Hours",
             description = "Get the List of the available Working hours a Pharmacy can have.")
-    public ResponseEntity<Page<WorkingHour>> getWorkingHours(
+    public ResponseEntity<Page<WorkingHourDto>> getWorkingHours(
             @Parameter(description = "Specify page.")
             @RequestParam(required = false) String page,
             @Parameter(description = "Specify size.")
@@ -38,7 +38,7 @@ public class WorkingHourRestController {
     @GetMapping("/working-hours/{workingHourId}")
     @Operation(summary = "Find a Working Hour by Id",
             description = "Returns a specific Working Hour info by the given Id.")
-    public ResponseEntity<WorkingHour> getWorkingHour(
+    public ResponseEntity<WorkingHourDto> getWorkingHour(
             @Parameter(description = "Specify the Working Hour ID.")
             @PathVariable Integer workingHourId) {
         return ResponseEntity.ok(workingHourService.findById(workingHourId));

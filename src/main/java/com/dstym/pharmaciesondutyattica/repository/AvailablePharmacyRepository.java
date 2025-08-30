@@ -1,6 +1,6 @@
 package com.dstym.pharmaciesondutyattica.repository;
 
-import com.dstym.pharmaciesondutyattica.entity.AvailablePharmacy;
+import com.dstym.pharmaciesondutyattica.model.AvailablePharmacy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,10 +9,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.lang.Nullable;
 
 import java.time.Instant;
-import java.util.List;
+import java.util.Optional;
 
 public interface AvailablePharmacyRepository extends JpaRepository<AvailablePharmacy, Long> {
-    List<AvailablePharmacy> findFirstByDateOrderByPulledVersionDesc(Instant date);
+    Optional<AvailablePharmacy> findFirstByDateOrderByPulledVersionDesc(Instant date);
 
     @Query(value = "select ap from AvailablePharmacy ap " +
             "where ap.pulledVersion=:pulledVersion " +
