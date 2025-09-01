@@ -8,6 +8,9 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     open-in-view: true
+  threads:
+    virtual:
+      enabled: true
   flyway:
     enabled: true
     locations: classpath:db/migration
