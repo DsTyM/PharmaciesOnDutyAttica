@@ -2,7 +2,7 @@
 FROM eclipse-temurin:24.0.2_12-jdk as build
 # https://hub.docker.com/_/eclipse-temurin
 
-# Set the current working directory inside the image
+# Set the current working directory for build
 WORKDIR /app
 
 # Copy maven executable to the image
@@ -15,9 +15,24 @@ COPY pom.xml .
 # Give the required rights to mvnw
 RUN chmod +x ./mvnw
 
+# Pre-download the dependencies for caching
+RUN ./mvnw dependency:resolve dependency:resolve-plugins
+
 # Copy the project source
 COPY src src
 
 # Package the application
 RUN ./mvnw clean package -DskipTests
-ENTRYPOINT ["sh", "-c" ,"java -jar target/pharmacies-on-duty-attica-1.0.0.jar --spring.datasource.url='jdbc:mysql://pharmacies-on-duty-attica-db:3306/pharmacies?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true'"]
+
+
+# Stage 2: Run the application
+FROM eclipse-temurin:24.0.2_12-jre
+
+# Set the current working directory for run
+WORKDIR /app
+
+# Copy jar from build stage
+COPY --from=build /app/target/pharmacies-on-duty-attica-1.0.0.jar app.jar
+
+# Run the application
+ENTRYPOINT ["java", "-jar", "app.jar"]

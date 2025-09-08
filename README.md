@@ -56,7 +56,7 @@ cd PharmaciesOnDutyAttica
 To start the project using docker, just run:
 
 ```shell
-docker-compose up --build
+docker-compose up
 ```
 
 The application can be accessed on:
