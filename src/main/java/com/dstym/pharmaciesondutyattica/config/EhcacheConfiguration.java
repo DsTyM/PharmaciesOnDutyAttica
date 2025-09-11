@@ -1,11 +1,12 @@
 package com.dstym.pharmaciesondutyattica.config;
 
-import com.dstym.pharmaciesondutyattica.model.Pharmacy;
-import com.dstym.pharmaciesondutyattica.model.WorkingHour;
 import java.time.Duration;
 import java.util.ArrayList;
 import javax.cache.CacheManager;
 import javax.cache.Caching;
+
+import com.dstym.pharmaciesondutyattica.dto.PharmacyDto;
+import com.dstym.pharmaciesondutyattica.dto.WorkingHourDto;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.ExpiryPolicyBuilder;
 import org.ehcache.config.builders.ResourcePoolsBuilder;
@@ -29,7 +30,7 @@ public class EhcacheConfiguration {
         Eh107Configuration.fromEhcacheCacheConfiguration(
             CacheConfigurationBuilder
                 .newCacheConfigurationBuilder(Integer.class,
-                    WorkingHour.class,
+                    WorkingHourDto.class,
                     ResourcePoolsBuilder.newResourcePoolsBuilder()
                         .offheap(100, MemoryUnit.MB)
                         .build())
@@ -55,7 +56,7 @@ public class EhcacheConfiguration {
         Eh107Configuration.fromEhcacheCacheConfiguration(
             CacheConfigurationBuilder
                 .newCacheConfigurationBuilder(Integer.class,
-                    Pharmacy.class,
+                    PharmacyDto.class,
                     ResourcePoolsBuilder.newResourcePoolsBuilder()
                         .offheap(100, MemoryUnit.MB)
                         .build())
