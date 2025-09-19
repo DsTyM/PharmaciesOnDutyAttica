@@ -5,7 +5,7 @@ services:
   # Database Service (MySQL)
   pharmacies-on-duty-attica-db:
     image: mysql:9.4.0
-#    https://hub.docker.com/_/mysql
+    # https://hub.docker.com/_/mysql
     ports:
       - "3308:3306"
     restart: always

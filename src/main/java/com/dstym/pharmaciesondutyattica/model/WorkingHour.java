@@ -1,9 +1,9 @@
 package com.dstym.pharmaciesondutyattica.model;
 
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
 
-import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
