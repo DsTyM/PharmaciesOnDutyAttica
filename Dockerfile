@@ -1,7 +1,7 @@
 # Stage 1: Build the application
 # TODO replace with eclipse-temurin jdk 25 when is available
 #FROM eclipse-temurin:24.0.2_12-jdk as build
-FROM openjdk:25-jdk as build
+FROM openjdk:25-jdk AS build
 # https://hub.docker.com/_/eclipse-temurin
 
 # Set the current working directory for build
