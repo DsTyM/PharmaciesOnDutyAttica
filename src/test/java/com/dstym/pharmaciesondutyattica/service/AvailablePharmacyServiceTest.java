@@ -1,6 +1,7 @@
 package com.dstym.pharmaciesondutyattica.service;
 
 import com.dstym.pharmaciesondutyattica.PharmaciesOnDutyAtticaApplication;
+import com.dstym.pharmaciesondutyattica.TestcontainersConfiguration;
 import com.dstym.pharmaciesondutyattica.mapper.AvailablePharmacyMapper;
 import com.dstym.pharmaciesondutyattica.model.AvailablePharmacy;
 import com.dstym.pharmaciesondutyattica.model.Pharmacy;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
@@ -32,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest(classes = {PharmaciesOnDutyAtticaApplication.class})
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
+@Import(TestcontainersConfiguration.class)
 class AvailablePharmacyServiceTest {
     @Autowired
     private AvailablePharmacyService availablePharmacyService;

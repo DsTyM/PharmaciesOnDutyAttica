@@ -24,7 +24,8 @@ public class PharmacyService {
 
     @Cacheable(value = "pharmacyCache", key = "#pharmacyId")
     public PharmacyDto getPharmacy(Integer pharmacyId) {
-        return pharmacyRepository.findById(pharmacyId).map(pharmacyMapper::getPharmacyDto)
+        return pharmacyRepository.findById(pharmacyId)
+                .map(pharmacyMapper::getPharmacyDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Did not find pharmacy with id: " + pharmacyId));
     }
@@ -35,7 +36,8 @@ public class PharmacyService {
                 .map(r -> URLDecoder.decode(r.trim(), StandardCharsets.UTF_8))
                 .orElse(null);
 
-        return Optional.of(pharmacyRepository.findAll(region, pageable).map(pharmacyMapper::getPharmacyDto))
+        return Optional.of(pharmacyRepository.findAll(region, pageable)
+                        .map(pharmacyMapper::getPharmacyDto))
                 .filter(Page::hasContent)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Did not find pharmacies."));
     }

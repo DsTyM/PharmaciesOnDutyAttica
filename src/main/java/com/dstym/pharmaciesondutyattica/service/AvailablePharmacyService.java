@@ -32,8 +32,8 @@ public class AvailablePharmacyService {
      * @throws ResponseStatusException if no available pharmacies are found for the given date.
      */
     private int getLastPulledVersion(Instant date) {
-        return availablePharmacyRepository
-                .findFirstByDateOrderByPulledVersionDesc(date).map(AvailablePharmacy::getPulledVersion)
+        return availablePharmacyRepository.findFirstByDateOrderByPulledVersionDesc(date)
+                .map(AvailablePharmacy::getPulledVersion)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Did not find available pharmacies for date: " + DateUtils.instantToString(date)));
     }
