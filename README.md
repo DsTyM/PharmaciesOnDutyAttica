@@ -9,7 +9,7 @@ It uses HtmlUnit to interact and crawl the "fsa.gr" website and jsoup to scrape 
 (the available pharmacies per day, pharmacies' information and the different working hours available). It also uses
 MySQL to save the data on the server and Spring Boot to provide the Rest API.
 
-The application has been tested using JUnit and Mockito.
+Tests using JUnit, Mockito and Testcontainers have been implemented.
 
 Here is an example of how it returns the pharmacies on duty:
 
