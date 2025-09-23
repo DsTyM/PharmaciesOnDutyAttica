@@ -41,14 +41,3 @@ logging:
       apache:
         http: off
       htmlunit: off
-
----
-
-spring:
-  config:
-    activate:
-      on-profile: testing
-  cache:
-    type: NONE
-  flyway:
-    enabled: true
