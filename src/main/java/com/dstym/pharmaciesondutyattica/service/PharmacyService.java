@@ -4,6 +4,7 @@ import com.dstym.pharmaciesondutyattica.dto.PharmacyDto;
 import com.dstym.pharmaciesondutyattica.mapper.PharmacyMapper;
 import com.dstym.pharmaciesondutyattica.model.Pharmacy;
 import com.dstym.pharmaciesondutyattica.repository.PharmacyRepository;
+import com.dstym.pharmaciesondutyattica.repository.specification.PharmacySpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -36,10 +37,16 @@ public class PharmacyService {
                 .map(r -> URLDecoder.decode(r.trim(), StandardCharsets.UTF_8))
                 .orElse(null);
 
-        return Optional.of(pharmacyRepository.findAll(region, pageable)
+        return Optional.of(searchPharmacies(region, pageable)
                         .map(pharmacyMapper::getPharmacyDto))
                 .filter(Page::hasContent)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Did not find pharmacies."));
+    }
+
+    public Page<Pharmacy> searchPharmacies(String region, Pageable pageable) {
+        var specification = PharmacySpecification.hasRegion(region);
+
+        return pharmacyRepository.findAll(specification, pageable);
     }
 
     public Pharmacy createPharmacy(Pharmacy pharmacy) {

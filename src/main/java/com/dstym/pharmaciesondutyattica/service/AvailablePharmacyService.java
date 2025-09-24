@@ -4,6 +4,7 @@ import com.dstym.pharmaciesondutyattica.dto.AvailablePharmacyDto;
 import com.dstym.pharmaciesondutyattica.mapper.AvailablePharmacyMapper;
 import com.dstym.pharmaciesondutyattica.model.AvailablePharmacy;
 import com.dstym.pharmaciesondutyattica.repository.AvailablePharmacyRepository;
+import com.dstym.pharmaciesondutyattica.repository.specification.AvailablePharmacySpecification;
 import com.dstym.pharmaciesondutyattica.util.DateUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
@@ -59,11 +60,19 @@ public class AvailablePharmacyService {
 
         var lastPulledVersion = getLastPulledVersion(finalDate);
 
-        return Optional.of(availablePharmacyRepository.findAllByLastPulledVersion(lastPulledVersion, finalDate, region, pageable)
+        return Optional.of(searchAvailablePharmacies(lastPulledVersion, region, finalDate, pageable)
                         .map(availablePharmacyMapper::getAvailablePharmacyDto))
                 .filter(Page::hasContent)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Did not find available pharmacies for date: " + DateUtils.instantToString(finalDate)));
+    }
+
+    public Page<AvailablePharmacy> searchAvailablePharmacies(Integer pulledVersion, String region, Instant date, Pageable pageable) {
+        var specification = AvailablePharmacySpecification.hasPulledVersion(pulledVersion)
+                .and(AvailablePharmacySpecification.hasRegion(region))
+                .and(AvailablePharmacySpecification.hasDate(date));
+
+        return availablePharmacyRepository.findAll(specification, pageable);
     }
 
     public AvailablePharmacyDto getAvailablePharmacy(Long availablePharmacyId) {
