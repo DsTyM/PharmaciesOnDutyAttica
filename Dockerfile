@@ -1,7 +1,5 @@
 # Stage 1: Build the application
-# TODO replace with eclipse-temurin jdk 25 when is available
-#FROM eclipse-temurin:24.0.2_12-jdk as build
-FROM openjdk:25-jdk AS build
+FROM eclipse-temurin:25-jdk AS build
 # https://hub.docker.com/_/eclipse-temurin
 
 # Set the current working directory for build
@@ -28,9 +26,7 @@ RUN ./mvnw clean package -DskipTests
 
 
 # Stage 2: Run the application
-# TODO replace with eclipse-temurin jre 25 when is available
-#FROM eclipse-temurin:24.0.2_12-jre
-FROM openjdk:25-jdk
+FROM eclipse-temurin:25-jre
 
 # Set the current working directory for run
 WORKDIR /app
