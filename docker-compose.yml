@@ -6,6 +6,7 @@ services:
   pharmacies-on-duty-attica-db:
     image: mysql:8.4
     # https://hub.docker.com/_/mysql
+    pull_policy: always
     ports:
       - "3308:3306"
     restart: always
@@ -26,6 +27,7 @@ services:
     build:
       context: . # Use an image built from the specified dockerfile in the root directory.
       dockerfile: Dockerfile
+      pull: true
     ports:
       - "8080:8080" # Forward the exposed port 8080 on the container to port 8080 on the host machine.
     restart: always

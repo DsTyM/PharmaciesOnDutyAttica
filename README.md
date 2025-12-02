@@ -56,7 +56,7 @@ cd PharmaciesOnDutyAttica
 To start the project using docker, just run:
 
 ```shell
-docker-compose up --build
+docker compose up --build
 ```
 
 The application can be accessed on:
@@ -71,7 +71,7 @@ Documentation.
 Of course, when you finish, don't forget to run:
 
 ```shell
-docker-compose down
+docker compose down
 ```
 
 The application uses Flyway for Database Versioning, and the initial changelog was generated using JPA Buddy.
